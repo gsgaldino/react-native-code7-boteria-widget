@@ -4,19 +4,16 @@
     "index.d.ts"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "react-native-code7-boteria-widget": [
         "./src/index"
-      ],
-      "*": [
-        "src/*"
       ],
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "preserve",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": [

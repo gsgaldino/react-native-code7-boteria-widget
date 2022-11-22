@@ -8,7 +8,7 @@ import React, {
 import socketio from 'socket.io-client';
 
 const SOCKET_URL =
-  'https://f6dc-2804-431-cff7-9f9f-a0de-42e2-3c5e-f6b8.ngrok.io';
+  'https://9e99-2804-431-cff6-2184-a072-e9c2-619f-1221.ngrok.io';
 const botId = '62ec1ac218ba8f42452383a6';
 const client = socketio(SOCKET_URL);
 

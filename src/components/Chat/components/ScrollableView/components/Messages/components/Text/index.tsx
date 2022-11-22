@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text as P, StyleSheet } from 'react-native';
+import { Message } from 'types/Message';
 
 const styles = StyleSheet.create({
   bot: {
@@ -10,10 +11,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function Text({ message, from }: any) {
-  const textColor = from === 'bot' ? styles.bot : styles.user;
+const Text: React.FC<Message> = (msg) => {
+  const textColor = msg.from === 'bot' ? styles.bot : styles.user;
 
-  return <P style={textColor}>{message}</P>;
-}
+  return <P style={textColor}>{msg.message}</P>;
+};
 
 export default Text;

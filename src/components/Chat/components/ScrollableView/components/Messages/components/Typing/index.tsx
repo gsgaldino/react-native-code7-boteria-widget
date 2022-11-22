@@ -5,42 +5,43 @@ import { styles } from './styles';
 
 const TWO_HUNDRED_MILLISECONDS = 200;
 
-function Typing() {
-  const dots = [0, 1, 2].map(
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    (dotNumber) => useRef<any>(new Animated.Value(dotNumber)).current
-  );
+const Typing: React.FC = () => {
+  const dots = [
+    useRef(new Animated.Value(1)).current,
+    useRef(new Animated.Value(1)).current,
+    useRef(new Animated.Value(1)).current,
+  ];
 
   const bounce = () => {
     const duration = TWO_HUNDRED_MILLISECONDS;
 
     Animated.sequence([
-      Animated.timing(dots[0], {
+      Animated.timing(dots[0] as Animated.Value, {
         toValue: -4,
         duration,
         useNativeDriver: true,
       }),
-      Animated.timing(dots[0], {
+      Animated.timing(dots[0] as Animated.Value, {
         toValue: 0,
         duration,
         useNativeDriver: true,
       }),
-      Animated.timing(dots[1], {
+      Animated.timing(dots[1] as Animated.Value, {
         toValue: -4,
         duration,
         useNativeDriver: true,
       }),
-      Animated.timing(dots[1], {
+      Animated.timing(dots[1] as Animated.Value, {
         toValue: 0,
         duration,
         useNativeDriver: true,
       }),
-      Animated.timing(dots[2], {
+      Animated.timing(dots[2] as Animated.Value, {
         toValue: -4,
         duration,
         useNativeDriver: true,
       }),
-      Animated.timing(dots[2], {
+      Animated.timing(dots[2] as Animated.Value, {
         toValue: 0,
         duration,
         useNativeDriver: true,
@@ -67,6 +68,6 @@ function Typing() {
       ))}
     </View>
   );
-}
+};
 
 export default Typing;

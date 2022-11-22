@@ -2,39 +2,35 @@ import React, { useState, useCallback } from 'react';
 import { TextInput, View, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-import { messageTypes } from '../../../../constants/messageTypes';
+import { MessageTypes } from '../../../../types/Message';
 import { useMessages } from '../../../../context/Messages';
 
 import attachIcon from '../../../../assets/attach_icon.png';
 import sendIcon from '../../../../assets/send_icon.png';
+
 import { styles } from './styles';
 
 function Input() {
   const { handleSubmitMessage } = useMessages();
   const [userText, setUserText] = useState('');
-  const [, setImage] = useState<any>();
+  const [, setImage] = useState<null | ImagePicker.ImagePickerResult>(null);
 
   const onAttach = useCallback(async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
-    console.log(result);
-
-    if (!result.canceled) {
-      console.log('RESULT', result.assets[0]);
-      setImage(result?.assets[0]?.uri);
-    }
+    setImage(result);
   }, []);
 
   const onSend = () => {
     if (!userText) return;
     else {
       handleSubmitMessage({
-        type: messageTypes.TEXT,
+        type: MessageTypes.TEXT,
         message: userText,
       });
       setUserText('');

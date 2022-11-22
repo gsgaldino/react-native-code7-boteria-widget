@@ -1,39 +1,30 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { IIsChatOpenContext } from 'types/isChatOpen';
 
-export interface IAppCtx {
-  isChatOpen: boolean;
-  toggleIsChatOpen: Function;
-}
+const IsChatOpenContext = createContext<IIsChatOpenContext>({
+  isChatOpen: false,
+  toggleIsChatOpen: () => {},
+});
 
-interface IIsChatOpenProviderProps {
-  children: React.FC | Element;
-}
-
-const IsChatOpenContext = createContext<IAppCtx | null | any>(null);
-
-export default function IsChatOpenProvider({
-  children,
-}: IIsChatOpenProviderProps) {
+const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
+  const { children } = props;
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const toggleIsChatOpen = useCallback(
-    () => setIsChatOpen(!isChatOpen),
-    [isChatOpen]
-  );
+  const toggleIsChatOpen = () => setIsChatOpen(!isChatOpen);
 
-  const sampleAppCtx: IAppCtx = {
+  const isChatOpenContextState: IIsChatOpenContext = {
     isChatOpen,
     toggleIsChatOpen,
   };
 
   return (
-    <IsChatOpenContext.Provider value={sampleAppCtx}>
+    <IsChatOpenContext.Provider value={isChatOpenContextState}>
       {children}
     </IsChatOpenContext.Provider>
   );
-}
-
-export const useIsChatOpen = () => {
-  const context = useContext(IsChatOpenContext);
-  return context;
 };
+
+export default IsChatOpenProvider;
+
+export const useIsChatOpen = () =>
+  useContext(IsChatOpenContext) as IIsChatOpenContext;

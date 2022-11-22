@@ -8,6 +8,7 @@ import {
 
 import IsChatOpenProvider from './context/IsChatOpen';
 import MessagesProvider from './context/Messages';
+import SocktProvider from './context/Socket/Context';
 
 import { Chat, Widget as WidgetComponent } from './components';
 
@@ -17,7 +18,7 @@ import { styles } from './styles';
 //   botId: string;
 // }
 
-export function Widget() {
+export function Code7Boteria() {
   const isIphone = Platform.OS === 'ios';
 
   return (
@@ -26,13 +27,15 @@ export function Widget() {
 
       <IsChatOpenProvider>
         <MessagesProvider>
-          <KeyboardAvoidingView
-            behavior={isIphone ? 'padding' : 'height'}
-            style={styles.container}
-          >
-            <Chat />
-            <WidgetComponent />
-          </KeyboardAvoidingView>
+          <SocktProvider>
+            <KeyboardAvoidingView
+              behavior={isIphone ? 'padding' : 'height'}
+              style={styles.container}
+            >
+              <Chat />
+              <WidgetComponent />
+            </KeyboardAvoidingView>
+          </SocktProvider>
         </MessagesProvider>
       </IsChatOpenProvider>
     </SafeAreaView>

@@ -11,16 +11,15 @@ import Messages from './components/Messages';
 import { styles } from './styles';
 
 function ScrollableView() {
-  const scrollViewRef = useRef<any>();
+  const scrollViewRef = useRef<null | ScrollView>(null);
+
+  const onContentSizeChange = () => {
+    scrollViewRef?.current?.scrollToEnd({ animated: true });
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView
-        ref={scrollViewRef}
-        onContentSizeChange={() =>
-          scrollViewRef?.current?.scrollToEnd({ animated: true })
-        }
-      >
+      <ScrollView ref={scrollViewRef} onContentSizeChange={onContentSizeChange}>
         <View style={styles.container}>
           <Messages />
         </View>

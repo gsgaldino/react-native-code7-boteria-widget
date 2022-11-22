@@ -2,14 +2,14 @@ import Text from '../components/Text';
 import Typing from '../components/Typing';
 import wrapMessage from './wrapMessage';
 
-import { messageTypes } from '../../../../../../../constants/messageTypes';
+import { MessageTypes } from '../../../../../../../types/Message';
 
-export default (type: any) => {
+export default (type: MessageTypes) => {
   switch (type) {
-    case messageTypes.TYPING:
+    case MessageTypes.TYPING:
       return wrapMessage(Typing);
 
-    case messageTypes.TEXT:
+    case MessageTypes.TEXT:
       return wrapMessage(Text);
 
     default:
