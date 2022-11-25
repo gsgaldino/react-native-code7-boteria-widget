@@ -3,20 +3,19 @@ import React from 'react';
 import { View } from 'react-native';
 import messageComponentByType from './utils/messageComponentByType';
 
-import { Message } from 'types/Message';
-import { useMessages } from '../../../../../../context/Messages';
+import { Message, MessageTypes } from 'types/Message';
+import { useSocketContext } from '../../../../../../context/Socket/Component';
 
 function Messages() {
-  const { messages } = useMessages();
+  const { messages } = useSocketContext();
 
   return (
     <View>
       {messages.map((msg: Message, index: number) => {
-        const MessageComponent = messageComponentByType(msg?.type);
+        const type = msg.type as MessageTypes;
+        const MessageComponent = messageComponentByType(type);
 
-        return (
-          <MessageComponent key={index} message={msg.message} from={msg.from} />
-        );
+        return <MessageComponent key={index} {...msg} />;
       })}
     </View>
   );

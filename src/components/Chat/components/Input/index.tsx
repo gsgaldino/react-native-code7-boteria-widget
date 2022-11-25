@@ -2,18 +2,17 @@ import React, { useState, useCallback } from 'react';
 import { TextInput, View, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-import { MessageTypes } from '../../../../types/Message';
-import { useMessages } from '../../../../context/Messages';
+import { MessageTypes, From, Message } from '../../../../types/Message';
 
+import { useSocketContext } from '../../../../context/Socket/Component';
 import attachIcon from '../../../../assets/attach_icon.png';
 import sendIcon from '../../../../assets/send_icon.png';
 
 import { styles } from './styles';
 
 function Input() {
-  const { handleSubmitMessage } = useMessages();
+  const { handleSubmitMessage } = useSocketContext();
   const [userText, setUserText] = useState('');
-  const [, setImage] = useState<null | ImagePicker.ImagePickerResult>(null);
 
   const onAttach = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -23,16 +22,28 @@ function Input() {
       base64: true,
     });
 
-    setImage(result);
+    const uri = result.assets ? result.assets[0]?.uri : '';
+
+    const msg: Message = {
+      from: From.USER,
+      ext: 'jpg',
+      isMedia: true,
+      type: MessageTypes.IMAGE,
+      message: uri,
+    };
+
+    handleSubmitMessage(msg);
   }, []);
 
   const onSend = () => {
     if (!userText) return;
     else {
-      handleSubmitMessage({
+      const msg: Message = {
         type: MessageTypes.TEXT,
         message: userText,
-      });
+        from: From.USER,
+      };
+      handleSubmitMessage(msg);
       setUserText('');
     }
   };

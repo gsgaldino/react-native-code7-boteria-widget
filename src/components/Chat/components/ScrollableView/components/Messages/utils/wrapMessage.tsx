@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message } from 'types/Message';
+import { Message, From } from '../../../../../../../types/Message';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 
 export default (MessageComponent: React.FC<Message>) => {
   const MessageWrapper = (props: Message) => {
-    const ballonStyle = props.from === 'bot' ? styles.bot : styles.user;
+    const ballonStyle = props.from === From.BOT ? styles.bot : styles.user;
 
     return (
       <View style={[styles.container, ballonStyle]}>

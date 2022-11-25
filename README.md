@@ -36,7 +36,7 @@ Inicia o projeto em modo de desenvolvimento
   
 - [x] Texto (Text)
 - [x] Digitando (Typing)
-- [ ] Imagem (Image)
+- [x] Imagem (Image)
 - [ ] Áudio (Audio)
 - [ ] Carrossel (Carousel)
 - [ ] Documento (Document)

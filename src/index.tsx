@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 
 import IsChatOpenProvider from './context/IsChatOpen';
-import MessagesProvider from './context/Messages';
-import SocktProvider from './context/Socket/Context';
+import SocketContextComponent from './context/Socket/Component';
 
 import { Chat, Widget as WidgetComponent } from './components';
 
@@ -26,17 +25,15 @@ export function Code7Boteria() {
       <StatusBar barStyle={isIphone ? 'dark-content' : 'default'} />
 
       <IsChatOpenProvider>
-        <MessagesProvider>
-          <SocktProvider>
-            <KeyboardAvoidingView
-              behavior={isIphone ? 'padding' : 'height'}
-              style={styles.container}
-            >
-              <Chat />
-              <WidgetComponent />
-            </KeyboardAvoidingView>
-          </SocktProvider>
-        </MessagesProvider>
+        <SocketContextComponent>
+          <KeyboardAvoidingView
+            behavior={isIphone ? 'padding' : 'height'}
+            style={styles.container}
+          >
+            <Chat />
+            <WidgetComponent />
+          </KeyboardAvoidingView>
+        </SocketContextComponent>
       </IsChatOpenProvider>
     </SafeAreaView>
   );

@@ -8,8 +8,8 @@ const TWO_HUNDRED_MILLISECONDS = 200;
 const Typing: React.FC = () => {
   const dots = [
     useRef(new Animated.Value(1)).current,
-    useRef(new Animated.Value(1)).current,
-    useRef(new Animated.Value(1)).current,
+    useRef(new Animated.Value(2)).current,
+    useRef(new Animated.Value(3)).current,
   ];
 
   const bounce = () => {
@@ -55,7 +55,6 @@ const Typing: React.FC = () => {
     }, 1200);
 
     return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

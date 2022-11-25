@@ -1,5 +1,7 @@
 import Text from '../components/Text';
 import Typing from '../components/Typing';
+import Image from '../components/Image';
+
 import wrapMessage from './wrapMessage';
 
 import { MessageTypes } from '../../../../../../../types/Message';
@@ -11,6 +13,9 @@ export default (type: MessageTypes) => {
 
     case MessageTypes.TEXT:
       return wrapMessage(Text);
+
+    case MessageTypes.IMAGE:
+      return wrapMessage(Image);
 
     default:
       return wrapMessage(Text);
