@@ -6,30 +6,31 @@ import {
   Platform,
 } from 'react-native';
 
-import IsChatOpenProvider from './context/IsChatOpen';
+import IsChatOpenProvider from './context/ChatConfigurations';
 import SocketContextComponent from './context/Socket/Component';
 
 import { Chat, Widget as WidgetComponent } from './components';
 
 import { styles } from './styles';
 
-// interface IWidgetProps {
-//   botId: string;
-// }
+interface ICode7BoteriaProps {
+  botId: string;
+}
 
-export function Code7Boteria() {
+export function Code7Boteria(props: ICode7BoteriaProps) {
+  const { botId } = props;
+
   const isIphone = Platform.OS === 'ios';
+  const barStyle = isIphone ? 'dark-content' : 'default';
+  const behavior = isIphone ? 'padding' : 'height';
 
   return (
     <SafeAreaView>
-      <StatusBar barStyle={isIphone ? 'dark-content' : 'default'} />
+      <StatusBar barStyle={barStyle} />
 
       <IsChatOpenProvider>
-        <SocketContextComponent>
-          <KeyboardAvoidingView
-            behavior={isIphone ? 'padding' : 'height'}
-            style={styles.container}
-          >
+        <SocketContextComponent botId={botId}>
+          <KeyboardAvoidingView behavior={behavior} style={styles.container}>
             <Chat />
             <WidgetComponent />
           </KeyboardAvoidingView>

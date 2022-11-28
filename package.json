@@ -118,6 +118,7 @@
       "prettier"
     ],
     "rules": {
+      "react-hooks/exhaustive-deps": "off",
       "prettier/prettier": [
         "error",
         {
@@ -160,6 +161,7 @@
     "@expo/webpack-config": "0.17.2",
     "@types/socket.io-client": "^3.0.0",
     "expo": "^47.0.3",
+    "expo-av": "~13.0.1",
     "expo-image-picker": "~14.0.1",
     "react-dom": "18.1.0",
     "react-native-web": "~0.18.9"

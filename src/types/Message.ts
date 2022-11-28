@@ -62,10 +62,19 @@ export interface Message {
    * URL da imagem armazenada no storage da boteria
    */
   image?: string;
-}
 
-export interface IMessageContextState {
-  messages: Message[] | undefined;
-  addBotMessage: Function;
-  addUserMessage: Function;
+  /**
+   * Essa opção é retornada quando o tipo === VIDEO
+   */
+  video?: {
+    /**
+     * URL para o vídeo armazenado no storage da boteria
+     */
+    fileUrl: string;
+
+    /**
+     * Título do video configurado pelo cliente no fluxo do BOT
+     */
+    title: string;
+  };
 }

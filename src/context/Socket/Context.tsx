@@ -3,7 +3,6 @@ import { ISocketContextState } from 'types/Socket';
 
 export const SocketContext = createContext<ISocketContextState>({
   socket: null,
-  emitMessage: () => {},
   handleSubmitMessage: () => {},
   messages: [],
 });

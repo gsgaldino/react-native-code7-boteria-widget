@@ -1,22 +1,30 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
-import { useIsChatOpen } from '../../../../context/IsChatOpen';
+import { useChatConfigurations } from '../../../../context/ChatConfigurations';
+import { Icon } from '../../..';
 
 import closeIcon from '../../../../assets/close_icon.png';
-import botIcon from '../../../../assets/widget.png';
 
 import { styles } from './styles';
 
 function Header() {
-  const { isChatOpen, toggleIsChatOpen } = useIsChatOpen();
+  const { isChatOpen, toggleIsChatOpen, botConfigs } = useChatConfigurations();
 
   const onClose = () => !!isChatOpen && toggleIsChatOpen();
 
   return (
-    <View style={[styles.container, styles.wrapper]}>
+    <View
+      style={[
+        styles.container,
+        styles.wrapper,
+        {
+          backgroundColor: botConfigs.colors.main,
+        },
+      ]}
+    >
       <View style={styles.titleContainer}>
-        <Image source={botIcon} style={styles.titleIcon} />
-        <Text style={styles.title}>Bot title</Text>
+        <Icon />
+        <Text style={styles.title}>{botConfigs.title}</Text>
       </View>
 
       <TouchableOpacity onPress={onClose}>

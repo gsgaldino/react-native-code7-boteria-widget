@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 5 / 4,
+    width: 80,
+    height: 80,
   },
 });

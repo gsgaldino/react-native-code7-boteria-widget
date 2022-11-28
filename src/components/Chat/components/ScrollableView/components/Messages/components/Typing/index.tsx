@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import { View, Animated } from 'react-native';
 
 import { styles } from './styles';
@@ -69,4 +69,4 @@ const Typing: React.FC = () => {
   );
 };
 
-export default Typing;
+export default memo(Typing);

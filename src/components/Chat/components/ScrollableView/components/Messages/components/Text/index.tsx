@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Text as P, StyleSheet } from 'react-native';
-import { Message } from 'types/Message';
-
-const styles = StyleSheet.create({
-  bot: {
-    color: '#5A5D68',
-  },
-  user: {
-    color: '#fff',
-  },
-});
+import { Message, From } from '../../../../../../../../types/Message';
+import { useChatConfigurations } from '../../../../../../../../context/ChatConfigurations';
 
 const Text: React.FC<Message> = (msg) => {
-  const textColor = msg.from === 'bot' ? styles.bot : styles.user;
+  const { botConfigs } = useChatConfigurations();
+
+  const styles = StyleSheet.create({
+    bot: {
+      color: botConfigs.colors.secondaryText,
+    },
+    user: {
+      color: botConfigs.colors.mainText,
+    },
+  });
+
+  const isBot = msg.from === From.BOT;
+  const textColor = isBot ? styles.bot : styles.user;
 
   return <P style={textColor}>{msg.message}</P>;
 };
 
-export default Text;
+export default memo(Text);

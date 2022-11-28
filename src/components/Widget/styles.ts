@@ -7,8 +7,4 @@ export const styles = StyleSheet.create({
     bottom: 18,
     right: 18,
   },
-  image: {
-    width: 100,
-    height: 100,
-  },
 });
