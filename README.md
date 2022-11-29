@@ -38,20 +38,20 @@ Inicia o projeto em modo de desenvolvimento
 - [x] Digitando (Typing)
 - [x] Imagem (Image)
 - [x] Vídeo (Video)
-- [ ] Áudio (Audio)
-- [ ] Carrossel (Carousel)
-- [ ] Documento (Document)
+- [x] Áudio (Audio)
+- [x] Documento (Document) - 3h
+- [ ] Carrossel (Carousel) - 7h
 
 - Bugs / Ajustes
 
 - [x] Estilos dos balões das mensagens
 - [x] Estilos do BOT com base nas configs salvas no banco
-- [ ] Título do BOT ao abrir teclado
-- [ ] Socket criando outras conexões ao enviar mensagem
-- [ ] Substituir o map em Messages por uma FlatList
-- [ ] Retirar o modo preview
-- [ ] Ajustar absolute imports
-- [ ] Spinner no carregamento de imagens
+- [x] Título do BOT ao abrir teclado - 3h
+- [ ] Socket criando outras conexões ao enviar mensagem - 7h
+- [ ] Substituir o map em Messages por uma FlatList - 3h
+- [ ] Retirar o modo preview - 3h
+- [ ] Ajustar absolute imports - 4h
+- [ ] Spinner no carregamento de imagens - 3h
 
 // ver com Gui
 

@@ -25,7 +25,7 @@ export function Code7Boteria(props: ICode7BoteriaProps) {
   const behavior = isIphone ? 'padding' : 'height';
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.areaView}>
       <StatusBar barStyle={barStyle} />
 
       <IsChatOpenProvider>

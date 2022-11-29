@@ -15,6 +15,23 @@ export enum From {
   BOT = 'bot',
 }
 
+export type Document = {
+  /**
+   * URL para o documento armazenado no storage da boteria
+   */
+  fileUrl: string;
+
+  /**
+   * Título do documento configurado pelo cliente no fluxo do BOT
+   */
+  title: string;
+
+  /**
+   * Tamanho do documento em KB
+   */
+  size: number;
+};
+
 export interface Message {
   /**
    * Identifica se a mensagem está sendo enviada pelo BOT
@@ -66,15 +83,15 @@ export interface Message {
   /**
    * Essa opção é retornada quando o tipo === VIDEO
    */
-  video?: {
-    /**
-     * URL para o vídeo armazenado no storage da boteria
-     */
-    fileUrl: string;
+  video?: Document;
 
-    /**
-     * Título do video configurado pelo cliente no fluxo do BOT
-     */
-    title: string;
-  };
+  /**
+   * Essa opção é retornada quando o tipo === AUDIO
+   */
+  audio?: Document;
+
+  /**
+   * Essa opção é retornada quando o tipo === DOCUMENT
+   */
+  document?: Document;
 }

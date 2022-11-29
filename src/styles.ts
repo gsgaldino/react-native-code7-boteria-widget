@@ -6,7 +6,10 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: width,
-    // padding: 10,
-    // paddingTop: 26,
+  },
+  areaView: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
 });

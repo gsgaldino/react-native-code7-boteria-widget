@@ -29,7 +29,8 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionId, setSessionId] = useState<null | string>(null);
 
-  const socketUrl = 'https://8827-177-188-34-207.ngrok.io';
+  const socketUrl =
+    'https://7174-2804-431-cff6-9aaa-75a4-d241-3021-7f2a.ngrok.io';
   const socket = useSocket(socketUrl);
 
   const addMessage = useCallback((message: Message) => {
