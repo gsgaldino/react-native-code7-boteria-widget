@@ -7,7 +7,7 @@ import Document from '../components/Document';
 
 import wrapMessage from './wrapMessage';
 
-import { MessageTypes } from '../../../../../../../types/Message';
+import { MessageTypes } from '../../../../../types/Message';
 
 export default (type: MessageTypes) => {
   switch (type) {

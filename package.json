@@ -168,6 +168,7 @@
     "expo-notifications": "~0.17.0",
     "expo-permissions": "~14.0.0",
     "react-dom": "18.1.0",
-    "react-native-web": "~0.18.9"
+    "react-native-web": "~0.18.9",
+    "socket.io-client": "4.5.1"
   }
 }

@@ -3,10 +3,10 @@ import { Message, Document } from 'types/Message';
 import { Text, Image, TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 
-import { getFileNameFromAttachment } from '../../../../../../../../utils/getFilenameFromAttachment';
-import { useChatConfigurations } from '../../../../../../../../context/ChatConfigurations';
-import attachIcon from '../../../../../../../../assets/attach_icon.png';
-import { saveAndroidFile } from '../../../../../../../../utils/save';
+import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFromAttachment';
+import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
+import attachIcon from '../../../../../../assets/attach_icon.png';
+import { saveAndroidFile } from '../../../../../../utils/save';
 
 import { styles } from './styles';
 
@@ -17,13 +17,14 @@ const DocumentComponent: React.FC<Message> = (msg) => {
   const fileName = getFileNameFromAttachment(fileUrl);
 
   const downloadFile = () => {
-    const uri = fileUrl.fileUrl;
-    let fileUri = FileSystem.documentDirectory as string;
-    FileSystem.downloadAsync(uri, fileUri)
-      .then((downloaded) => {
+    FileSystem.downloadAsync(
+      fileUrl.fileUrl,
+      FileSystem.documentDirectory + fileName
+    )
+      .then(({ uri }) => {
         saveAndroidFile({
           fileName,
-          fileUri: downloaded.uri,
+          fileUri: uri,
         });
       })
       .catch((error) => {

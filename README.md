@@ -47,11 +47,12 @@ Inicia o projeto em modo de desenvolvimento
 - [x] Estilos dos balões das mensagens
 - [x] Estilos do BOT com base nas configs salvas no banco
 - [x] Título do BOT ao abrir teclado - 3h
-- [ ] Socket criando outras conexões ao enviar mensagem - 7h
 - [ ] Substituir o map em Messages por uma FlatList - 3h
+- [ ] Socket criando outras conexões ao enviar mensagem - 7h
 - [ ] Retirar o modo preview - 3h
 - [ ] Ajustar absolute imports - 4h
 - [ ] Spinner no carregamento de imagens - 3h
+- [ ] Ajustar mimetype ao salvar documentos
 
 // ver com Gui
 

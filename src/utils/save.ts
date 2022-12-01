@@ -27,7 +27,7 @@ export const saveAndroidFile = async (properties: ISaveAndroidFileProps) => {
           await FileSystem.writeAsStringAsync(uri, fileString, {
             encoding: FileSystem.EncodingType.Base64,
           });
-          console.log('Report Downloaded Successfully');
+          console.log('document downloaded successfully');
         })
         .catch(console.log);
     } catch (error) {

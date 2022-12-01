@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message, From } from '../../../../../../../types/Message';
-import { useChatConfigurations } from '../../../../../../../context/ChatConfigurations';
+import { Message, From } from '../../../../../types/Message';
+import { useChatConfigurations } from '../../../../../context/ChatConfigurations';
 
 export default (MessageComponent: React.FC<Message>) => {
   const { botConfigs } = useChatConfigurations();

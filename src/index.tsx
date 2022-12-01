@@ -6,7 +6,7 @@ import {
   Platform,
 } from 'react-native';
 
-import IsChatOpenProvider from './context/ChatConfigurations';
+import ChatConfigurationsProvider from './context/ChatConfigurations';
 import SocketContextComponent from './context/Socket/Component';
 
 import { Chat, Widget as WidgetComponent } from './components';
@@ -28,14 +28,14 @@ export function Code7Boteria(props: ICode7BoteriaProps) {
     <SafeAreaView style={styles.areaView}>
       <StatusBar barStyle={barStyle} />
 
-      <IsChatOpenProvider>
+      <ChatConfigurationsProvider>
         <SocketContextComponent botId={botId}>
           <KeyboardAvoidingView behavior={behavior} style={styles.container}>
             <Chat />
             <WidgetComponent />
           </KeyboardAvoidingView>
         </SocketContextComponent>
-      </IsChatOpenProvider>
+      </ChatConfigurationsProvider>
     </SafeAreaView>
   );
 }

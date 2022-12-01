@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Text as P, StyleSheet } from 'react-native';
-import { Message, From } from '../../../../../../../../types/Message';
-import { useChatConfigurations } from '../../../../../../../../context/ChatConfigurations';
+import { Message, From } from '../../../../../../types/Message';
+import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
 
 const Text: React.FC<Message> = (msg) => {
   const { botConfigs } = useChatConfigurations();

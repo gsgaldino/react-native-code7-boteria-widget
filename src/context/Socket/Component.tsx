@@ -4,9 +4,11 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useMemo,
+  useRef,
 } from 'react';
 import { SocketContextProvider, SocketContext } from './Context';
-import { useSocket } from '../../hooks/useSocket';
+import { Socket, io } from 'socket.io-client';
 import { useChatConfigurations } from '../ChatConfigurations';
 
 import { ISocketContextState } from 'types/Socket';
@@ -23,15 +25,17 @@ interface ISocketComponentProps {
 }
 
 const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
+  const phone = '11988889999';
+  const channel = 'webchat';
+  const socketUrl =
+    'https://7174-2804-431-cff6-9aaa-75a4-d241-3021-7f2a.ngrok.io';
+
   const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();
 
+  const clientRef = useRef<null | Socket>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionId, setSessionId] = useState<null | string>(null);
-
-  const socketUrl =
-    'https://7174-2804-431-cff6-9aaa-75a4-d241-3021-7f2a.ngrok.io';
-  const socket = useSocket(socketUrl);
 
   const addMessage = useCallback((message: Message) => {
     setMessages((prevState) => [
@@ -43,7 +47,7 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const handleSubmitMessage = useCallback(
     ({ message, type, ext }: Message) => {
       const isMedia = type !== MessageTypes.TEXT;
-      socket.emit('message', {
+      clientRef?.current?.emit('message', {
         botId: botId,
         message,
         isMedia,
@@ -61,69 +65,96 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
     [sessionId]
   );
 
-  const startNewSession = () => {
-    socket.emit('subscribe', {
-      botId,
+  const handleStartConversation = useCallback(
+    (_sessionId: string) => {
+      setSessionId(_sessionId);
+      clientRef?.current?.emit('start', {
+        botId: botId,
+        id: _sessionId,
+        channel: channel,
+        contactNumber: phone,
+      });
+    },
+    [clientRef]
+  );
+
+  const startNewSession = (client: Socket) => {
+    client.emit('subscribe', {
+      botId: botId,
       isPreview: true,
     });
   };
 
-  const handleStartConversation = (session: string) => {
-    socket.emit('start', {
-      botId: botId,
-      id: session,
-      channel: 'webchat',
-      contactNumber: '11988887777',
-    });
-  };
+  useEffect(() => {
+    if (!clientRef.current) {
+      const client = io(socketUrl);
+      clientRef.current = client;
 
-  const startListeners = () => {
-    socket.on('connect', () => {
-      startNewSession();
-    });
-
-    socket.on('message', (data) => {
-      addMessage({ ...data, from: From.BOT });
-    });
-
-    // response with bot and session data
-    socket.on('subscribe-response', (data) => {
-      handleStartConversation(data?.id);
-      setSessionId(data?.id);
-
-      const [channel] = data?.bot?.channels?.filter((ch: IChannel) => {
-        return ch.channelId === 'WebChat';
+      client.on('connect', () => {
+        if (!sessionId) {
+          startNewSession(client);
+        }
       });
 
-      const botConfigs: IBotConfigs = {
-        title: data?.bot?.title,
-        botFab: channel?.settings?.botFab,
-        colors: {
-          main: channel?.settings?.mainColor,
-          secondary: channel?.settings?.secondaryColor,
-          mainText: channel?.settings?.mainTextColor,
-          secondaryText: channel?.settings?.secondaryTextColor,
-        },
+      client.on('message', (data) => {
+        addMessage({ ...data, from: From.BOT });
+      });
+
+      client.on('subscribe-response', (data) => {
+        setSessionId(data?.id);
+        handleStartConversation(data.id);
+
+        const [channel] = data?.bot?.channels?.filter((ch: IChannel) => {
+          return ch.channelId === 'WebChat';
+        });
+
+        const botConfigs: IBotConfigs = {
+          title: data?.bot?.title,
+          botFab: channel?.settings?.botFab,
+          colors: {
+            main: channel?.settings?.mainColor,
+            secondary: channel?.settings?.secondaryColor,
+            mainText: channel?.settings?.mainTextColor,
+            secondaryText: channel?.settings?.secondaryTextColor,
+          },
+        };
+
+        setBotConfigs(botConfigs);
+      });
+
+      client.on('reconnect_attempt', () => {
+        client.io.opts.transports = ['polling', 'websocket'];
+      });
+
+      client.on('disconnect', () => {
+        if (clientRef.current) {
+          console.log('ws closed by server');
+        } else {
+          console.log('ws closed by app component unmount');
+          return;
+        }
+      });
+
+      client.on('end_conversation', (data) => {
+        if (!data?.isTransfer) {
+          setSessionId('');
+        }
+      });
+
+      return () => {
+        clientRef.current = null;
+        client.close();
       };
+    }
+  }, [botId, handleStartConversation]);
 
-      setBotConfigs(botConfigs);
-    });
-
-    socket.on('connect_error', (err) => {
-      console.log(`connect_error due to ${err.message}`);
-    });
-  };
-
-  useEffect(() => {
-    startListeners();
-    socket.emit('subscribe', { botId });
-  }, []);
-
-  const state: ISocketContextState = {
-    socket,
-    handleSubmitMessage,
-    messages,
-  };
+  const state: ISocketContextState = useMemo(
+    () => ({
+      handleSubmitMessage,
+      messages,
+    }),
+    [messages]
+  );
 
   return (
     <SocketContextProvider value={state}>{children}</SocketContextProvider>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { IBotConfigs, IChatConfigurations } from 'types/ChatConfigurations';
 
 const defaultBotConfig: IBotConfigs = {
@@ -25,7 +25,10 @@ const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [configs, setConfigs] = useState<IBotConfigs>(defaultBotConfig);
 
-  const toggleIsChatOpen = () => setIsChatOpen(!isChatOpen);
+  const toggleIsChatOpen = useCallback(
+    () => setIsChatOpen(!isChatOpen),
+    [isChatOpen]
+  );
 
   const setBotConfigs = (cfg: IBotConfigs) => setConfigs(cfg as IBotConfigs);
 
