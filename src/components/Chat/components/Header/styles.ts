@@ -31,5 +31,6 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     color: '#fff',
+    marginLeft: 8,
   },
 });

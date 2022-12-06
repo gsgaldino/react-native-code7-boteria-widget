@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
+import { Linking } from 'react-native';
 import { SocketContextProvider, SocketContext } from './Context';
 import { Socket, io } from 'socket.io-client';
 import { useChatConfigurations } from '../ChatConfigurations';
@@ -27,8 +28,7 @@ interface ISocketComponentProps {
 const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const phone = '11988889999';
   const channel = 'webchat';
-  const socketUrl =
-    'https://7174-2804-431-cff6-9aaa-75a4-d241-3021-7f2a.ngrok.io';
+  const socketUrl = 'https://b1d3-191-193-237-58.ngrok.io';
 
   const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();
@@ -52,9 +52,8 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
         message,
         isMedia,
         ext,
-        isPreview: true,
         id: sessionId,
-        botChannel: 'webchat',
+        botChannel: 'WebChat',
       });
 
       setMessages((prevState) => [
@@ -72,6 +71,7 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
         botId: botId,
         id: _sessionId,
         channel: channel,
+        botChannel: 'WebChat',
         contactNumber: phone,
       });
     },
@@ -81,7 +81,35 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const startNewSession = (client: Socket) => {
     client.emit('subscribe', {
       botId: botId,
-      isPreview: true,
+      botChannel: 'WebChat',
+    });
+  };
+
+  const handleOpenLink = useCallback(async (url: string) => {
+    await Linking.openURL(url);
+  }, []);
+
+  const handleCarouselButtonClick = (clickInfo: any) => {
+    const { clickedButton, clickedCard } = clickInfo;
+    const { destination } = clickedButton;
+    const { type, value } = destination;
+
+    if (type === 'url') {
+      handleOpenLink(value);
+    }
+
+    if (type === 'phone') {
+      const treated = value.replace(/[^A-Z0-9]/gi, '');
+      handleOpenLink(`tel:+55${treated}`);
+    }
+
+    clientRef?.current?.emit('action', {
+      botId: botId,
+      action: {
+        type: MessageTypes.CAROUSEL,
+        data: { clickedButton, clickedCard },
+      },
+      id: sessionId,
     });
   };
 
@@ -104,18 +132,18 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
         setSessionId(data?.id);
         handleStartConversation(data.id);
 
-        const [channel] = data?.bot?.channels?.filter((ch: IChannel) => {
+        const [webchatChannel] = data?.bot?.channels?.filter((ch: IChannel) => {
           return ch.channelId === 'WebChat';
         });
 
         const botConfigs: IBotConfigs = {
           title: data?.bot?.title,
-          botFab: channel?.settings?.botFab,
+          botFab: webchatChannel?.settings?.botFab,
           colors: {
-            main: channel?.settings?.mainColor,
-            secondary: channel?.settings?.secondaryColor,
-            mainText: channel?.settings?.mainTextColor,
-            secondaryText: channel?.settings?.secondaryTextColor,
+            main: webchatChannel?.settings?.mainColor,
+            secondary: webchatChannel?.settings?.secondaryColor,
+            mainText: webchatChannel?.settings?.mainTextColor,
+            secondaryText: webchatChannel?.settings?.secondaryTextColor,
           },
         };
 
@@ -146,12 +174,17 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
         client.close();
       };
     }
+
+    return () => {
+      clientRef.current = null;
+    };
   }, [botId, handleStartConversation]);
 
   const state: ISocketContextState = useMemo(
     () => ({
       handleSubmitMessage,
       messages,
+      handleCarouselButtonClick,
     }),
     [messages]
   );

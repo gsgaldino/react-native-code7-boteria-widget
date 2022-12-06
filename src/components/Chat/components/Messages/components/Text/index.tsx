@@ -7,6 +7,9 @@ const Text: React.FC<Message> = (msg) => {
   const { botConfigs } = useChatConfigurations();
 
   const styles = StyleSheet.create({
+    container: {
+      fontSize: 16,
+    },
     bot: {
       color: botConfigs.colors.secondaryText,
     },
@@ -18,7 +21,7 @@ const Text: React.FC<Message> = (msg) => {
   const isBot = msg.from === From.BOT;
   const textColor = isBot ? styles.bot : styles.user;
 
-  return <P style={textColor}>{msg.message}</P>;
+  return <P style={[styles.container, textColor]}>{msg.message}</P>;
 };
 
 export default memo(Text);

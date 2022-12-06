@@ -9,7 +9,7 @@ export default function App() {
       <View>
         <Text>My application</Text>
       </View>
-      <Code7Boteria botId="62ec1abb18ba8f42452383a4" />
+      <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
     </View>
   );
 }

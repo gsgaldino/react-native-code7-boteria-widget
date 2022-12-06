@@ -8,11 +8,16 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     justifyContent: 'space-between',
-    paddingBottom: 8,
     backgroundColor: '#fff',
     zIndex: 1,
   },
   closed: {
     display: 'none',
+  },
+  visibleKeyboard: {
+    paddingBottom: 22,
+  },
+  notVisibleKeyboard: {
+    paddingBottom: 0,
   },
 });

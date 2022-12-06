@@ -4,6 +4,7 @@ import Image from '../components/Image';
 import Video from '../components/Video';
 import Audio from '../components/Audio';
 import Document from '../components/Document';
+import Carousel from '../components/Carousel';
 
 import wrapMessage from './wrapMessage';
 
@@ -28,6 +29,9 @@ export default (type: MessageTypes) => {
 
     case MessageTypes.DOCUMENT:
       return wrapMessage(Document);
+
+    case MessageTypes.CAROUSEL:
+      return wrapMessage(Carousel);
 
     default:
       return wrapMessage(Text);

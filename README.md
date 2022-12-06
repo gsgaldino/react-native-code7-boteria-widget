@@ -11,12 +11,12 @@ npm install react-native-code7-boteria-widget
 ## Como utilizar
 
 ```js
-import { Widget } from 'react-native-code7-boteria-widget';
+import { Code7Boteria } from 'react-native-code7-boteria-widget';
 
 // ...
 
 return (
-  <Widget botId="MEU_BOT_ID" />
+  <Code7Boteria botId="MEU_BOT_ID" />
 );
 ```
 
@@ -39,20 +39,20 @@ Inicia o projeto em modo de desenvolvimento
 - [x] Imagem (Image)
 - [x] Vídeo (Video)
 - [x] Áudio (Audio)
-- [x] Documento (Document) - 3h
-- [ ] Carrossel (Carousel) - 7h
+- [x] Documento (Document)
+- [x] Carrossel (Carousel)
 
 - Bugs / Ajustes
 
 - [x] Estilos dos balões das mensagens
 - [x] Estilos do BOT com base nas configs salvas no banco
-- [x] Título do BOT ao abrir teclado - 3h
-- [ ] Substituir o map em Messages por uma FlatList - 3h
-- [ ] Socket criando outras conexões ao enviar mensagem - 7h
-- [ ] Retirar o modo preview - 3h
-- [ ] Ajustar absolute imports - 4h
-- [ ] Spinner no carregamento de imagens - 3h
+- [x] Título do BOT ao abrir teclado
+- [x] Substituir o map em Messages por uma FlatList
+- [x] Socket criando outras conexões ao enviar mensagem
+- [x] Retirar o modo preview
 - [ ] Ajustar mimetype ao salvar documentos
+- [ ] Spinner no carregamento de imagens
+- [ ] Ajustar absolute imports
 
 // ver com Gui
 

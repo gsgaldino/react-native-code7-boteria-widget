@@ -61,7 +61,7 @@ export interface Message {
   /**
    * Identifica se é um arquivo de mídia ou não
    */
-  isMedia?: Boolean;
+  isMedia?: boolean;
 
   /**
    * Descrição da foto configurada no fluxo do BOT
@@ -94,4 +94,21 @@ export interface Message {
    * Essa opção é retornada quando o tipo === DOCUMENT
    */
   document?: Document;
+
+  carousel?: {
+    cards?: Card[];
+  };
 }
+
+type Card = {
+  _id: string;
+  imageUrl: string;
+  buttons: Button[];
+  title: string;
+  description: string;
+};
+
+type Button = {
+  _id: string;
+  label: string;
+};
