@@ -3,6 +3,7 @@ import * as FileSystem from 'expo-file-system';
 interface ISaveAndroidFileProps {
   fileUri: string;
   fileName: string;
+  contentType: string;
 }
 
 export const saveAndroidFile = async (properties: ISaveAndroidFileProps) => {
@@ -21,7 +22,7 @@ export const saveAndroidFile = async (properties: ISaveAndroidFileProps) => {
       await FileSystem.StorageAccessFramework.createFileAsync(
         permissions.directoryUri,
         properties.fileName,
-        'application/docx'
+        properties.contentType
       )
         .then(async (uri) => {
           await FileSystem.writeAsStringAsync(uri, fileString, {

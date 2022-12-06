@@ -21,15 +21,14 @@ const DocumentComponent: React.FC<Message> = (msg) => {
       fileUrl.fileUrl,
       FileSystem.documentDirectory + fileName
     )
-      .then(({ uri }) => {
+      .then((doc) => {
         saveAndroidFile({
           fileName,
-          fileUri: uri,
+          fileUri: doc.uri,
+          contentType: doc.headers['content-type'] as string,
         });
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch(console.log);
   };
 
   return (

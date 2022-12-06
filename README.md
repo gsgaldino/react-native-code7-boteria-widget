@@ -50,7 +50,7 @@ Inicia o projeto em modo de desenvolvimento
 - [x] Substituir o map em Messages por uma FlatList
 - [x] Socket criando outras conexões ao enviar mensagem
 - [x] Retirar o modo preview
-- [ ] Ajustar mimetype ao salvar documentos
+- [x] Ajustar mimetype ao salvar documentos
 - [ ] Spinner no carregamento de imagens
 - [ ] Ajustar absolute imports
 
