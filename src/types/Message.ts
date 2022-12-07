@@ -95,12 +95,14 @@ export interface Message {
    */
   document?: Document;
 
-  carousel?: {
-    cards?: Card[];
-  };
+  carousel?: Carousel;
 }
 
-type Card = {
+export interface Carousel {
+  cards?: Card[];
+}
+
+export type Card = {
   _id: string;
   imageUrl: string;
   buttons: Button[];
@@ -108,7 +110,16 @@ type Card = {
   description: string;
 };
 
-type Button = {
+export enum CarouselDestinationTypes {
+  URL = 'url',
+  PHONE = 'phone',
+}
+
+export type Button = {
   _id: string;
   label: string;
+  destination?: {
+    type?: CarouselDestinationTypes;
+    value?: string;
+  };
 };

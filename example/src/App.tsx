@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { Code7Boteria } from 'react-native-code7-boteria-widget';
+import { Code7Boteria } from '../../lib/commonjs';
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <View>
@@ -12,7 +12,7 @@ export default function App() {
       <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -21,3 +21,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;

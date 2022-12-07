@@ -31,8 +31,8 @@ export const saveAndroidFile = async (properties: ISaveAndroidFileProps) => {
           console.log('document downloaded successfully');
         })
         .catch(console.log);
-    } catch (error) {
-      console.log('ERROR', error);
+    } catch (e) {
+      console.log(e);
     }
   } catch (err) {}
 };

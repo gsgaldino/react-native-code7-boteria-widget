@@ -3,7 +3,7 @@ import { View, Animated } from 'react-native';
 
 import { styles } from './styles';
 
-const TWO_HUNDRED_MILLISECONDS = 200;
+const TWO_HUNDRED_MILLISECONDS = 180;
 
 const Typing: React.FC = () => {
   const dots = [
@@ -52,7 +52,7 @@ const Typing: React.FC = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       bounce();
-    }, 1200);
+    }, 1000);
 
     return () => clearInterval(intervalId);
   }, []);

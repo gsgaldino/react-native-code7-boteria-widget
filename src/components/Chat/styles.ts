@@ -14,10 +14,4 @@ export const styles = StyleSheet.create({
   closed: {
     display: 'none',
   },
-  visibleKeyboard: {
-    paddingBottom: 22,
-  },
-  notVisibleKeyboard: {
-    paddingBottom: 0,
-  },
 });

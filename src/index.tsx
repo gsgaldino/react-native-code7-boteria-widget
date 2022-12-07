@@ -17,7 +17,7 @@ interface ICode7BoteriaProps {
   botId: string;
 }
 
-export function Code7Boteria(props: ICode7BoteriaProps) {
+export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
   const { botId } = props;
 
   const isIphone = Platform.OS === 'ios';
@@ -38,4 +38,4 @@ export function Code7Boteria(props: ICode7BoteriaProps) {
       </ChatConfigurationsProvider>
     </SafeAreaView>
   );
-}
+};

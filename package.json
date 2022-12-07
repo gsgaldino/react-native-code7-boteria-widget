@@ -27,12 +27,11 @@
     "!**/.*"
   ],
   "scripts": {
-    "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
     "release": "release-it",
-    "example": "yarn --cwd example",
+    "example": "yarn --cwd example2",
     "bootstrap": "yarn example && yarn install"
   },
   "keywords": [
@@ -41,7 +40,7 @@
     "android"
   ],
   "repository": "https://github.com/code7-xlab/react-native-code7-boteria-widget",
-  "author": "Gabriel Soares <gabrielsoaresii@outlook.com> (https://github.com/code7-xlab)",
+  "author": "Code7 Xlab <code7xlab@hotmail.com> (https://github.com/code7-xlab)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/code7-xlab/react-native-code7-boteria-widget/issues"
@@ -55,18 +54,14 @@
     "@commitlint/config-conventional": "^17.0.2",
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
-    "@types/dotenv": "^8.2.0",
-    "@types/jest": "^28.1.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "commitlint": "^17.0.2",
-    "dotenv": "^16.0.3",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "18.1.0",
@@ -159,6 +154,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "0.17.2",
+    "@miblanchard/react-native-slider": "^2.1.0",
     "@types/socket.io-client": "^3.0.0",
     "expo": "^47.0.3",
     "expo-av": "~13.0.1",

@@ -11,20 +11,11 @@ import CarouselCardInfo from './components/CarouselCardInfo';
 import CustomImage from './components/CustomImage';
 import { useSocketContext } from '../../../../../../context/Socket/Component';
 
-import { Message } from 'types/Message';
+import { Message, Button, Card } from 'types/Message';
+import { IHandleCarouselButtonClickProps } from 'types/Socket';
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;
-
-// interface ICarouselProps {
-//   message: {
-//     carousel: {
-//       cards: Card[];
-//     };
-//   };
-//   onCarouselButtonClick: Function;
-//   handleClickImage: Function;
-// }
 
 export default (message: Message) => {
   const [slidePosition, setSlidePosition] = useState(0);
@@ -45,15 +36,18 @@ export default (message: Message) => {
     setSlidePosition((prevState) => prevState + 1);
   };
 
-  const handleButtonClick = ({ clickedButton, clickedCard }: any) => {
+  const handleButtonClick = ({
+    clickedButton,
+    clickedCard,
+  }: IHandleCarouselButtonClickProps) => {
     handleCarouselButtonClick({ clickedButton, clickedCard });
   };
 
-  const checkButtonIsEmpty = (button: any) => {
+  const checkButtonIsEmpty = (button: Button) => {
     return button?.label === '';
   };
 
-  const checkHasInfo = (card: any) => {
+  const checkHasInfo = (card: Card) => {
     return card?.title !== '' || card?.description !== '';
   };
 

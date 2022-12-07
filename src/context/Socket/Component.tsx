@@ -12,8 +12,16 @@ import { SocketContextProvider, SocketContext } from './Context';
 import { Socket, io } from 'socket.io-client';
 import { useChatConfigurations } from '../ChatConfigurations';
 
-import { ISocketContextState } from 'types/Socket';
-import { From, Message, MessageTypes } from '../../types/Message';
+import {
+  ISocketContextState,
+  IHandleCarouselButtonClickProps,
+} from 'types/Socket';
+import {
+  From,
+  Message,
+  MessageTypes,
+  CarouselDestinationTypes,
+} from '../../types/Message';
 import { IBotConfigs } from '../../types/ChatConfigurations';
 
 interface IChannel {
@@ -26,9 +34,9 @@ interface ISocketComponentProps {
 }
 
 const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
-  const phone = '11988889999';
   const channel = 'webchat';
-  const socketUrl = 'https://b1d3-191-193-237-58.ngrok.io';
+  const socketUrl =
+    'https://eb55-2804-431-cff7-5484-41fc-bbd5-e6c4-46a2.ngrok.io';
 
   const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();
@@ -72,7 +80,7 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
         id: _sessionId,
         channel: channel,
         botChannel: 'WebChat',
-        contactNumber: phone,
+        contactNumber: sessionId,
       });
     },
     [clientRef]
@@ -89,17 +97,18 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
     await Linking.openURL(url);
   }, []);
 
-  const handleCarouselButtonClick = (clickInfo: any) => {
-    const { clickedButton, clickedCard } = clickInfo;
+  const handleCarouselButtonClick = ({
+    clickedButton,
+    clickedCard,
+  }: IHandleCarouselButtonClickProps) => {
     const { destination } = clickedButton;
-    const { type, value } = destination;
 
-    if (type === 'url') {
-      handleOpenLink(value);
+    if (destination?.type === CarouselDestinationTypes.URL) {
+      handleOpenLink(destination?.value as string);
     }
 
-    if (type === 'phone') {
-      const treated = value.replace(/[^A-Z0-9]/gi, '');
+    if (destination?.type === CarouselDestinationTypes.PHONE) {
+      const treated = destination?.value?.replace(/[^A-Z0-9]/gi, '');
       handleOpenLink(`tel:+55${treated}`);
     }
 
