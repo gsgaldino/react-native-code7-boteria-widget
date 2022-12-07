@@ -8,5 +8,6 @@ export const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 16,
+    color: '#5A5D68',
   },
 });

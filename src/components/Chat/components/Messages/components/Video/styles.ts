@@ -4,6 +4,6 @@ export const styles = StyleSheet.create({
   video: {
     width: '100%',
     height: undefined,
-    aspectRatio: 5 / 4,
+    aspectRatio: 5 / 3,
   },
 });

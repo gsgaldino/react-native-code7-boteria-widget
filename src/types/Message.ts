@@ -15,6 +15,11 @@ export enum From {
   BOT = 'bot',
 }
 
+export enum CarouselDestinationTypes {
+  URL = 'url',
+  PHONE = 'phone',
+}
+
 export type Document = {
   /**
    * URL para o documento armazenado no storage da boteria
@@ -95,31 +100,64 @@ export interface Message {
    */
   document?: Document;
 
+  /**
+   * Objeto com as informações as respeito do Carrossel
+   * É retornado quando o tipo === CAROUSEL
+   */
   carousel?: Carousel;
 }
 
 export interface Carousel {
+  /**
+   * Array com os cards do carrossel
+   */
   cards?: Card[];
 }
 
 export type Card = {
   _id: string;
+
+  /**
+   * URL para a imagem do card
+   */
   imageUrl: string;
+
+  /**
+   * Array com os botões configurados na Boteria
+   */
   buttons: Button[];
+
+  /**
+   * Título do card
+   */
   title: string;
+
+  /**
+   * Descrição do card
+   */
   description: string;
 };
 
-export enum CarouselDestinationTypes {
-  URL = 'url',
-  PHONE = 'phone',
-}
-
 export type Button = {
   _id: string;
+
+  /**
+   * Texto de título do botão
+   */
   label: string;
+
+  /**
+   * Objeto com o destino do botão
+   */
   destination?: {
+    /**
+     * Indica qual o tipo de destino
+     */
     type?: CarouselDestinationTypes;
+
+    /**
+     * Valor do destino do botão
+     */
     value?: string;
   };
 };
