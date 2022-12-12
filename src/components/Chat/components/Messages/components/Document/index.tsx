@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Message, Document } from 'src/types/Message';
+import { Message, Document } from '../../../../../../types/Message';
 import { Text, Image, TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 

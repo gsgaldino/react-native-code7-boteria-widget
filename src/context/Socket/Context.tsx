@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ISocketContextState } from 'src/types/Socket';
+import { ISocketContextState } from '../../types/Socket';
 
 export const SocketContext = createContext<ISocketContextState>({
   handleSubmitMessage: () => {},

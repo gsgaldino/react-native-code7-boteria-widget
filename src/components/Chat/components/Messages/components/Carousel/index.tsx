@@ -11,8 +11,8 @@ import CarouselCardInfo from './components/CarouselCardInfo';
 import CustomImage from './components/CustomImage';
 import { useSocketContext } from '../../../../../../context/Socket/Component';
 
-import { Message, Button, Card } from 'src/types/Message';
-import { IHandleCarouselButtonClickProps } from 'src/types/Socket';
+import { Message, Button, Card } from '../../../../../../types/Message';
+import { IHandleCarouselButtonClickProps } from '../../../../../../types/Socket';
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;

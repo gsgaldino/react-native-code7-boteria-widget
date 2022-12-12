@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { Message } from 'src/types/Message';
+import { Message } from '../../../../../../types/Message';
 
 import Slider from './components/Slider';
 import PlayPauseButton from './components/PlayPauseButton';

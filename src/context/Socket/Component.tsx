@@ -15,7 +15,7 @@ import { useChatConfigurations } from '../ChatConfigurations';
 import {
   ISocketContextState,
   IHandleCarouselButtonClickProps,
-} from 'src/types/Socket';
+} from '../../types/Socket';
 import {
   From,
   Message,

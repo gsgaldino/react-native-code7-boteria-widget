@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from 'src/types/Message';
+import { Message } from '../../../../../../types/Message';
 
 import messageComponentByType from '../../utils/messageComponentByType';
 

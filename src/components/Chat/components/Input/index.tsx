@@ -2,12 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { TextInput, View, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-import { MessageTypes, From, Message } from 'src/types/Message';
+import { MessageTypes, From, Message } from '../../../../types/Message';
 
-import { useSocketContext } from 'src/context/Socket/Component';
-import attachIcon from 'src/assets/attach_icon.png';
-// import sendIcon from 'src/assets/send_icon.png';
-import SendIcon from 'src/assets/icons/SendIcon';
+import { useSocketContext } from '../../../../context/Socket/Component';
+import attachIcon from '../../../../assets/attach_icon.png';
+import SendIcon from '../../../../assets/icons/SendIcon';
 
 import { styles } from './styles';
 
