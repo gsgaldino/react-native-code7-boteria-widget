@@ -15,7 +15,7 @@ import { useChatConfigurations } from '../ChatConfigurations';
 import {
   ISocketContextState,
   IHandleCarouselButtonClickProps,
-} from 'types/Socket';
+} from 'src/types/Socket';
 import {
   From,
   Message,
@@ -23,20 +23,20 @@ import {
   CarouselDestinationTypes,
 } from '../../types/Message';
 import { IBotConfigs } from '../../types/ChatConfigurations';
+import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
 
 interface IChannel {
   channelId: string;
 }
 
 interface ISocketComponentProps {
-  children: React.ReactChild;
+  children: React.ReactNode;
   botId: string;
 }
 
 const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const channel = 'webchat';
-  const socketUrl =
-    'https://eb55-2804-431-cff7-5484-41fc-bbd5-e6c4-46a2.ngrok.io';
+  const socketUrl = 'https://e118-191-193-237-58.ngrok.io';
 
   const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();
@@ -48,7 +48,7 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const addMessage = useCallback((message: Message) => {
     setMessages((prevState) => [
       ...(prevState.filter((m) => m.type !== MessageTypes.TYPING) ?? []),
-      message as Message,
+      { ...message, hour: getHourAndMinutes() } as Message,
     ]);
   }, []);
 
@@ -66,7 +66,12 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
 
       setMessages((prevState) => [
         ...prevState,
-        { from: From.USER, message, type },
+        {
+          from: From.USER,
+          message,
+          type,
+          hour: getHourAndMinutes(),
+        } as Message,
       ]);
     },
     [sessionId]

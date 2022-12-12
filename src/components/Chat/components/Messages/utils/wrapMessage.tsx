@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message, From } from '../../../../../types/Message';
+import { Message, From, MessageTypes } from '../../../../../types/Message';
 import { useChatConfigurations } from '../../../../../context/ChatConfigurations';
+import MessageHour from '../components/MessageHour';
 
 export default (MessageComponent: React.FC<Message>) => {
   const { botConfigs } = useChatConfigurations();
@@ -12,7 +13,9 @@ export default (MessageComponent: React.FC<Message>) => {
       borderTopRightRadius: 16,
       borderTopStartRadius: 16,
       maxWidth: 290,
+      minWidth: 80,
       padding: 16,
+      paddingBottom: 0,
     },
     bot: {
       backgroundColor: botConfigs.colors.secondary,
@@ -36,6 +39,7 @@ export default (MessageComponent: React.FC<Message>) => {
     return (
       <View style={[styles.container, ballonStyle]}>
         <MessageComponent {...(props as Message)} />
+        {props.type !== MessageTypes.TYPING && <MessageHour msg={props} />}
       </View>
     );
   };

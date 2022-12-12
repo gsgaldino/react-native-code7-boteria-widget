@@ -105,6 +105,12 @@ export interface Message {
    * É retornado quando o tipo === CAROUSEL
    */
   carousel?: Carousel;
+
+  /**
+   * Hora na qual a mensagem foi foi recebida ou enviada
+   * String formadata no padrão HH:MM
+   */
+  hour?: string;
 }
 
 export interface Carousel {

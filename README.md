@@ -51,8 +51,10 @@ Inicia o projeto em modo de desenvolvimento
 - [x] Socket criando outras conexões ao enviar mensagem
 - [x] Retirar o modo preview
 - [x] Ajustar mimetype ao salvar documentos
+- [x] Adicionar carimbo de hora nas mensagens
+- [x] Ajustar absolute imports
 - [ ] Spinner no carregamento de imagens
-- [ ] Ajustar absolute imports
+- [ ] Adicionar logs no loggly
 
 // ver com Gui
 
