@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Message } from 'types/Message';
+import { Message } from 'src/types/Message';
 import { Video, ResizeMode } from 'expo-av';
 
 import { styles } from './styles';

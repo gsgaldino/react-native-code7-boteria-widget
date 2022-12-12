@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { IBotConfigs, IChatConfigurations } from 'types/ChatConfigurations';
+import { IBotConfigs, IChatConfigurations } from 'src/types/ChatConfigurations';
 
 const defaultBotConfig: IBotConfigs = {
   title: 'Bot title',

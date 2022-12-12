@@ -1,4 +1,4 @@
-import { Document } from 'types/Message';
+import { Document } from 'src/types/Message';
 
 export const getFileNameFromUrl = (url: string): string => {
   const fullFilename = url.slice(url.lastIndexOf('/') + 1, url.length);

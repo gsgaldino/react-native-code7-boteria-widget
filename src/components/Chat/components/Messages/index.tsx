@@ -1,6 +1,6 @@
 import React, { useRef, memo } from 'react';
 import { FlatList, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { Message } from 'types/Message';
+import { Message } from 'src/types/Message';
 
 import { useSocketContext } from '../../../../context/Socket/Component';
 import MessageComponent from './components/MessageComponent';
