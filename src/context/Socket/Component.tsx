@@ -36,7 +36,8 @@ interface ISocketComponentProps {
 
 const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
   const channel = 'webchat';
-  const socketUrl = 'https://e118-191-193-237-58.ngrok.io';
+  const socketUrl =
+    'https://7cb9-2804-431-cff7-5484-b43c-67d6-c3e4-2363.ngrok.io';
 
   const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();

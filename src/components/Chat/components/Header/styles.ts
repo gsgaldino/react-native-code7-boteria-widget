@@ -6,11 +6,11 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 80,
     padding: 16,
-    // alignItems: 'center',
+    alignItems: 'center',
   },
   titleContainer: {
     flexDirection: 'row',
-    // alignItems: 'center',
+    alignItems: 'center',
   },
   titleIcon: {
     width: 50,

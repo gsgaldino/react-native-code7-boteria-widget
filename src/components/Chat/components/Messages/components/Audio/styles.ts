@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   audio: {
     width: 260,
     flexDirection: 'row',
-    // alignItems: 'center',
+    alignItems: 'center',
   },
   duration: {
     fontSize: 16,
