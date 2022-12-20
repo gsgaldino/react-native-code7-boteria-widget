@@ -17,12 +17,11 @@ export const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
-  closeIconContainer: {
+  iconContainer: {
     padding: 10,
   },
-  closeIcon: {
-    width: 14,
-    height: 14,
+  iconsWrapper: {
+    flexDirection: 'row',
   },
   wrapper: {
     flexDirection: 'row',

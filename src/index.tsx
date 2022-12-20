@@ -15,10 +15,11 @@ import { styles } from './styles';
 
 interface ICode7BoteriaProps {
   botId: string;
+  params: string;
 }
 
 export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
-  const { botId } = props;
+  const { botId, params } = props;
 
   const isIphone = Platform.OS === 'ios';
   const barStyle = isIphone ? 'dark-content' : 'default';
@@ -29,7 +30,7 @@ export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
       <StatusBar barStyle={barStyle} />
 
       <ChatConfigurationsProvider>
-        <SocketContextComponent botId={botId}>
+        <SocketContextComponent botId={botId} params={params}>
           <KeyboardAvoidingView behavior={behavior} style={styles.container}>
             <Chat />
             <WidgetComponent />

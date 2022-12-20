@@ -1,68 +1,162 @@
 import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  useState,
   useContext,
   memo,
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
 } from 'react';
-import { Linking } from 'react-native';
+import { io, Socket } from 'socket.io-client';
+
 import { SocketContextProvider, SocketContext } from './Context';
-import { Socket, io } from 'socket.io-client';
-import { useChatConfigurations } from '../ChatConfigurations';
+import { useChatConfigurations } from '../../context/ChatConfigurations';
 
 import {
-  ISocketContextState,
   IHandleCarouselButtonClickProps,
+  ISocketContextState,
 } from '../../types/Socket';
 import {
+  CarouselDestinationTypes,
   From,
   Message,
   MessageTypes,
-  CarouselDestinationTypes,
 } from '../../types/Message';
 import { IBotConfigs } from '../../types/ChatConfigurations';
 import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
+import { Linking } from 'react-native';
+import { useDebounce } from '../../hooks/useDebounce';
+import {
+  updateAsync,
+  getItemsAsync,
+  updateSessionIdAsync,
+  clearAsync,
+} from '../../utils/asyncStorage';
+
+interface ISocketContextComponentProps {
+  botId: string;
+  params?: string;
+  children: React.ReactNode;
+}
 
 interface IChannel {
   channelId: string;
+  settings: {
+    botFab: string;
+    mainTextColor: string;
+    mainColor: string;
+    secondaryColor: string;
+    secondaryTextColor: string;
+  };
 }
 
-interface ISocketComponentProps {
-  children: React.ReactNode;
-  botId: string;
-}
+const TWO_SECONDS = 2000;
+const socketUrl = 'https://737a-177-198-85-112.ngrok.io';
+const botChannel = 'WebChat';
+const channel = 'webchat';
 
-const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
-  const channel = 'webchat';
-  const socketUrl =
-    'https://7cb9-2804-431-cff7-5484-b43c-67d6-c3e4-2363.ngrok.io';
+function SocketContextComponent(props: ISocketContextComponentProps) {
+  let sessionId: string | null = null;
 
-  const { children, botId } = props;
   const { setBotConfigs } = useChatConfigurations();
-
   const clientRef = useRef<null | Socket>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [sessionId, setSessionId] = useState<null | string>(null);
 
-  const addMessage = useCallback((message: Message) => {
-    setMessages((prevState) => [
-      ...(prevState.filter((m) => m.type !== MessageTypes.TYPING) ?? []),
-      { ...message, hour: getHourAndMinutes() } as Message,
-    ]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const debouncedMessages = useDebounce(messages, TWO_SECONDS);
+
+  useEffect(() => {
+    async function getStoredData() {
+      const storedData = await getItemsAsync();
+      const json = JSON.parse(storedData ?? '[]');
+
+      setMessages(json.messages as Message[]);
+    }
+
+    getStoredData();
+  }, []);
+
+  useEffect(() => {
+    async function updateStorage() {
+      const storedData = await getItemsAsync();
+      const json = JSON.parse(storedData ?? '[]');
+
+      await updateAsync({ messages, sessionId: sessionId || json.sessionId });
+    }
+
+    updateStorage();
+  }, [debouncedMessages]);
+
+  interface IUpdateChannelWithBotConfigsProps {
+    channels: IChannel[];
+    botTitle: string;
+  }
+
+  const updateChannelWithBotConfigs = ({
+    channels,
+    botTitle,
+  }: IUpdateChannelWithBotConfigsProps) => {
+    const [webchatChannel] = channels?.filter((ch) => {
+      return ch.channelId === botChannel;
+    });
+
+    const botConfigs: IBotConfigs = {
+      title: botTitle,
+      botFab: String(webchatChannel?.settings?.botFab),
+      colors: {
+        main: String(webchatChannel?.settings?.mainColor),
+        secondary: String(webchatChannel?.settings?.secondaryColor),
+        mainText: String(webchatChannel?.settings?.mainTextColor),
+        secondaryText: String(webchatChannel?.settings?.secondaryTextColor),
+      },
+    };
+
+    setBotConfigs(botConfigs);
+  };
+
+  const startSession = () => {
+    clientRef.current?.emit('subscribe', {
+      id: sessionId,
+      botId: props.botId,
+      botChannel,
+    });
+  };
+
+  const handleStartConversation = useCallback(
+    async (_sessionId: string) => {
+      clientRef?.current?.emit('start', {
+        botId: props.botId,
+        id: _sessionId,
+        channel: channel,
+        botChannel: 'WebChat',
+        contactNumber: sessionId,
+      });
+    },
+    [clientRef]
+  );
+
+  const addMessage = useCallback(async (message) => {
+    setMessages((prevState) => {
+      const newState = [
+        ...(prevState.filter((m) => m.type !== MessageTypes.TYPING) ?? []),
+        {
+          ...message,
+          hour: getHourAndMinutes(),
+        } as Message,
+      ];
+      return newState;
+    });
   }, []);
 
   const handleSubmitMessage = useCallback(
-    ({ message, type, ext }: Message) => {
+    async ({ message, type, ext }: Message) => {
       const isMedia = type !== MessageTypes.TEXT;
       clientRef?.current?.emit('message', {
-        botId: botId,
+        botId: props.botId,
         message,
         isMedia,
         ext,
         id: sessionId,
-        botChannel: 'WebChat',
+        botChannel,
       });
 
       setMessages((prevState) => [
@@ -78,26 +172,72 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
     [sessionId]
   );
 
-  const handleStartConversation = useCallback(
-    (_sessionId: string) => {
-      setSessionId(_sessionId);
-      clientRef?.current?.emit('start', {
-        botId: botId,
-        id: _sessionId,
-        channel: channel,
-        botChannel: 'WebChat',
-        contactNumber: sessionId,
-      });
-    },
-    [clientRef]
-  );
-
-  const startNewSession = (client: Socket) => {
-    client.emit('subscribe', {
-      botId: botId,
-      botChannel: 'WebChat',
-    });
+  const restartConversation = async () => {
+    await clearAsync();
+    setMessages([]);
+    startSession();
   };
+
+  useEffect(() => {
+    if (!clientRef.current) {
+      const client = io(socketUrl);
+      clientRef.current = client;
+
+      client.on('connect', async () => {
+        const storedData = await getItemsAsync();
+        const json = JSON.parse(storedData ?? '[]');
+
+        sessionId = json?.sessionId as string;
+        startSession();
+      });
+
+      client.on('message', async (data) => {
+        const newMessage = { ...data, from: From.BOT };
+        addMessage(newMessage);
+      });
+
+      client.on('subscribe-response', async (data) => {
+        updateChannelWithBotConfigs({
+          botTitle: data.bot.title as string,
+          channels: data.bot.channels as IChannel[],
+        });
+
+        if (!sessionId || sessionId !== data.id) {
+          sessionId = data.id;
+          await updateSessionIdAsync(data.id);
+
+          handleStartConversation(data.id);
+        }
+      });
+
+      client.on('reconnect_attempt', () => {
+        client.io.opts.transports = ['polling', 'websocket'];
+      });
+
+      client.on('disconnect', () => {
+        if (clientRef.current) {
+          console.log('ws closed by server');
+        } else {
+          console.log('ws closed by app component unmount');
+          return;
+        }
+      });
+
+      client.on('end_conversation', (data) => {
+        if (!data?.isTransfer) {
+          sessionId = null;
+        }
+      });
+      return () => {
+        clientRef.current = null;
+        client.close();
+      };
+    }
+
+    return () => {
+      clientRef.current = null;
+    };
+  }, []);
 
   const handleOpenLink = useCallback(async (url: string) => {
     await Linking.openURL(url);
@@ -119,7 +259,7 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
     }
 
     clientRef?.current?.emit('action', {
-      botId: botId,
+      botId: props.botId,
       action: {
         type: MessageTypes.CAROUSEL,
         data: { clickedButton, clickedCard },
@@ -128,89 +268,25 @@ const SocketComponent: React.FC<ISocketComponentProps> = (props) => {
     });
   };
 
-  useEffect(() => {
-    if (!clientRef.current) {
-      const client = io(socketUrl);
-      clientRef.current = client;
-
-      client.on('connect', () => {
-        if (!sessionId) {
-          startNewSession(client);
-        }
-      });
-
-      client.on('message', (data) => {
-        addMessage({ ...data, from: From.BOT });
-      });
-
-      client.on('subscribe-response', (data) => {
-        setSessionId(data?.id);
-        handleStartConversation(data.id);
-
-        const [webchatChannel] = data?.bot?.channels?.filter((ch: IChannel) => {
-          return ch.channelId === 'WebChat';
-        });
-
-        const botConfigs: IBotConfigs = {
-          title: data?.bot?.title,
-          botFab: webchatChannel?.settings?.botFab,
-          colors: {
-            main: webchatChannel?.settings?.mainColor,
-            secondary: webchatChannel?.settings?.secondaryColor,
-            mainText: webchatChannel?.settings?.mainTextColor,
-            secondaryText: webchatChannel?.settings?.secondaryTextColor,
-          },
-        };
-
-        setBotConfigs(botConfigs);
-      });
-
-      client.on('reconnect_attempt', () => {
-        client.io.opts.transports = ['polling', 'websocket'];
-      });
-
-      client.on('disconnect', () => {
-        if (clientRef.current) {
-          console.log('ws closed by server');
-        } else {
-          console.log('ws closed by app component unmount');
-          return;
-        }
-      });
-
-      client.on('end_conversation', (data) => {
-        if (!data?.isTransfer) {
-          setSessionId('');
-        }
-      });
-
-      return () => {
-        clientRef.current = null;
-        client.close();
-      };
-    }
-
-    return () => {
-      clientRef.current = null;
-    };
-  }, [botId, handleStartConversation]);
-
   const state: ISocketContextState = useMemo(
     () => ({
       handleSubmitMessage,
       messages,
       handleCarouselButtonClick,
+      restartConversation,
     }),
     [messages]
   );
 
   return (
-    <SocketContextProvider value={state}>{children}</SocketContextProvider>
+    <SocketContextProvider value={state}>
+      {props.children}
+    </SocketContextProvider>
   );
-};
+}
 
 export const useSocketContext = () => {
   return useContext(SocketContext) as ISocketContextState;
 };
 
-export default memo(SocketComponent);
+export default memo(SocketContextComponent);

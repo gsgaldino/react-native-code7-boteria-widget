@@ -1,15 +1,20 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { Code7Boteria } from '../../lib/commonjs';
+import { Code7Boteria } from 'react-native-code7-boteria-widget';
 
 const App: React.FC = () => {
+  const variables = {
+    nome: 'Gabriel Soares',
+  };
+
   return (
     <View style={styles.container}>
       <View>
         <Text>My application</Text>
       </View>
-      <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
+
+      <Code7Boteria botId="62ec1ac218ba8f42452383a6" params={variables} />
     </View>
   );
 };

@@ -1,14 +1,17 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { useChatConfigurations } from '../../../../context/ChatConfigurations';
-import { Icon } from '../../..';
+import { useSocketContext } from '../../../../context/Socket/Component';
+import Icon from '../../../Icon';
 
-import closeIcon from '../../../../assets/close_icon.png';
+import closeIcon from '../../../../assets/icons/CloseIcon.png';
+import resetIcon from '../../../../assets/icons/ResetIcon.png';
 
 import { styles } from './styles';
 
 function Header() {
   const { isChatOpen, toggleIsChatOpen, botConfigs } = useChatConfigurations();
+  const { restartConversation } = useSocketContext();
 
   const onClose = () => !!isChatOpen && toggleIsChatOpen();
 
@@ -27,11 +30,19 @@ function Header() {
         <Text style={styles.title}>{botConfigs.title}</Text>
       </View>
 
-      <TouchableOpacity onPress={onClose}>
-        <View style={styles.closeIconContainer}>
-          <Image source={closeIcon} style={styles.closeIcon} />
-        </View>
-      </TouchableOpacity>
+      <View style={styles.iconsWrapper}>
+        <TouchableOpacity onPress={() => restartConversation()}>
+          <View style={styles.iconContainer}>
+            <Image source={resetIcon} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={onClose}>
+          <View style={styles.iconContainer}>
+            <Image source={closeIcon} />
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

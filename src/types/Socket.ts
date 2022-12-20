@@ -31,4 +31,6 @@ export interface ISocketContextState {
   handleCarouselButtonClick: (
     clickInfo: IHandleCarouselButtonClickProps
   ) => void;
+
+  restartConversation: () => Promise<void>;
 }

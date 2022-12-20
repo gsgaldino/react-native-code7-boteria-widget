@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useChatConfigurations } from '../../context/ChatConfigurations';
-import { Icon } from '../../components';
+import Icon from '../../components/Icon';
 import { styles } from './styles';
 
 function Widget() {
