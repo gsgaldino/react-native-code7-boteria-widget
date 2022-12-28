@@ -5,6 +5,7 @@ export const SocketContext = createContext<ISocketContextState>({
   handleSubmitMessage: () => {},
   messages: [],
   handleCarouselButtonClick: () => {},
+  restartConversation: async () => {},
 });
 
 export const SocketContextProvider = SocketContext.Provider;

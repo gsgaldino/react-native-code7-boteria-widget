@@ -1,18 +1,16 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 
-import { useChatConfigurations } from '../../context/ChatConfigurations';
 import Icon from '../../components/Icon';
 import { styles } from './styles';
 
-function Widget() {
-  const { toggleIsChatOpen } = useChatConfigurations();
+type Props = {
+  onPress: (e: GestureResponderEvent) => void;
+};
 
+function Widget({ onPress }: Props) {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => toggleIsChatOpen()}
-    >
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Icon />
     </TouchableOpacity>
   );

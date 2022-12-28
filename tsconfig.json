@@ -2,7 +2,7 @@
   "include": [
     "src",
     "index.d.ts"
-  ],
+, "src/styles.ts"  ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {

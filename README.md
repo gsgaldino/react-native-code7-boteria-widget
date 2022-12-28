@@ -8,15 +8,80 @@ Maneira fácil e rápida para criar uma instância do chat (Boteria) em aplicati
 npm install react-native-code7-boteria-widget
 ```
 
+## Parâmetros
+
+<table>
+  <tr>
+    <td> Parâmetro </td>
+    <td> Descrição </td>
+    <td> Obrigatório </td>
+    <td> Tipo </td>
+    <td> Exemplo </td>
+  </tr>
+  <tr>
+    <td> botId </td>
+    <td> Identificador do BOT </td>
+    <td> Sim </td>
+    <td> String </td>
+    <td> 62e9145fc073550012d52f25 </td>
+  </tr>
+  <tr>
+    <td> params </td>
+    <td> Variáveis externas que entrarão no fluxo </td>
+    <td> não </td>
+    <td> Object </td>
+    <td>
+
+  ```js
+  {
+    foo: 'bar'
+  }
+  ```
+  </td>
+  </tr>
+  <tr>
+    <td> children </td>
+    <td> Componente que irá substituir o Widget </td>
+    <td> não </td>
+    <td> React Component </td>
+    <td>
+
+  ```jsx
+  <MyComponent />
+  ```
+  </td>
+  </tr>
+</table>
+
 ## Como utilizar
 
 ```js
 import { Code7Boteria } from 'react-native-code7-boteria-widget';
+import MyComponent from 'components';
 
 // ...
 
+const params = {
+  foo: 'bar'
+};
+
 return (
-  <Code7Boteria botId="MEU_BOT_ID" />
+  <Code7Boteria
+    botId="botId"
+    params={params}
+    children={<MyComponent />}
+  />
+);
+```
+
+Ou então:
+
+```js
+
+return (
+  <Code7Boteria botId="botId" params={params}>
+    <MyComponent />
+  </Code7Boteria>
 );
 ```
 
@@ -29,33 +94,3 @@ npm run dev
 ```
 
 Inicia o projeto em modo de desenvolvimento
-
-## Todos
-
-- Componentes de mensagem
-  
-- [x] Texto (Text)
-- [x] Digitando (Typing)
-- [x] Imagem (Image)
-- [x] Vídeo (Video)
-- [x] Áudio (Audio)
-- [x] Documento (Document)
-- [x] Carrossel (Carousel)
-
-- Bugs / Ajustes
-
-- [x] Estilos dos balões das mensagens
-- [x] Estilos do BOT com base nas configs salvas no banco
-- [x] Título do BOT ao abrir teclado
-- [x] Substituir o map em Messages por uma FlatList
-- [x] Socket criando outras conexões ao enviar mensagem
-- [x] Retirar o modo preview
-- [x] Ajustar mimetype ao salvar documentos
-- [x] Adicionar carimbo de hora nas mensagens
-- [x] Ajustar absolute imports
-- [ ] Spinner no carregamento de imagens
-- [ ] Adicionar logs no loggly
-
-// ver com Gui
-
-- Customização semelhante ao webchat fullscreen

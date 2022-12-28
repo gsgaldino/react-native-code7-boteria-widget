@@ -1,249 +1,203 @@
 import React, {
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-  useState,
   useContext,
-  memo,
+  useEffect,
+  useCallback,
+  useRef,
+  useState,
 } from 'react';
-import { io, Socket } from 'socket.io-client';
-
-import { SocketContextProvider, SocketContext } from './Context';
-import { useChatConfigurations } from '../../context/ChatConfigurations';
-
-import {
-  IHandleCarouselButtonClickProps,
-  ISocketContextState,
-} from '../../types/Socket';
-import {
-  CarouselDestinationTypes,
-  From,
-  Message,
-  MessageTypes,
-} from '../../types/Message';
-import { IBotConfigs } from '../../types/ChatConfigurations';
-import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
 import { Linking } from 'react-native';
-import { useDebounce } from '../../hooks/useDebounce';
+import { SocketContextProvider, SocketContext } from './Context';
+
+import { StorageState } from '../../types/AsyncStorage';
 import {
-  updateAsync,
-  getItemsAsync,
-  updateSessionIdAsync,
-  clearAsync,
-} from '../../utils/asyncStorage';
+  Message,
+  From,
+  MessageTypes,
+  CarouselDestinationTypes,
+} from '../../types/Message';
+import {
+  ISocketContextState,
+  IHandleCarouselButtonClickProps,
+} from '../../types/Socket';
 
-interface ISocketContextComponentProps {
-  botId: string;
-  params?: string;
-  children: React.ReactNode;
-}
+import { useAsyncStorage } from '../AsyncStorage';
+import { useChatConfigurations } from '../ChatConfigurations';
+import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
 
-interface IChannel {
-  channelId: string;
-  settings: {
-    botFab: string;
-    mainTextColor: string;
-    mainColor: string;
-    secondaryColor: string;
-    secondaryTextColor: string;
-  };
-}
+import { SOCKET_URL } from '../../constants';
+import api from '../../services/api';
+import { useDebounce } from '../../hooks/useDebounce';
 
-const TWO_SECONDS = 2000;
-const socketUrl = 'https://737a-177-198-85-112.ngrok.io';
 const botChannel = 'WebChat';
-const channel = 'webchat';
+const TWO_SECONDS = 2000;
 
-function SocketContextComponent(props: ISocketContextComponentProps) {
-  let sessionId: string | null = null;
+interface Props {
+  children?: React.ReactNode;
+  params?: Object;
+  botId: string;
+}
 
-  const { setBotConfigs } = useChatConfigurations();
-  const clientRef = useRef<null | Socket>(null);
+function SocketContextComponent({ children, botId, params }: Props) {
+  const clientRef = useRef<WebSocket | null>(null);
+  const isFirstRender = useRef(true);
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const debouncedMessages = useDebounce(messages, TWO_SECONDS);
+  const { getItemsAsync, clearAsync, saveDataAsync } = useAsyncStorage();
+  const { fetchBotAndUpdateConfigs } = useChatConfigurations();
 
-  useEffect(() => {
-    async function getStoredData() {
-      const storedData = await getItemsAsync();
-      const json = JSON.parse(storedData ?? '[]');
+  const [storageState, setStorageState] = useState<null | StorageState>(null);
 
-      setMessages(json.messages as Message[]);
-    }
+  const debouncedMessages = useDebounce(storageState?.messages, TWO_SECONDS);
 
-    getStoredData();
-  }, []);
-
-  useEffect(() => {
-    async function updateStorage() {
-      const storedData = await getItemsAsync();
-      const json = JSON.parse(storedData ?? '[]');
-
-      await updateAsync({ messages, sessionId: sessionId || json.sessionId });
-    }
-
-    updateStorage();
-  }, [debouncedMessages]);
-
-  interface IUpdateChannelWithBotConfigsProps {
-    channels: IChannel[];
-    botTitle: string;
-  }
-
-  const updateChannelWithBotConfigs = ({
-    channels,
-    botTitle,
-  }: IUpdateChannelWithBotConfigsProps) => {
-    const [webchatChannel] = channels?.filter((ch) => {
-      return ch.channelId === botChannel;
-    });
-
-    const botConfigs: IBotConfigs = {
-      title: botTitle,
-      botFab: String(webchatChannel?.settings?.botFab),
-      colors: {
-        main: String(webchatChannel?.settings?.mainColor),
-        secondary: String(webchatChannel?.settings?.secondaryColor),
-        mainText: String(webchatChannel?.settings?.mainTextColor),
-        secondaryText: String(webchatChannel?.settings?.secondaryTextColor),
-      },
-    };
-
-    setBotConfigs(botConfigs);
-  };
-
-  const startSession = () => {
-    clientRef.current?.emit('subscribe', {
-      id: sessionId,
-      botId: props.botId,
+  const subscribe = async () => {
+    const { data } = await api.post('/webchat/subscribe', {
+      sessionId: storageState?.sessionId,
+      botId,
+      channel: 'webchat',
       botChannel,
+      parameters: JSON.stringify(params || '[]'),
     });
+
+    return data;
   };
 
-  const handleStartConversation = useCallback(
-    async (_sessionId: string) => {
-      clientRef?.current?.emit('start', {
-        botId: props.botId,
-        id: _sessionId,
-        channel: channel,
-        botChannel: 'WebChat',
-        contactNumber: sessionId,
-      });
-    },
-    [clientRef]
-  );
-
-  const addMessage = useCallback(async (message) => {
-    setMessages((prevState) => {
-      const newState = [
-        ...(prevState.filter((m) => m.type !== MessageTypes.TYPING) ?? []),
+  const addMessage = (newMessage: Message) => {
+    setStorageState((prevState) => {
+      const newMessages = [
+        ...(prevState?.messages?.filter?.(
+          (m) => m.type !== MessageTypes.TYPING
+        ) ?? []),
         {
-          ...message,
+          ...newMessage,
           hour: getHourAndMinutes(),
         } as Message,
       ];
-      return newState;
+
+      return {
+        messages: newMessages,
+        sessionId: prevState?.sessionId,
+      } as StorageState;
     });
-  }, []);
+  };
 
   const handleSubmitMessage = useCallback(
     async ({ message, type, ext }: Message) => {
       const isMedia = type !== MessageTypes.TEXT;
-      clientRef?.current?.emit('message', {
-        botId: props.botId,
-        message,
-        isMedia,
-        ext,
-        id: sessionId,
-        botChannel,
-      });
 
-      setMessages((prevState) => [
-        ...prevState,
-        {
+      try {
+        addMessage({
           from: From.USER,
           message,
           type,
-          hour: getHourAndMinutes(),
-        } as Message,
-      ]);
+        } as Message);
+
+        await api.post('/webchat/message', {
+          botId,
+          message,
+          isMedia,
+          ext,
+          sessionId: storageState?.sessionId,
+          botChannel,
+          isPreview: false,
+        });
+      } catch (error) {
+        console.log('Error sending message', error);
+      }
     },
-    [sessionId]
+    [storageState?.sessionId]
   );
 
+  const onClientMessage = (msg: Message) => {
+    addMessage({
+      ...msg,
+      from: From.BOT,
+    });
+  };
+
+  async function startConversation() {
+    const subscribeResponse = await subscribe();
+
+    if (
+      !storageState?.sessionId ||
+      subscribeResponse.sessionId !== storageState?.sessionId
+    ) {
+      const newData: StorageState = {
+        sessionId: subscribeResponse.sessionId,
+        messages: storageState?.messages || [],
+      };
+
+      setStorageState(newData);
+      await saveDataAsync(newData);
+    }
+
+    return subscribeResponse;
+  }
+
   const restartConversation = async () => {
+    setStorageState(null);
+
     await clearAsync();
-    setMessages([]);
-    startSession();
+    await startConversation();
   };
 
   useEffect(() => {
+    (async () => {
+      if (debouncedMessages?.length && storageState?.sessionId) {
+        await saveDataAsync(storageState as StorageState);
+      }
+    })();
+  }, [debouncedMessages]);
+
+  useEffect(() => {
+    getItemsAsync()
+      .then((stored) => {
+        setStorageState(stored);
+      })
+      .catch(console.log);
+  }, []);
+
+  useEffect(() => {
+    const client = new WebSocket(SOCKET_URL);
     if (!clientRef.current) {
-      const client = io(socketUrl);
       clientRef.current = client;
 
-      client.on('connect', async () => {
-        const storedData = await getItemsAsync();
-        const json = JSON.parse(storedData ?? '[]');
-
-        sessionId = json?.sessionId as string;
-        startSession();
-      });
-
-      client.on('message', async (data) => {
-        const newMessage = { ...data, from: From.BOT };
-        addMessage(newMessage);
-      });
-
-      client.on('subscribe-response', async (data) => {
-        updateChannelWithBotConfigs({
-          botTitle: data.bot.title as string,
-          channels: data.bot.channels as IChannel[],
-        });
-
-        if (!sessionId || sessionId !== data.id) {
-          sessionId = data.id;
-          await updateSessionIdAsync(data.id);
-
-          handleStartConversation(data.id);
+      client.onmessage = (msg: WebSocketMessageEvent) => {
+        try {
+          const serverResponse = JSON.parse(msg.data);
+          if (serverResponse.action === 'message') {
+            onClientMessage(serverResponse.data as Message);
+          }
+        } catch (error) {
+          console.log('Error treating received message', error);
         }
-      });
-
-      client.on('reconnect_attempt', () => {
-        client.io.opts.transports = ['polling', 'websocket'];
-      });
-
-      client.on('disconnect', () => {
-        if (clientRef.current) {
-          console.log('ws closed by server');
-        } else {
-          console.log('ws closed by app component unmount');
-          return;
-        }
-      });
-
-      client.on('end_conversation', (data) => {
-        if (!data?.isTransfer) {
-          sessionId = null;
-        }
-      });
-      return () => {
-        clientRef.current = null;
-        client.close();
       };
     }
 
     return () => {
+      client.close();
       clientRef.current = null;
     };
+  }, [SOCKET_URL]);
+
+  useEffect(() => {
+    (async () => {
+      await fetchBotAndUpdateConfigs(botId);
+    })();
   }, []);
 
-  const handleOpenLink = useCallback(async (url: string) => {
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    startConversation();
+  }, []);
+
+  const handleOpenLink = async (url: string) => {
     await Linking.openURL(url);
-  }, []);
+  };
 
-  const handleCarouselButtonClick = ({
+  const handleCarouselButtonClick = async ({
     clickedButton,
     clickedCard,
   }: IHandleCarouselButtonClickProps) => {
@@ -258,35 +212,32 @@ function SocketContextComponent(props: ISocketContextComponentProps) {
       handleOpenLink(`tel:+55${treated}`);
     }
 
-    clientRef?.current?.emit('action', {
-      botId: props.botId,
+    await api.post('/webchat/action', {
+      botId: botId,
       action: {
         type: MessageTypes.CAROUSEL,
         data: { clickedButton, clickedCard },
       },
-      id: sessionId,
+      sessionId: storageState?.sessionId,
     });
   };
 
-  const state: ISocketContextState = useMemo(
-    () => ({
-      handleSubmitMessage,
-      messages,
-      handleCarouselButtonClick,
-      restartConversation,
-    }),
-    [messages]
-  );
-
   return (
-    <SocketContextProvider value={state}>
-      {props.children}
+    <SocketContextProvider
+      value={{
+        handleCarouselButtonClick,
+        handleSubmitMessage,
+        messages: storageState?.messages || [],
+        restartConversation,
+      }}
+    >
+      {children}
     </SocketContextProvider>
   );
 }
 
-export const useSocketContext = () => {
-  return useContext(SocketContext) as ISocketContextState;
-};
+export default SocketContextComponent;
 
-export default memo(SocketContextComponent);
+export function useSocketContext() {
+  return useContext(SocketContext) as ISocketContextState;
+}

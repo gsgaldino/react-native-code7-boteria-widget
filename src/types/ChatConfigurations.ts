@@ -56,4 +56,9 @@ export interface IChatConfigurations {
    * Função que atualiza o estado com as configurações do Bot
    */
   setBotConfigs: (newConfigs: IBotConfigs) => void;
+
+  /**
+   *
+   */
+  fetchBotAndUpdateConfigs: (botId: string) => Promise<void>;
 }

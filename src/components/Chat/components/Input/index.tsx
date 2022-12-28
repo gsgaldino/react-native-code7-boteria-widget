@@ -10,6 +10,8 @@ import SendIcon from '../../../../assets/icons/SendIcon';
 
 import { styles } from './styles';
 
+const ONE_THOUSAND = 1000;
+
 function Input() {
   const { handleSubmitMessage } = useSocketContext();
   const [userText, setUserText] = useState('');
@@ -56,6 +58,7 @@ function Input() {
         onChangeText={setUserText}
         style={styles.input}
         value={userText}
+        maxLength={ONE_THOUSAND}
       />
 
       <View style={styles.icons}>
@@ -64,7 +67,6 @@ function Input() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onSend}>
-          {/* <Image source={sendIcon} style={styles.sendIcon} /> */}
           <SendIcon />
         </TouchableOpacity>
       </View>
