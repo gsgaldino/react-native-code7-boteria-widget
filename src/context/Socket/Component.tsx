@@ -20,16 +20,16 @@ import {
   IHandleCarouselButtonClickProps,
 } from '../../types/Socket';
 
-import { useAsyncStorage } from '../AsyncStorage';
+// import { useAsyncStorage } from '../AsyncStorage';
 import { useChatConfigurations } from '../ChatConfigurations';
 import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
 
 import { SOCKET_URL } from '../../constants';
 import api from '../../services/api';
-import { useDebounce } from '../../hooks/useDebounce';
+// import { useDebounce } from '../../hooks/useDebounce';
 
 const botChannel = 'WebChat';
-const TWO_SECONDS = 2000;
+// const TWO_SECONDS = 2000;
 
 interface Props {
   children?: React.ReactNode;
@@ -41,12 +41,12 @@ function SocketContextComponent({ children, botId, params }: Props) {
   const clientRef = useRef<WebSocket | null>(null);
   const isFirstRender = useRef(true);
 
-  const { getItemsAsync, clearAsync, saveDataAsync } = useAsyncStorage();
+  // const { getItemsAsync, clearAsync, saveDataAsync } = useAsyncStorage();
   const { fetchBotAndUpdateConfigs } = useChatConfigurations();
 
   const [storageState, setStorageState] = useState<null | StorageState>(null);
 
-  const debouncedMessages = useDebounce(storageState?.messages, TWO_SECONDS);
+  // const debouncedMessages = useDebounce(storageState?.messages, TWO_SECONDS);
 
   const subscribe = async () => {
     const { data } = await api.post('/webchat/subscribe', {
@@ -126,7 +126,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
       };
 
       setStorageState(newData);
-      await saveDataAsync(newData);
+      // await saveDataAsync(newData);
     }
 
     return subscribeResponse;
@@ -135,25 +135,25 @@ function SocketContextComponent({ children, botId, params }: Props) {
   const restartConversation = async () => {
     setStorageState(null);
 
-    await clearAsync();
+    // await clearAsync();
     await startConversation();
   };
 
-  useEffect(() => {
-    (async () => {
-      if (debouncedMessages?.length && storageState?.sessionId) {
-        await saveDataAsync(storageState as StorageState);
-      }
-    })();
-  }, [debouncedMessages]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (debouncedMessages?.length && storageState?.sessionId) {
+  //       await saveDataAsync(storageState as StorageState);
+  //     }
+  //   })();
+  // }, [debouncedMessages]);
 
-  useEffect(() => {
-    getItemsAsync()
-      .then((stored) => {
-        setStorageState(stored);
-      })
-      .catch(console.log);
-  }, []);
+  // useEffect(() => {
+  //   getItemsAsync()
+  //     .then((stored) => {
+  //       setStorageState(stored);
+  //     })
+  //     .catch(console.log);
+  // }, []);
 
   useEffect(() => {
     const client = new WebSocket(SOCKET_URL);
