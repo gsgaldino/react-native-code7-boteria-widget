@@ -6,7 +6,6 @@
  * @flow strict-local
  */
 
-import {Code7Boteria} from 'react-native-code7-boteria-widget';
 import React from 'react';
 import type {Node} from 'react';
 import {
@@ -26,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {Code7Boteria} from '../lib/commonjs';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -91,7 +91,6 @@ const App: () => Node = () => {
           </Section>
           <LearnMoreLinks />
         </View>
-
         <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
       </ScrollView>
     </SafeAreaView>

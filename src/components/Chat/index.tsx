@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { useChatConfigurations } from '../../context/ChatConfigurations';
 
 import Header from './components/Header';
-import Input from './components/Input';
-import Messages from './components/Messages';
+// import Input from './components/Input';
+// import Messages from './components/Messages';
 
 import { styles } from './styles';
 
@@ -16,8 +16,8 @@ function Chat() {
   return (
     <View style={[styles.container, isChatOpenClass]}>
       <Header />
-      <Messages />
-      <Input />
+      {/* <Messages /> */}
+      {/* <Input /> */}
     </View>
   );
 }
