@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     padding: 8,
     position: 'relative',
+    backgroundColor: '#ffffff',
   },
   input: {
     backgroundColor: '#F3F5F9',

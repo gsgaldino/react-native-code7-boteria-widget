@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import { TextInput, View, Image, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { TextInput, View, TouchableOpacity, Image } from 'react-native';
 
 import { MessageTypes, From, Message } from '../../../../types/Message';
 
 import { useSocketContext } from '../../../../context/Socket/Component';
 import attachIcon from '../../../../assets/attach_icon.png';
-import SendIcon from '../../../../assets/icons/SendIcon';
+import sendIcon from '../../../../assets/send_icon.png';
+
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import { styles } from './styles';
 
@@ -17,21 +18,17 @@ function Input() {
   const [userText, setUserText] = useState('');
 
   const onAttach = useCallback(async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-      base64: true,
+    launchImageLibrary({ mediaType: 'photo' }, (a) => {
+      console.log('yo', a);
     });
-
-    const uri = result.assets ? result.assets[0]?.uri : '';
+    // const uri = result.assets ? result.assets[0]?.uri : '';
 
     const msg: Message = {
       from: From.USER,
       ext: 'jpg',
       isMedia: true,
       type: MessageTypes.IMAGE,
-      message: uri,
+      message: 'uri',
     };
 
     handleSubmitMessage(msg);
@@ -67,7 +64,7 @@ function Input() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onSend}>
-          <SendIcon />
+          <Image source={sendIcon} style={styles.sendIcon} />
         </TouchableOpacity>
       </View>
     </View>

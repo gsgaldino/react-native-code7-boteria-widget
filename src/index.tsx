@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  StatusBar,
-  Platform,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import ChatConfigurationsProvider from './context/ChatConfigurations';
 // import AsyncStorageContext from './context/AsyncStorage';
@@ -23,13 +18,10 @@ export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
   const { botId, params } = props;
 
   const isIphone = Platform.OS === 'ios';
-  const barStyle = isIphone ? 'dark-content' : 'default';
   const behavior = isIphone ? 'padding' : 'height';
 
   return (
-    <SafeAreaView style={styles.areaView}>
-      <StatusBar barStyle={barStyle} />
-
+    <>
       {/* <AsyncStorageContext> */}
       <ChatConfigurationsProvider>
         <SocketContextComponent botId={botId} params={params}>
@@ -39,6 +31,6 @@ export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
         </SocketContextComponent>
       </ChatConfigurationsProvider>
       {/* </AsyncStorageContext> */}
-    </SafeAreaView>
+    </>
   );
 };

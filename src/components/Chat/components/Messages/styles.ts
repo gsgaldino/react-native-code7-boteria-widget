@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  containerContentStyle: {
+  messagesContainer: {
+    backgroundColor: '#ffffff',
+    zIndex: 99,
     flex: 1,
-    justifyContent: 'space-between',
   },
 });

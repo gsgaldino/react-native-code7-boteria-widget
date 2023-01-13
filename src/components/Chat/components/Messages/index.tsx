@@ -1,9 +1,16 @@
 import React, { useRef, memo } from 'react';
-import { FlatList, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import {
+  FlatList,
+  Keyboard,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { Message } from '../../../../types/Message';
 
 import { useSocketContext } from '../../../../context/Socket/Component';
 import MessageComponent from './components/MessageComponent';
+
+import { styles } from './styles';
 
 interface IRenderItemProps {
   item: Message;
@@ -22,15 +29,17 @@ const MessageList: React.FC = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <FlatList
-        ref={flatlistRef}
-        data={messages}
-        onContentSizeChange={scrollBottom}
-        onLayout={scrollBottom}
-        renderItem={renderItem}
-      />
-    </TouchableWithoutFeedback>
+    <View style={styles.messagesContainer}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <FlatList
+          ref={flatlistRef}
+          data={messages}
+          onContentSizeChange={scrollBottom}
+          onLayout={scrollBottom}
+          renderItem={renderItem}
+        />
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 

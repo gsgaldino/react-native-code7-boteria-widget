@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: width,
   },
-  areaView: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
+  // areaView: {
+  //   position: 'absolute',
+  //   width: 70,
+  //   height: 70,
+  //   bottom: 18,
+  //   right: 18,
+  // },
   app: {
     flex: 1,
   },

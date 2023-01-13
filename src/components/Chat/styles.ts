@@ -1,15 +1,20 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screen = Dimensions.get('screen');
+const headerHeight = 48;
 
 export const styles = StyleSheet.create({
   container: {
+    alignSelf: 'baseline',
+    width: screen.width,
+    height: screen.height - headerHeight,
     position: 'absolute',
-    top: 0,
+    bottom: 0,
     left: 0,
-    height: '100%',
-    width: '100%',
+    flex: 1,
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    zIndex: 1,
+    zIndex: 99,
   },
   closed: {
     display: 'none',

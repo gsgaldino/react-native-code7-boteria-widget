@@ -91,8 +91,8 @@ const App: () => Node = () => {
           </Section>
           <LearnMoreLinks />
         </View>
-        <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
       </ScrollView>
+      <Code7Boteria botId="62ec1ac218ba8f42452383a6" />
     </SafeAreaView>
   );
 };
