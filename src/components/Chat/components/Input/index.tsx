@@ -16,11 +16,12 @@ const ONE_THOUSAND = 1000;
 function Input() {
   const { handleSubmitMessage } = useSocketContext();
   const [userText, setUserText] = useState('');
+  console.log('IMAGEÌCKER', launchImageLibrary);
 
   const onAttach = useCallback(async () => {
-    launchImageLibrary({ mediaType: 'photo' }, (a) => {
-      console.log('yo', a);
-    });
+    // launchImageLibrary({ mediaType: 'photo' }, (a) => {
+    //   console.log('yo', a);
+    // });
     // const uri = result.assets ? result.assets[0]?.uri : '';
 
     const msg: Message = {
