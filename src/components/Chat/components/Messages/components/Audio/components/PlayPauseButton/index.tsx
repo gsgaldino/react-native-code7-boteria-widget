@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { TouchableOpacity, Image, View } from 'react-native';
 
 import FaPlay from '../../../../../../../../assets/icons/FaPlay.png';
@@ -27,4 +27,4 @@ const PlayPauseButton = (props: IPlayPauseButtonProps) => {
   );
 };
 
-export default PlayPauseButton;
+export default memo(PlayPauseButton);

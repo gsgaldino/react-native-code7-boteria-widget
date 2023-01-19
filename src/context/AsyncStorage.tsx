@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useCallback } from 'react';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IAsyncStorage, StorageState } from '../types/AsyncStorage';
 
 const storageKey = '@react-native-code7-boteria-widget';

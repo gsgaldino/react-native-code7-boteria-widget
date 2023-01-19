@@ -1,8 +1,8 @@
 import React, { useRef, memo } from 'react';
 import {
   FlatList,
-  Keyboard,
-  TouchableWithoutFeedback,
+  // Keyboard,
+  // TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { Message } from '../../../../types/Message';
@@ -30,15 +30,13 @@ const MessageList: React.FC = () => {
 
   return (
     <View style={styles.messagesContainer}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <FlatList
-          ref={flatlistRef}
-          data={messages}
-          onContentSizeChange={scrollBottom}
-          onLayout={scrollBottom}
-          renderItem={renderItem}
-        />
-      </TouchableWithoutFeedback>
+      <FlatList
+        ref={flatlistRef}
+        data={messages}
+        onContentSizeChange={scrollBottom}
+        onLayout={scrollBottom}
+        renderItem={renderItem}
+      />
     </View>
   );
 };

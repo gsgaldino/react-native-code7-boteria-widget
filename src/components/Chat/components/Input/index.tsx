@@ -16,23 +16,24 @@ const ONE_THOUSAND = 1000;
 function Input() {
   const { handleSubmitMessage } = useSocketContext();
   const [userText, setUserText] = useState('');
-  console.log('IMAGEÌCKER', launchImageLibrary);
 
   const onAttach = useCallback(async () => {
-    // launchImageLibrary({ mediaType: 'photo' }, (a) => {
-    //   console.log('yo', a);
-    // });
-    // const uri = result.assets ? result.assets[0]?.uri : '';
+    launchImageLibrary({ mediaType: 'photo' }, (response) => {
+      const uri = response.assets ? response.assets[0]?.uri : '';
+      const ext = response.assets
+        ? response.assets[0]?.type?.split('/')[1]
+        : '';
 
-    const msg: Message = {
-      from: From.USER,
-      ext: 'jpg',
-      isMedia: true,
-      type: MessageTypes.IMAGE,
-      message: 'uri',
-    };
+      const msg: Message = {
+        from: From.USER,
+        ext,
+        isMedia: true,
+        type: MessageTypes.IMAGE,
+        message: uri,
+      };
 
-    handleSubmitMessage(msg);
+      handleSubmitMessage(msg);
+    });
   }, []);
 
   const onSend = () => {

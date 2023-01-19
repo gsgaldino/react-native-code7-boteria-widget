@@ -1,84 +1,90 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
 import { Message } from '../../../../../../types/Message';
 
 import Slider from './components/Slider';
 import PlayPauseButton from './components/PlayPauseButton';
+import Sound from 'react-native-sound';
 
-import { Audio, AVPlaybackStatusSuccess } from 'expo-av';
-
-import { millisToMinutesAndSeconds } from './utils/millisToMinutesAndSeconds';
+import { secondsToMinutesAndSeconds } from './utils/millisToMinutesAndSeconds';
 import { getPlayedPercentage } from './utils/getPlayedPercentage';
 import { getPlayedPosition } from './utils/getPlayerPosition';
 
 import { styles } from './styles';
 
+const THREE_HUNDRED_MILLIS = 300;
+
 const AudioComponent: React.FC<Message> = (props) => {
-  const [soundState, setSoundState] = useState<undefined | Audio.Sound>();
-  const [playbackStatus, setPlaybackStatus] = useState<
-    undefined | AVPlaybackStatusSuccess
-  >();
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [playing, setPlaying] = useState(false);
 
-  async function playSound() {
-    await soundState?.playAsync();
-  }
+  const interval = useRef<null | NodeJS.Timer>();
+  const sound = useRef<Sound | null>(
+    new Sound(props.audio?.fileUrl, Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      } else {
+        setDuration(Math.floor(sound.current?.getDuration() as number));
+      }
+    })
+  );
 
-  async function pauseSound() {
-    await soundState?.pauseAsync();
-  }
+  useEffect(
+    () => () => {
+      sound.current?.release();
+      sound.current = null;
+      clearInterval(interval.current as NodeJS.Timeout);
+    },
+    []
+  );
 
-  const onPlayPausePress = () => {
-    playbackStatus?.isPlaying ? pauseSound() : playSound();
-  };
+  const updateCurrentTime = useCallback(() => {
+    sound.current?.getCurrentTime((seconds) => {
+      setCurrentTime(Math.floor(seconds));
+    });
+  }, [sound.current]);
+
+  const togglePlayback = useCallback(() => {
+    if (playing) {
+      sound.current?.pause();
+      setPlaying(false);
+      clearInterval(interval.current as NodeJS.Timeout);
+    } else {
+      sound.current?.play(() => {
+        sound.current?.release();
+        setPlaying(false);
+      });
+
+      interval.current = setInterval(updateCurrentTime, THREE_HUNDRED_MILLIS);
+      setPlaying(true);
+    }
+  }, [sound.current, playing]);
 
   const onSliderChange = (value: number) => {
-    soundState?.setPositionAsync(
+    sound.current?.setCurrentTime(
       getPlayedPosition({
-        duration: playbackStatus?.durationMillis as number,
+        duration,
         playedPercentage: value,
       })
     );
   };
 
-  useEffect(() => {
-    (async () => {
-      const { sound } = await Audio.Sound.createAsync({
-        uri: props.audio?.fileUrl as string,
-      });
-
-      sound.setOnPlaybackStatusUpdate((status) =>
-        setPlaybackStatus(status as AVPlaybackStatusSuccess)
-      );
-
-      setSoundState(sound as Audio.Sound);
-    })();
-  }, []);
-
-  useEffect(() => {
-    return soundState
-      ? () => {
-          soundState.unloadAsync();
-        }
-      : undefined;
-  }, [soundState]);
-
   return (
     <View style={styles.audio}>
-      <PlayPauseButton
-        isPlaying={!!playbackStatus?.isPlaying}
-        onPress={onPlayPausePress}
-      />
+      <PlayPauseButton isPlaying={playing} onPress={togglePlayback} />
 
       <Text style={styles.duration}>
-        {millisToMinutesAndSeconds(playbackStatus?.positionMillis as number)} /{' '}
-        {millisToMinutesAndSeconds(playbackStatus?.durationMillis as number)}
+        {secondsToMinutesAndSeconds(currentTime)} /{' '}
+        {secondsToMinutesAndSeconds(duration)}
       </Text>
 
       <Slider
         onValueChange={onSliderChange}
         value={getPlayedPercentage({
-          currentTime: playbackStatus?.positionMillis as number,
-          duration: playbackStatus?.durationMillis as number,
+          currentTime,
+          duration,
         })}
       />
     </View>

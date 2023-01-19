@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StyleSheet, Dimensions } from 'react-native';
 
 const screen = Dimensions.get('screen');
@@ -10,8 +11,8 @@ export const styles = StyleSheet.create({
     height: screen.height - headerHeight,
     position: 'absolute',
     bottom: 0,
-    left: 0,
-    flex: 1,
+    right: 0,
+    // flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
     zIndex: 99,
