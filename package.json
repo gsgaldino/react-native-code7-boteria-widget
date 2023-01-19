@@ -83,7 +83,9 @@
     "expo-av": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-image-picker": "*"
+    "react-native-image-picker": "*",
+    "react-native-video": "*",
+    "react-native-sound": "*"
   },
   "jest": {
     "preset": "react-native",
