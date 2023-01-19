@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StyleSheet, Dimensions } from 'react-native';
 
 const screen = Dimensions.get('screen');
