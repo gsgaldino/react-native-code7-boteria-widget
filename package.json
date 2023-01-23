@@ -80,12 +80,13 @@
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",
-    "expo-av": "*",
     "react": "*",
     "react-native": "*",
     "react-native-image-picker": "*",
+    "react-native-sound": "*",
     "react-native-video": "*",
-    "react-native-sound": "*"
+    "react-native-notifications": "*",
+    "expo-file-system": "*"
   },
   "jest": {
     "preset": "react-native",
@@ -173,6 +174,7 @@
     "expo-notifications": "~0.17.0",
     "expo-permissions": "~14.0.0",
     "react-dom": "18.1.0",
+    "react-native-notifications": "^4.3.3",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.9",
     "socket.io-client": "4.5.1"

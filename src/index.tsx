@@ -6,11 +6,10 @@ import AsyncStorageContext from './context/AsyncStorage';
 import SocketContextComponent from './context/Socket/Component';
 
 import App from './App';
-import { styles } from './styles';
 
 interface ICode7BoteriaProps {
   botId: string;
-  params: Object;
+  params?: Object;
   children?: React.ReactNode;
 }
 
@@ -21,16 +20,14 @@ export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
   const behavior = isIphone ? 'padding' : 'height';
 
   return (
-    <>
+    <KeyboardAvoidingView behavior={behavior}>
       <ChatConfigurationsProvider>
         <AsyncStorageContext>
           <SocketContextComponent botId={botId} params={params}>
-            <KeyboardAvoidingView behavior={behavior} style={styles.container}>
-              <App customWidget={props.children} />
-            </KeyboardAvoidingView>
+            <App customWidget={props.children} />
           </SocketContextComponent>
         </AsyncStorageContext>
       </ChatConfigurationsProvider>
-    </>
+    </KeyboardAvoidingView>
   );
 };

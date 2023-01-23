@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { Linking } from 'react-native';
+
 import { SocketContextProvider, SocketContext } from './Context';
 
 import { StorageState } from '../../types/AsyncStorage';
@@ -22,7 +23,9 @@ import {
 
 import { useAsyncStorage } from '../AsyncStorage';
 import { useChatConfigurations } from '../ChatConfigurations';
+
 import { getHourAndMinutes } from '../../utils/getHourAndMinutes';
+import { sendNotification } from '../../utils/sendLocalNotification';
 
 import { SOCKET_URL } from '../../constants';
 import api from '../../services/api';
@@ -106,12 +109,23 @@ function SocketContextComponent({ children, botId, params }: Props) {
     [storageState?.sessionId]
   );
 
-  const onClientMessage = (msg: Message) => {
-    addMessage({
-      ...msg,
-      from: From.BOT,
-    });
-  };
+  const onClientMessage = useCallback((msg: WebSocketMessageEvent) => {
+    try {
+      const serverResponse = JSON.parse(msg.data);
+      if (serverResponse.action === 'message') {
+        const incomingMessage: Message = {
+          ...serverResponse.data,
+          from: From.BOT,
+        };
+
+        addMessage(incomingMessage);
+
+        sendNotification({ body: incomingMessage.message as string });
+      }
+    } catch (error) {
+      console.log('Error treating received message', error);
+    }
+  }, []);
 
   async function startConversation() {
     const subscribeResponse = await subscribe();
@@ -160,16 +174,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
     if (!clientRef.current) {
       clientRef.current = client;
 
-      client.onmessage = (msg: WebSocketMessageEvent) => {
-        try {
-          const serverResponse = JSON.parse(msg.data);
-          if (serverResponse.action === 'message') {
-            onClientMessage(serverResponse.data as Message);
-          }
-        } catch (error) {
-          console.log('Error treating received message', error);
-        }
-      };
+      client.onmessage = onClientMessage;
     }
 
     return () => {

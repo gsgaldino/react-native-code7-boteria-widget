@@ -9,8 +9,7 @@ const VideoComponent: React.FC<Message> = (props) => {
     <Video
       source={{ uri: props.video?.fileUrl as string }}
       style={styles.video}
-      controls
-      paused
+      controls={true}
     />
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { SafeAreaView } from 'react-native';
 import Chat from './components/Chat';
 import WidgetComponent from './components/Widget';
 import { useChatConfigurations } from './context/ChatConfigurations';
-// import { styles } from './styles';
 
 type Props = {
   customWidget: React.ReactNode;
@@ -19,10 +19,10 @@ function App({ customWidget }: Props) {
     });
 
   return (
-    <>
+    <SafeAreaView>
       <Chat />
       {newComponent || <WidgetComponent onPress={() => toggleIsChatOpen()} />}
-    </>
+    </SafeAreaView>
   );
 }
 

@@ -38,14 +38,12 @@ const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [configs, setConfigs] = useState<IBotConfigs>(defaultBotConfig);
 
-  const toggleIsChatOpen = useCallback(
-    () => setIsChatOpen(!isChatOpen),
-    [isChatOpen]
-  );
+  const toggleIsChatOpen = useCallback(() => {
+    setIsChatOpen((oldValue) => !oldValue);
+  }, [isChatOpen, setIsChatOpen]);
 
   const setBotConfigs = (cfg: IBotConfigs) => setConfigs(cfg);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchBotAndUpdateConfigs = async (botId: string) => {
     const { data } = await getBot.get('62e9145fc073550012d52f25');
 

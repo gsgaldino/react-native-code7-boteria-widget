@@ -25,7 +25,7 @@ const MessageList: React.FC = () => {
   };
 
   const scrollBottom = (): void => {
-    flatlistRef.current?.scrollToEnd({ animated: true });
+    flatlistRef.current?.scrollToEnd({ animated: false });
   };
 
   return (
