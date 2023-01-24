@@ -1,10 +1,5 @@
 import React, { useRef, memo } from 'react';
-import {
-  FlatList,
-  // Keyboard,
-  // TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Message } from '../../../../types/Message';
 
 import { useSocketContext } from '../../../../context/Socket/Component';
@@ -25,7 +20,7 @@ const MessageList: React.FC = () => {
   };
 
   const scrollBottom = (): void => {
-    flatlistRef.current?.scrollToEnd({ animated: false });
+    if (messages.length) flatlistRef.current?.scrollToEnd?.();
   };
 
   return (
