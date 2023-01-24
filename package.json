@@ -69,7 +69,7 @@
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-builder-bob": "^0.20.0",
-    "react-native-image-picker": "^5.0.0",
+    "react-native-image-picker": "^5.0.1",
     "react-native-sound": "^0.11.2",
     "react-native-video": "^5.2.1",
     "release-it": "^15.0.0",
@@ -80,13 +80,13 @@
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",
+    "expo-file-system": "*",
     "react": "*",
     "react-native": "*",
     "react-native-image-picker": "*",
-    "react-native-sound": "*",
-    "react-native-video": "*",
     "react-native-notifications": "*",
-    "expo-file-system": "*"
+    "react-native-sound": "*",
+    "react-native-video": "*"
   },
   "jest": {
     "preset": "react-native",
