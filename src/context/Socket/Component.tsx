@@ -120,7 +120,9 @@ function SocketContextComponent({ children, botId, params }: Props) {
 
         addMessage(incomingMessage);
 
-        sendNotification({ body: incomingMessage.message as string });
+        if (incomingMessage.type !== MessageTypes.TYPING) {
+          sendNotification({ body: incomingMessage.message as string });
+        }
       }
     } catch (error) {
       console.log('Error treating received message', error);

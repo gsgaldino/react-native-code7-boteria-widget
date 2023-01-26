@@ -5,8 +5,11 @@ interface ISendNotificationProps {
 }
 
 export const sendNotification = ({ body }: ISendNotificationProps) => {
+  const soundPath = '../notification_receiving.mp3';
+
   Notifications.postLocalNotification({
     body,
-    // sound: 'download.aiff',
+    sound: soundPath,
+    badge: 1,
   } as Notification);
 };
