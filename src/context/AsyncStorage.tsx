@@ -25,9 +25,10 @@ const AsyncStorageProvider: React.FC<React.ReactNode> = (props) => {
     return JSON.parse(data || '{}') as StorageState;
   };
 
-  const clearAsync = async () => {
-    await AsyncStorage.clear();
-  };
+  const clearAsync = () =>
+    new Promise((resolve) => {
+      AsyncStorage.clear().then(resolve);
+    });
 
   return (
     <AsyncStorageContext.Provider
@@ -44,5 +45,5 @@ const AsyncStorageProvider: React.FC<React.ReactNode> = (props) => {
 
 export default AsyncStorageProvider;
 
-export const useAsyncStorage = (): IAsyncStorage =>
+export const useAsyncStorage = () =>
   useContext(AsyncStorageContext) as IAsyncStorage;

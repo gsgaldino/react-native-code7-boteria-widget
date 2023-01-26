@@ -6,7 +6,7 @@ import Slider from './components/Slider';
 import PlayPauseButton from './components/PlayPauseButton';
 import Sound from 'react-native-sound';
 
-import { secondsToMinutesAndSeconds } from './utils/millisToMinutesAndSeconds';
+import { secondsToMinutesAndSeconds } from './utils/secondsToMinutesAndSeconds';
 import { getPlayedPercentage } from './utils/getPlayedPercentage';
 import { getPlayedPosition } from './utils/getPlayerPosition';
 

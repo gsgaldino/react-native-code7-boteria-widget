@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
-  image: {
-    marginRight: 8,
+  text: {
+    marginLeft: 8,
   },
 });

@@ -1,48 +1,50 @@
-import React, { memo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Message, Document } from '../../../../../../types/Message';
-import { Text, Image, TouchableOpacity } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-
 import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFromAttachment';
-import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
+import RNFS from 'react-native-fs';
+
 import attachIcon from '../../../../../../assets/attach_icon.png';
-import { saveAndroidFile } from '../../../../../../utils/save';
 
 import { styles } from './styles';
 
 const DocumentComponent: React.FC<Message> = (msg) => {
-  const { botConfigs } = useChatConfigurations();
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const fileUrl = msg.document as Document;
-  const fileName = getFileNameFromAttachment(fileUrl);
+  const fileName = useMemo(
+    () => getFileNameFromAttachment(msg.document as Document),
+    [msg.document]
+  );
 
-  const downloadFile = () => {
-    FileSystem.downloadAsync(
-      fileUrl.fileUrl,
-      FileSystem.documentDirectory + fileName
-    )
-      .then((doc) => {
-        saveAndroidFile({
-          fileName,
-          fileUri: doc.uri,
-          contentType: doc.headers['content-type'] as string,
-        });
-      })
-      .catch(console.log);
+  const downloadDocumentToDevice = async () => {
+    setIsDownloading(true);
+
+    try {
+      const destination = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+      const job = RNFS.downloadFile({
+        fromUrl: msg.document?.fileUrl as string,
+        toFile: destination,
+      });
+
+      await job.promise;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const onDocumentPress = () => {
+    downloadDocumentToDevice();
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={downloadFile}>
-      <Image source={attachIcon} style={styles.image} />
-      <Text
-        style={{
-          color: botConfigs.colors.secondaryText,
-        }}
-      >
-        {fileName}
-      </Text>
+    <TouchableOpacity onPress={onDocumentPress} style={styles.container}>
+      {isDownloading ? <ActivityIndicator /> : <Image source={attachIcon} />}
+
+      <Text style={styles.text}>{fileName}</Text>
     </TouchableOpacity>
   );
 };
 
-export default memo(DocumentComponent);
+export default DocumentComponent;

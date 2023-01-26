@@ -146,12 +146,11 @@ function SocketContextComponent({ children, botId, params }: Props) {
     return subscribeResponse;
   }
 
-  const restartConversation = async () => {
-    setStorageState(null);
-
-    await clearAsync();
-    await startConversation();
-  };
+  const restartConversation = useCallback(() => {
+    clearAsync().then(async () => {
+      await startConversation();
+    });
+  }, []);
 
   useEffect(() => {
     (async () => {

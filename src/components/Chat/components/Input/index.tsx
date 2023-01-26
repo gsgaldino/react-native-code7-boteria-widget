@@ -18,22 +18,28 @@ function Input() {
   const [userText, setUserText] = useState('');
 
   const onAttach = useCallback(async () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      const uri = response.assets ? response.assets[0]?.uri : '';
-      const ext = response.assets
-        ? response.assets[0]?.type?.split('/')[1]
-        : '';
+    launchImageLibrary(
+      { mediaType: 'photo', includeBase64: true },
+      (response) => {
+        if (response.didCancel) {
+          return;
+        } else {
+          const uri = response.assets ? response.assets[0]?.base64 : '';
+          const ext = response.assets
+            ? response.assets[0]?.type?.split('/')[1]
+            : '';
 
-      const msg: Message = {
-        from: From.USER,
-        ext,
-        isMedia: true,
-        type: MessageTypes.IMAGE,
-        message: uri,
-      };
-
-      handleSubmitMessage(msg);
-    });
+          const msg: Message = {
+            from: From.USER,
+            ext,
+            isMedia: true,
+            type: MessageTypes.IMAGE,
+            message: uri,
+          };
+          msg.message && handleSubmitMessage(msg);
+        }
+      }
+    );
   }, []);
 
   const onSend = () => {

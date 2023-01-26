@@ -1,70 +1,55 @@
-import React, { useRef, useEffect, memo } from 'react';
+import React, { useEffect, memo, useRef } from 'react';
 import { View, Animated } from 'react-native';
 
 import { styles } from './styles';
 
-const TWO_HUNDRED_MILLISECONDS = 180;
+const ONE_HUNDRED_EIGHTY = 180;
 
 const Typing: React.FC = () => {
-  const dots = [
-    useRef(new Animated.Value(1)).current,
-    useRef(new Animated.Value(2)).current,
-    useRef(new Animated.Value(3)).current,
-  ];
+  const dots = {
+    one: useRef(new Animated.Value(0)).current,
+    two: useRef(new Animated.Value(0)).current,
+    three: useRef(new Animated.Value(0)).current,
+  };
 
   const bounce = () => {
-    const duration = TWO_HUNDRED_MILLISECONDS;
+    const bounceUp: Animated.TimingAnimationConfig = {
+      toValue: -4,
+      duration: ONE_HUNDRED_EIGHTY,
+      useNativeDriver: true,
+    };
+
+    const bounceDown: Animated.TimingAnimationConfig = {
+      toValue: 0,
+      duration: ONE_HUNDRED_EIGHTY,
+      useNativeDriver: true,
+    };
 
     Animated.sequence([
-      Animated.timing(dots[0] as Animated.Value, {
-        toValue: -4,
-        duration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(dots[0] as Animated.Value, {
-        toValue: 0,
-        duration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(dots[1] as Animated.Value, {
-        toValue: -4,
-        duration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(dots[1] as Animated.Value, {
-        toValue: 0,
-        duration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(dots[2] as Animated.Value, {
-        toValue: -4,
-        duration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(dots[2] as Animated.Value, {
-        toValue: 0,
-        duration,
-        useNativeDriver: true,
-      }),
-    ]).start();
+      Animated.timing(dots.one, bounceUp),
+      Animated.timing(dots.two, bounceUp),
+      Animated.timing(dots.three, bounceUp),
+      Animated.timing(dots.one, bounceDown),
+      Animated.timing(dots.two, bounceDown),
+      Animated.timing(dots.three, bounceDown),
+    ]).start(() => bounce());
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      bounce();
-    }, 1000);
-
-    return () => clearInterval(intervalId);
+    bounce();
   }, []);
 
   return (
     <View style={styles.wrapper}>
-      {dots.map((dotAnimation, index) => (
-        <Animated.View
-          key={index}
-          style={[styles.dot, { transform: [{ translateY: dotAnimation }] }]}
-        />
-      ))}
+      <Animated.View
+        style={[styles.dot, { transform: [{ translateY: dots.one }] }]}
+      />
+      <Animated.View
+        style={[styles.dot, { transform: [{ translateY: dots.two }] }]}
+      />
+      <Animated.View
+        style={[styles.dot, { transform: [{ translateY: dots.three }] }]}
+      />
     </View>
   );
 };

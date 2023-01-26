@@ -8,5 +8,5 @@ export type StorageState = {
 export interface IAsyncStorage {
   getItemsAsync: () => Promise<StorageState>;
   saveDataAsync: (data: StorageState) => Promise<void>;
-  clearAsync: () => Promise<void>;
+  clearAsync: () => Promise<unknown>;
 }
