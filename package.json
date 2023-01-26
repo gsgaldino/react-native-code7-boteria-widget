@@ -53,6 +53,8 @@
     "@arkweid/lefthook": "^0.7.7",
     "@commitlint/config-conventional": "^17.0.2",
     "@react-native-community/eslint-config": "^3.0.2",
+    "@react-native-async-storage/async-storage": "^1.17.11",
+    "@types/react-native-video": "^5.0.14",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
@@ -67,7 +69,12 @@
     "react-native": "0.70.5",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "react-native-fs": "^2.20.0",
+    "react-native-image-picker": "^5.0.1",
+    "react-native-notifications": "^4.3.3",
+    "react-native-sound": "^0.11.2",
+    "react-native-video": "^5.2.1"
   },
   "resolutions": {
     "@types/react": "17.0.21"
@@ -154,8 +161,6 @@
   "dependencies": {
     "@expo/webpack-config": "0.17.2",
     "@miblanchard/react-native-slider": "^2.1.0",
-    "@react-native-async-storage/async-storage": "^1.17.11",
-    "@types/react-native-video": "^5.0.14",
     "@types/socket.io-client": "^3.0.0",
     "axios": "^1.2.1",
     "expo": "^47.0.3",
@@ -163,12 +168,7 @@
     "expo-notifications": "~0.17.0",
     "expo-permissions": "~14.0.0",
     "react-dom": "18.1.0",
-    "react-native-fs": "^2.20.0",
-    "react-native-image-picker": "^5.0.1",
-    "react-native-notifications": "^4.3.3",
-    "react-native-sound": "^0.11.2",
     "react-native-svg": "13.4.0",
-    "react-native-video": "^5.2.1",
     "react-native-web": "~0.18.9",
     "socket.io-client": "4.5.1"
   }
