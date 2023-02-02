@@ -45,9 +45,8 @@ const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
   const setBotConfigs = (cfg: IBotConfigs) => setConfigs(cfg);
 
   const fetchBotAndUpdateConfigs = async (botId: string) => {
-    const { data } = await getBot.get('62e9145fc073550012d52f25');
+    const { data } = await getBot.get(botId);
 
-    console.log('botId', botId);
     const [webchatChannel] = data?.channels?.filter((ch: IChannel) => {
       return ch.channelId === 'WebChat';
     });

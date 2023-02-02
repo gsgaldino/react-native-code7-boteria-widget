@@ -111,6 +111,11 @@ export interface Message {
    * String formadata no padrão HH:MM
    */
   hour?: string;
+
+  /**
+   * URI para o arquivo localizado no aparelho do cliente
+   */
+  localFileUri?: string;
 }
 
 export interface Carousel {

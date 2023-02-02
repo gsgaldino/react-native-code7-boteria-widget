@@ -83,14 +83,15 @@ function SocketContextComponent({ children, botId, params }: Props) {
   };
 
   const handleSubmitMessage = useCallback(
-    async ({ message, type, ext }: Message) => {
+    async ({ message, type, ext, localFileUri, document }: Message) => {
       const isMedia = type !== MessageTypes.TEXT;
 
       try {
         addMessage({
           from: From.USER,
-          message,
+          message: isMedia ? localFileUri : message,
           type,
+          document,
         } as Message);
 
         await api.post('/webchat/message', {
@@ -109,25 +110,29 @@ function SocketContextComponent({ children, botId, params }: Props) {
     [storageState?.sessionId]
   );
 
-  const onClientMessage = useCallback((msg: WebSocketMessageEvent) => {
-    try {
-      const serverResponse = JSON.parse(msg.data);
-      if (serverResponse.action === 'message') {
-        const incomingMessage: Message = {
-          ...serverResponse.data,
-          from: From.BOT,
-        };
+  const onClientMessage = useCallback(
+    (msg: WebSocketMessageEvent) => {
+      console.log('INCOMING SERVER MESSAGE:', msg);
+      try {
+        const serverResponse = JSON.parse(msg.data);
+        if (serverResponse.action === 'message') {
+          const incomingMessage: Message = {
+            ...serverResponse.data,
+            from: From.BOT,
+          };
 
-        addMessage(incomingMessage);
+          addMessage(incomingMessage);
 
-        if (incomingMessage.type !== MessageTypes.TYPING) {
-          sendNotification({ body: incomingMessage.message as string });
+          if (incomingMessage.type !== MessageTypes.TYPING) {
+            sendNotification({ body: incomingMessage.message as string });
+          }
         }
+      } catch (error) {
+        console.log('Error treating received message', error);
       }
-    } catch (error) {
-      console.log('Error treating received message', error);
-    }
-  }, []);
+    },
+    [clientRef.current]
+  );
 
   async function startConversation() {
     const subscribeResponse = await subscribe();
@@ -172,6 +177,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
 
   useEffect(() => {
     const client = new WebSocket(SOCKET_URL);
+    console.log('WEBSOCKET CLIENT:', client);
     if (!clientRef.current) {
       clientRef.current = client;
 

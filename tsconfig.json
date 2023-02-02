@@ -6,7 +6,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-code7-boteria-widget": [
+      "code7-boteria-lib-mobile-rn": [
         "./src/index"
       ],
     },
@@ -17,7 +17,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": [
-      "esnext"
+      "es5", "es6", "dom", "dom.iterable"
     ],
     "module": "esnext",
     "moduleResolution": "node",

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { PropsWithChildren } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
 import ChatConfigurationsProvider from './context/ChatConfigurations';
@@ -7,13 +8,12 @@ import SocketContextComponent from './context/Socket/Component';
 
 import App from './App';
 
-interface ICode7BoteriaProps {
-  botId: string;
+type Code7BoteriaProps = PropsWithChildren<{
   params?: Object;
-  children?: React.ReactNode;
-}
+  botId: string;
+}>;
 
-export const Code7Boteria = (props: ICode7BoteriaProps): React.ReactNode => {
+export const Code7Boteria = (props: Code7BoteriaProps) => {
   const { botId, params } = props;
 
   const isIphone = Platform.OS === 'ios';

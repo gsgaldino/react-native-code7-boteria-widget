@@ -24,9 +24,4 @@ export const styles = StyleSheet.create({
     width: 21,
     height: 18,
   },
-  attachIcon: {
-    width: 19,
-    height: 22,
-    marginRight: 14,
-  },
 });

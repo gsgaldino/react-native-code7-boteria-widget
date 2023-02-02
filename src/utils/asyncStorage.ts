@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const storageKey = '@react-native-code7-boteria-widget/session';
+const storageKey = '@code7-boteria-lib-mobile-rn/session';
 import { Message } from '../types/Message';
 
 interface ISessionStorageProps {

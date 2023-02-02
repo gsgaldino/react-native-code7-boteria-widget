@@ -1,7 +1,10 @@
 import { Document } from '../types/Message';
 
 export const getFileNameFromUrl = (url: string): string => {
-  const fullFilename = url.slice(url.lastIndexOf('/') + 1, url.length);
+  const fullFilename = url
+    ? url.slice(url.lastIndexOf('/') + 1, url.length)
+    : 'Name';
+
   const filenameWAux = fullFilename.replace(
     /([0-9a-fA-F]{24})-([0-9a-fA-F]{24})-/,
     ''
@@ -12,5 +15,6 @@ export const getFileNameFromUrl = (url: string): string => {
   return `${filename?.slice(0, -auxCharactersQuantity)}.${ext}`;
 };
 
-export const getFileNameFromAttachment = (document: Document) =>
-  document.size ? document.title : getFileNameFromUrl(document.fileUrl);
+export const getFileNameFromAttachment = (document: Document) => {
+  return document.title || getFileNameFromUrl(document?.fileUrl);
+};

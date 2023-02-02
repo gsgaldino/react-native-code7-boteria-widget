@@ -8,12 +8,14 @@ const Image: React.FC<Message> = (msg) => {
 
   return (
     <View>
-      <ExpoImage
-        style={styles.image}
-        source={{
-          uri: imageUri,
-        }}
-      />
+      {imageUri && (
+        <ExpoImage
+          style={styles.image}
+          source={{
+            uri: imageUri,
+          }}
+        />
+      )}
     </View>
   );
 };
