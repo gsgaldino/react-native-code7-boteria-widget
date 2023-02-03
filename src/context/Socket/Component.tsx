@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { Linking } from 'react-native';
+import socketio, { Socket } from 'socket.io-client';
 
 import { SocketContextProvider, SocketContext } from './Context';
 
@@ -41,7 +42,7 @@ interface Props {
 }
 
 function SocketContextComponent({ children, botId, params }: Props) {
-  const clientRef = useRef<WebSocket | null>(null);
+  const clientRef = useRef<Socket | null>(null);
   const isFirstRender = useRef(true);
 
   const { getItemsAsync, clearAsync, saveDataAsync } = useAsyncStorage();
@@ -110,29 +111,29 @@ function SocketContextComponent({ children, botId, params }: Props) {
     [storageState?.sessionId]
   );
 
-  const onClientMessage = useCallback(
-    (msg: WebSocketMessageEvent) => {
-      console.log('INCOMING SERVER MESSAGE:', msg);
-      try {
-        const serverResponse = JSON.parse(msg.data);
-        if (serverResponse.action === 'message') {
-          const incomingMessage: Message = {
-            ...serverResponse.data,
-            from: From.BOT,
-          };
+  // const onClientMessage = useCallback(
+  //   (msg: any) => {
+  //     console.log('INCOMING SERVER MESSAGE:', msg);
+  //     try {
+  //       const serverResponse = JSON.parse(msg.data);
+  //       if (serverResponse.action === 'message') {
+  //         const incomingMessage: Message = {
+  //           ...serverResponse.data,
+  //           from: From.BOT,
+  //         };
 
-          addMessage(incomingMessage);
+  //         addMessage(incomingMessage);
 
-          if (incomingMessage.type !== MessageTypes.TYPING) {
-            sendNotification({ body: incomingMessage.message as string });
-          }
-        }
-      } catch (error) {
-        console.log('Error treating received message', error);
-      }
-    },
-    [clientRef.current]
-  );
+  //         if (incomingMessage.type !== MessageTypes.TYPING) {
+  //           sendNotification({ body: incomingMessage.message as string });
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.log('Error treating received message', error);
+  //     }
+  //   },
+  //   [clientRef.current]
+  // );
 
   async function startConversation() {
     const subscribeResponse = await subscribe();
@@ -176,16 +177,42 @@ function SocketContextComponent({ children, botId, params }: Props) {
   }, []);
 
   useEffect(() => {
-    const client = new WebSocket(SOCKET_URL);
-    console.log('WEBSOCKET CLIENT:', client);
     if (!clientRef.current) {
+      const client = socketio(SOCKET_URL);
       clientRef.current = client;
+      console.log('SOCKET VERSION', require('socket.io/package').version);
 
-      client.onmessage = onClientMessage;
+      client.on('connect', () => {
+        console.log('CLIENT CONNECTED');
+      });
+
+      client.on('message', (msg) => {
+        console.log('INCOMING SERVER MESSAGE:', msg);
+        try {
+          const serverResponse = JSON.parse(msg.data);
+          if (serverResponse.action === 'message') {
+            const incomingMessage: Message = {
+              ...serverResponse.data,
+              from: From.BOT,
+            };
+
+            addMessage(incomingMessage);
+
+            if (incomingMessage.type !== MessageTypes.TYPING) {
+              sendNotification({ body: incomingMessage.message as string });
+            }
+          }
+        } catch (error) {
+          console.log('Error treating received message', error);
+        }
+      });
+
+      // client.onmessage = onClientMessage;
     }
 
     return () => {
-      client.close();
+      // client.close();
+      clientRef.current?.close?.();
       clientRef.current = null;
     };
   }, [SOCKET_URL]);
