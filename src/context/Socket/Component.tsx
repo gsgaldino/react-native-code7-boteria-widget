@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
   useContext,
   useEffect,
@@ -32,7 +33,7 @@ import { SOCKET_URL } from '../../constants';
 import api from '../../services/api';
 import { useDebounce } from '../../hooks/useDebounce';
 
-const botChannel = 'WebChat';
+const botChannel = 'webchat';
 const TWO_SECONDS = 2000;
 
 interface Props {
@@ -44,6 +45,7 @@ interface Props {
 function SocketContextComponent({ children, botId, params }: Props) {
   const clientRef = useRef<Socket | null>(null);
   const isFirstRender = useRef(true);
+  const [waitingToReconnect, setWaitingToReconnect] = useState(false);
 
   const { getItemsAsync, clearAsync, saveDataAsync } = useAsyncStorage();
   const { fetchBotAndUpdateConfigs } = useChatConfigurations();
@@ -51,18 +53,6 @@ function SocketContextComponent({ children, botId, params }: Props) {
   const [storageState, setStorageState] = useState<null | StorageState>(null);
 
   const debouncedMessages = useDebounce(storageState?.messages, TWO_SECONDS);
-
-  const subscribe = async () => {
-    const { data } = await api.post('/webchat/subscribe', {
-      sessionId: storageState?.sessionId,
-      botId,
-      channel: 'webchat',
-      botChannel,
-      parameters: JSON.stringify(params || '[]'),
-    });
-
-    return data;
-  };
 
   const addMessage = (newMessage: Message) => {
     setStorageState((prevState) => {
@@ -95,14 +85,14 @@ function SocketContextComponent({ children, botId, params }: Props) {
           document,
         } as Message);
 
-        await api.post('/webchat/message', {
+        clientRef.current?.emit('message', {
           botId,
           message,
           isMedia,
           ext,
-          sessionId: storageState?.sessionId,
-          botChannel,
           isPreview: false,
+          id: storageState?.sessionId,
+          botChannel,
         });
       } catch (error) {
         console.log('Error sending message', error);
@@ -111,54 +101,25 @@ function SocketContextComponent({ children, botId, params }: Props) {
     [storageState?.sessionId]
   );
 
-  // const onClientMessage = useCallback(
-  //   (msg: any) => {
-  //     console.log('INCOMING SERVER MESSAGE:', msg);
-  //     try {
-  //       const serverResponse = JSON.parse(msg.data);
-  //       if (serverResponse.action === 'message') {
-  //         const incomingMessage: Message = {
-  //           ...serverResponse.data,
-  //           from: From.BOT,
-  //         };
-
-  //         addMessage(incomingMessage);
-
-  //         if (incomingMessage.type !== MessageTypes.TYPING) {
-  //           sendNotification({ body: incomingMessage.message as string });
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.log('Error treating received message', error);
-  //     }
-  //   },
-  //   [clientRef.current]
-  // );
-
-  async function startConversation() {
-    const subscribeResponse = await subscribe();
-
-    if (
-      !storageState?.sessionId ||
-      subscribeResponse.sessionId !== storageState?.sessionId
-    ) {
-      const newData: StorageState = {
-        sessionId: subscribeResponse.sessionId,
-        messages: storageState?.messages || [],
-      };
-
-      setStorageState(newData);
-      await saveDataAsync(newData);
-    }
-
-    return subscribeResponse;
-  }
+  const startConversation = (client: Socket) => {
+    client.emit('subscribe', {
+      botId,
+      isPreview: false,
+      botChannel,
+    });
+  };
 
   const restartConversation = useCallback(() => {
-    clearAsync().then(async () => {
-      await startConversation();
+    console.log('RESTARTING');
+    clearAsync().then(() => {
+      console.log('CLEANED');
+      console.log('client', clientRef.current);
+      if (clientRef.current) {
+        console.log('STARTING');
+        startConversation(clientRef.current);
+      }
     });
-  }, []);
+  }, [clientRef.current]);
 
   useEffect(() => {
     (async () => {
@@ -177,47 +138,6 @@ function SocketContextComponent({ children, botId, params }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!clientRef.current) {
-      const client = socketio(SOCKET_URL);
-      clientRef.current = client;
-      console.log('SOCKET VERSION', require('socket.io/package').version);
-
-      client.on('connect', () => {
-        console.log('CLIENT CONNECTED');
-      });
-
-      client.on('message', (msg) => {
-        console.log('INCOMING SERVER MESSAGE:', msg);
-        try {
-          const serverResponse = JSON.parse(msg.data);
-          if (serverResponse.action === 'message') {
-            const incomingMessage: Message = {
-              ...serverResponse.data,
-              from: From.BOT,
-            };
-
-            addMessage(incomingMessage);
-
-            if (incomingMessage.type !== MessageTypes.TYPING) {
-              sendNotification({ body: incomingMessage.message as string });
-            }
-          }
-        } catch (error) {
-          console.log('Error treating received message', error);
-        }
-      });
-
-      // client.onmessage = onClientMessage;
-    }
-
-    return () => {
-      // client.close();
-      clientRef.current?.close?.();
-      clientRef.current = null;
-    };
-  }, [SOCKET_URL]);
-
-  useEffect(() => {
     (async () => {
       await fetchBotAndUpdateConfigs(botId);
     })();
@@ -229,7 +149,63 @@ function SocketContextComponent({ children, botId, params }: Props) {
       return;
     }
 
-    startConversation();
+    if (waitingToReconnect) return;
+
+    const client = socketio(SOCKET_URL);
+
+    if (!clientRef?.current) {
+      clientRef.current = client;
+
+      client.on('connect', () => {
+        startConversation(client);
+      });
+
+      client.on('subscribe-response', async (data) => {
+        if (!storageState?.sessionId || storageState.sessionId !== data.id) {
+          const newData: StorageState = {
+            sessionId: data.id,
+            messages: storageState?.messages || [],
+          };
+
+          setStorageState(newData);
+          await saveDataAsync(newData);
+        }
+
+        client.emit('start', {
+          botId,
+          id: data.id,
+          isPreview: false,
+          botChannel,
+          parameters: JSON.stringify(params),
+        });
+      });
+
+      client.on('reconnect_attempt', () => {
+        client.io.opts.transports = ['polling', 'websocket'];
+      });
+
+      client.on('disconnect', () => {
+        if (!clientRef.current) return;
+        if (waitingToReconnect) return;
+
+        setWaitingToReconnect(true);
+
+        setTimeout(() => setWaitingToReconnect(false), 500);
+      });
+
+      client.on('message', (data) => {
+        const incomingMessage: Message = {
+          ...data,
+          from: From.BOT,
+        };
+
+        addMessage(incomingMessage);
+
+        if (incomingMessage.type !== MessageTypes.TYPING) {
+          sendNotification({ body: incomingMessage.message as string });
+        }
+      });
+    }
   }, []);
 
   const handleOpenLink = async (url: string) => {
