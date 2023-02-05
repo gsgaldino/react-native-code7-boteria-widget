@@ -108,7 +108,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
     });
   };
 
-  const restartConversation = useCallback(() => {
+  const restartConversation = () => {
     console.log('RESTARTING');
     clearAsync().then(() => {
       console.log('CLEANED');
@@ -118,7 +118,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
         startConversation(clientRef.current);
       }
     });
-  }, [clientRef.current]);
+  };
 
   useEffect(() => {
     (async () => {
@@ -154,6 +154,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
 
     if (!clientRef?.current) {
       clientRef.current = client;
+      console.log('CLIENT', clientRef.current);
 
       client.on('connect', () => {
         startConversation(client);
@@ -205,7 +206,7 @@ function SocketContextComponent({ children, botId, params }: Props) {
         }
       });
     }
-  }, []);
+  }, [isFirstRender.current]);
 
   const handleOpenLink = async (url: string) => {
     await Linking.openURL(url);
