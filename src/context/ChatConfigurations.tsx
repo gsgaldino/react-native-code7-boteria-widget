@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { IBotConfigs, IChatConfigurations } from '../types/ChatConfigurations';
-import getBot from '../services/getBot';
+import { IBotConfigs, IChatConfigurations } from '../types/chatConfigurations';
+import { createService } from '../services';
+import { logger } from '../utils';
+import { Global } from '../global';
 
 interface IChannel {
   channelId: string;
@@ -32,9 +34,17 @@ const ChatConfigurationsContext = createContext<IChatConfigurations>({
   fetchBotAndUpdateConfigs: async () => {},
 });
 
-const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
-  const { children } = props;
+interface IChatConfigurationsProps {
+  appearance?: IBotConfigs;
+  apiUrl: string;
+}
 
+const IsChatOpenProvider: React.FC<IChatConfigurationsProps> = ({
+  children,
+  appearance,
+  apiUrl,
+}) => {
+  const getBotService = createService(apiUrl);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [configs, setConfigs] = useState<IBotConfigs>(defaultBotConfig);
 
@@ -42,28 +52,47 @@ const IsChatOpenProvider: React.FC<React.ReactNode> = (props) => {
     setIsChatOpen((oldValue) => !oldValue);
   }, [isChatOpen, setIsChatOpen]);
 
-  const setBotConfigs = (cfg: IBotConfigs) => setConfigs(cfg);
+  const setBotConfigs = useCallback((cfg: IBotConfigs) => setConfigs(cfg), []);
 
-  const fetchBotAndUpdateConfigs = async (botId: string) => {
-    const { data } = await getBot.get(botId);
+  const fetchBotAndUpdateConfigs = useCallback(async () => {
+    try {
+      const { data } = await getBotService.get(Global.botId);
 
-    const [webchatChannel] = data?.channels?.filter((ch: IChannel) => {
-      return ch.channelId === 'WebChat';
-    });
+      const [webchatChannel] = data?.channels?.filter((ch: IChannel) => {
+        return ch.channelId === 'WebChat';
+      });
 
-    const botConfigs: IBotConfigs = {
-      title: data?.title,
-      botFab: String(webchatChannel?.settings?.botFab),
-      colors: {
-        main: String(webchatChannel?.settings?.mainColor),
-        secondary: String(webchatChannel?.settings?.secondaryColor),
-        mainText: String(webchatChannel?.settings?.mainTextColor),
-        secondaryText: String(webchatChannel?.settings?.secondaryTextColor),
-      },
-    };
+      const botConfigs: IBotConfigs = {
+        title: data?.title,
+        botFab: String(webchatChannel?.settings?.botFab),
+        colors: {
+          main: String(webchatChannel?.settings?.mainColor),
+          secondary: String(webchatChannel?.settings?.secondaryColor),
+          mainText: String(webchatChannel?.settings?.mainTextColor),
+          secondaryText: String(webchatChannel?.settings?.secondaryTextColor),
+        },
+      };
 
-    setBotConfigs(botConfigs);
-  };
+      setBotConfigs({
+        ...botConfigs,
+        ...appearance,
+        colors: {
+          ...botConfigs.colors,
+          ...appearance?.colors,
+        },
+      });
+    } catch (error) {
+      logger.log(`Error getting bot styles: ${JSON.stringify(error)}`);
+      setBotConfigs({
+        ...defaultBotConfig,
+        ...appearance,
+        colors: {
+          ...defaultBotConfig.colors,
+          ...appearance?.colors,
+        },
+      });
+    }
+  }, []);
 
   const chatConfigurationsState: IChatConfigurations = {
     isChatOpen,

@@ -1,8 +1,9 @@
 import React, { useRef, memo } from 'react';
 import { FlatList, View } from 'react-native';
-import { Message } from '../../../../types/Message';
+import { Message } from '../../../../types/message';
+import { generateUniqueId } from '../../../../utils';
 
-import { useSocketContext } from '../../../../context/Socket/Component';
+import { useStorage } from '../../../../context/Storage/Component';
 import MessageComponent from './components/MessageComponent';
 
 import { styles } from './styles';
@@ -13,7 +14,7 @@ interface IRenderItemProps {
 
 const MessageList: React.FC = () => {
   const flatlistRef = useRef<null | FlatList>(null);
-  const { messages } = useSocketContext();
+  const { messages } = useStorage();
 
   const renderItem = ({ item }: IRenderItemProps) => {
     return <MessageComponent message={item} />;
@@ -31,6 +32,7 @@ const MessageList: React.FC = () => {
         onContentSizeChange={scrollBottom}
         onLayout={scrollBottom}
         renderItem={renderItem}
+        keyExtractor={() => generateUniqueId()}
       />
     </View>
   );

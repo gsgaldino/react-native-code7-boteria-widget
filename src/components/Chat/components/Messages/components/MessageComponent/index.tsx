@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from '../../../../../../types/Message';
+import { Message } from '../../../../../../types/message';
 
 import messageComponentByType from '../../utils/messageComponentByType';
 

@@ -60,5 +60,5 @@ export interface IChatConfigurations {
   /**
    *
    */
-  fetchBotAndUpdateConfigs: (botId: string) => Promise<void>;
+  fetchBotAndUpdateConfigs: () => Promise<void>;
 }

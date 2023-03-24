@@ -1,14 +1,18 @@
 import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { Message } from '../../../../../../types/Message';
-
-import Slider from './components/Slider';
-import PlayPauseButton from './components/PlayPauseButton';
 import Sound from 'react-native-sound';
 
-import { secondsToMinutesAndSeconds } from './utils/secondsToMinutesAndSeconds';
-import { getPlayedPercentage } from './utils/getPlayedPercentage';
-import { getPlayedPosition } from './utils/getPlayerPosition';
+import { Message } from '../../../../../../types';
+import Slider from './components/Slider';
+import PlayPauseButton from './components/PlayPauseButton';
+
+import {
+  secondsToMinutesAndSeconds,
+  getPlayedPercentage,
+  getPlayedPosition,
+} from './utils';
+
+import { logger } from '../../../../../../utils';
 
 import { styles } from './styles';
 
@@ -23,7 +27,7 @@ const AudioComponent: React.FC<Message> = (props) => {
   const sound = useRef<Sound | null>(
     new Sound(props.audio?.fileUrl, Sound.MAIN_BUNDLE, (error) => {
       if (error) {
-        console.log('failed to load the sound', error);
+        logger.log(`failed to load the sound ${JSON.stringify(error)}`);
         return;
       } else {
         setDuration(Math.floor(sound.current?.getDuration() as number));

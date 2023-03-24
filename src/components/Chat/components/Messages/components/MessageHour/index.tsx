@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Message, From } from '../../../../../../types/Message';
+import { Message, From } from '../../../../../../types/message';
 
 import { styles } from './styles';
 

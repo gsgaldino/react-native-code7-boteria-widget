@@ -1,28 +1,21 @@
+import type { DocumentPickerResponse } from 'react-native-document-picker';
+
 import React, { useState, useCallback } from 'react';
 import { TextInput, View, TouchableOpacity, Image } from 'react-native';
 
-import {
-  MessageTypes,
-  From,
-  Message,
-  Document,
-} from '../../../../types/Message';
+import { MessageTypes, From, Message, Document } from '../../../../types';
 import FilePicker from './components/FilePicker';
 
-import { useSocketContext } from '../../../../context/Socket/Component';
-
-import sendIcon from '../../../../assets/send_icon.png';
-
-import type { DocumentPickerResponse } from 'react-native-document-picker';
+import { useSocketActions } from '../../../../hooks';
 
 import { toBase64 } from './utils/toBase64';
-
+import sendIcon from '../../../../assets/send_icon.png';
 import { styles } from './styles';
 
 const ONE_THOUSAND = 1000;
 
 function Input() {
-  const { handleSubmitMessage } = useSocketContext();
+  const { handleSubmitMessage } = useSocketActions();
   const [userText, setUserText] = useState('');
 
   const getMessageType = (type: string) => {
@@ -31,13 +24,10 @@ function Input() {
       case 'msword':
       case 'text':
         return MessageTypes.DOCUMENT;
-
       case 'video':
         return MessageTypes.VIDEO;
-
       case 'image':
         return MessageTypes.IMAGE;
-
       default:
         return MessageTypes.IMAGE;
     }

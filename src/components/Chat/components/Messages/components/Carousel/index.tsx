@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Linking } from 'react-native';
 
-import CarouselActions from './components/CarouselActions';
-import CarouselCardButton from './components/CarouselButton';
+import {
+  CarouselActions,
+  CarouselButton,
+  CarouselCardInfo,
+  CarouselSlider,
+  CarouselSliderContent,
+  CarouselWrapper,
+  CustomImage,
+} from './components';
 
-import CarouselWrapper from './components/CarouselWrapper';
-import CarouselSlider from './components/CarouselSlider';
-import CarouselSliderContent from './components/CarouselSliderContent';
-import CarouselCardInfo from './components/CarouselCardInfo';
-import CustomImage from './components/CustomImage';
-import { useSocketContext } from '../../../../../../context/Socket/Component';
+import {
+  Message,
+  Button,
+  Card,
+  CarouselDestinationTypes,
+  IHandleCarouselButtonClickProps,
+  SocketPayload,
+  MessageTypes,
+} from '../../../../../../types';
 
-import { Message, Button, Card } from '../../../../../../types/Message';
-import { IHandleCarouselButtonClickProps } from '../../../../../../types/Socket';
+import { useSocketActions } from '../../../../../../hooks';
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;
 
 export default (message: Message) => {
+  const { sendAction } = useSocketActions();
   const [slidePosition, setSlidePosition] = useState(0);
-  const { handleCarouselButtonClick } = useSocketContext();
 
   const previousDisabled = slidePosition === 0;
   const nextDisabled =
@@ -36,11 +45,31 @@ export default (message: Message) => {
     setSlidePosition((prevState) => prevState + 1);
   };
 
-  const handleButtonClick = ({
+  const handleOpenLink = async (url: string) => {
+    await Linking.openURL(url);
+  };
+
+  const handleButtonClick = async ({
     clickedButton,
     clickedCard,
   }: IHandleCarouselButtonClickProps) => {
-    handleCarouselButtonClick({ clickedButton, clickedCard });
+    const { destination } = clickedButton;
+
+    if (destination?.type === CarouselDestinationTypes.URL) {
+      handleOpenLink(destination?.value as string);
+    }
+
+    if (destination?.type === CarouselDestinationTypes.PHONE) {
+      const treated = destination?.value?.replace(/[^A-Z0-9]/gi, '');
+      handleOpenLink(`tel:+55${treated}`);
+    }
+
+    const socketActionPayload: SocketPayload = {
+      type: MessageTypes.CAROUSEL,
+      data: { clickedButton, clickedCard },
+    };
+
+    await sendAction(socketActionPayload);
   };
 
   const checkButtonIsEmpty = (button: Button) => {
@@ -75,7 +104,7 @@ export default (message: Message) => {
                 {card?.buttons?.map(
                   (button) =>
                     !checkButtonIsEmpty(button) && (
-                      <CarouselCardButton
+                      <CarouselButton
                         key={button?._id}
                         onPress={() =>
                           handleButtonClick({
@@ -85,7 +114,7 @@ export default (message: Message) => {
                         }
                       >
                         {button?.label}
-                      </CarouselCardButton>
+                      </CarouselButton>
                     )
                 )}
               </View>

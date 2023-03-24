@@ -1,11 +1,8 @@
 import { createContext } from 'react';
-import { ISocketContextState } from '../../types/Socket';
+import { ISocketContextState } from '../../types/socket';
 
 export const SocketContext = createContext<ISocketContextState>({
-  handleSubmitMessage: () => {},
-  messages: [],
-  handleCarouselButtonClick: () => {},
-  restartConversation: async () => {},
+  disconnect: async () => {},
 });
 
 export const SocketContextProvider = SocketContext.Provider;

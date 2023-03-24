@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Text as P, StyleSheet } from 'react-native';
-import { Message, From } from '../../../../../../types/Message';
+import { Message, From } from '../../../../../../types/message';
 import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
 
 const Text: React.FC<Message> = (msg) => {

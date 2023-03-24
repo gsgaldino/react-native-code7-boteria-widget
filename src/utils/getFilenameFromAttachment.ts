@@ -1,4 +1,4 @@
-import { Document } from '../types/Message';
+import { Document } from '../types/message';
 
 export const getFileNameFromUrl = (url: string): string => {
   const fullFilename = url

@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Message, Document, From } from '../../../../../../types/Message';
+import { Message, Document, From } from '../../../../../../types/message';
 import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFromAttachment';
 import RNFS from 'react-native-fs';
 

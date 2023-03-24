@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message, From, MessageTypes } from '../../../../../types/Message';
+import { Message, From, MessageTypes } from '../../../../../types/message';
 import { useChatConfigurations } from '../../../../../context/ChatConfigurations';
 import MessageHour from '../components/MessageHour';
 

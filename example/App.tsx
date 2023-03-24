@@ -24,7 +24,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import {Code7Boteria} from 'react-native-code7-boteria-widget';
+import {Code7Boteria} from 'code7-boteria-lib-mobile-rn';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -96,9 +96,21 @@ function App(): JSX.Element {
 
       <Code7Boteria
         botId="62ec1ac218ba8f42452383a6"
+        // appearance={{
+        //   title: 'Anderson',
+        //   botFab:
+        //     'https://img2.gratispng.com/20180524/aoj/kisspng-robotics-humanoid-robot-android-robit-5b066411dbb9a1.0134849715271454899.jpg',
+        //   colors: {
+        //     main: '#FF0000',
+        //     mainText: '#00FF00',
+        //     secondary: '#000000',
+        //     secondaryText: '#0000FF',
+        //   },
+        // }}
         params={{
           name: 'Joe Doe',
         }}
+        staging={false}
       />
     </SafeAreaView>
   );

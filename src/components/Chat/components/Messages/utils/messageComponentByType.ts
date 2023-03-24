@@ -8,7 +8,7 @@ import Carousel from '../components/Carousel';
 
 import wrapMessage from './wrapMessage';
 
-import { MessageTypes } from '../../../../../types/Message';
+import { MessageTypes } from '../../../../../types/message';
 
 export default (type: MessageTypes) => {
   switch (type) {
