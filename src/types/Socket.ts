@@ -21,11 +21,13 @@ export type SocketData = {
   isPreview: boolean;
   botChannel: string;
   id: string;
+  sessionId: string | null;
+  socketId: string;
 };
 
 export type SocketAction = {
-  action: 'message' | 'subscribe' | 'start';
-  data: SocketData;
+  action: 'message' | 'link';
+  data: Partial<SocketData>;
 };
 
 export type SocketPayload = {

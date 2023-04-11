@@ -10,8 +10,12 @@ import { useStorage } from '../context/Storage/Component';
 import { useSocketActions } from './useSocketActions';
 
 import { sendNotification } from '../utils';
+import { useEncryptedStorage } from './useEncryptedStorage';
+
+import { Global } from '../global';
 
 export const useSocket = (wsUrl: string) => {
+  const { retrieve } = useEncryptedStorage();
   const isFirstRender = useRef(true);
   const wsRef = useRef<ChatbotWebSocket | null>(null);
 
@@ -22,7 +26,17 @@ export const useSocket = (wsUrl: string) => {
   const { addMessage } = useStorage();
 
   const onOpenCallback: OnOpenCallback = async () => {
-    await subscribe();
+    const sessionId = await retrieve('sessionId');
+
+    if (!Global.socketId) {
+      wsRef.current?.sendMessage({
+        action: 'link',
+        data: {
+          sessionId,
+          botId: Global.botId,
+        },
+      });
+    }
   };
 
   const onMessageCallback: OnMessageCallback = (msg) => {
@@ -57,6 +71,17 @@ export const useSocket = (wsUrl: string) => {
       wsRef.current?.disconnect();
     };
   }, [isFirstRender.current, waitingToReconnect]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    (async () => {
+      if (Global.socketId) await subscribe();
+    })();
+  }, [isFirstRender.current, Global.socketId]);
 
   return { disconnect };
 };

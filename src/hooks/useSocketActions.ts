@@ -23,6 +23,7 @@ export const useSocketActions = () => {
         sessionId,
         botId,
         parameters: JSON.stringify(Global.params),
+        socketId: Global.socketId,
       });
 
       const hasToStoreNewSessionId = !sessionId || sessionId !== data.sessionId;
@@ -53,6 +54,7 @@ export const useSocketActions = () => {
           sessionId,
           botChannel: channel,
           isPreview: false,
+          socketId: Global.socketId,
         });
       } catch (error) {
         logger.log(`Error sending message ${JSON.stringify(error)}`);

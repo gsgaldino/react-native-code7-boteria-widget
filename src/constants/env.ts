@@ -8,8 +8,9 @@ interface IEnvironments {
 
 export const environments: IEnvironments = {
   development: {
-    SOCKET_URL: 'http://e502-200-100-194-234.ngrok.io',
-    API_URL: 'http://b5d6-200-100-194-234.ngrok.io',
+    SOCKET_URL:
+      'wss://k66xbjj993.execute-api.sa-east-1.amazonaws.com/homologacao/',
+    API_URL: 'https://boteria.ngrok.io',
     GET_BOT_URL: 'http://5ba7-200-100-194-234.ngrok.io/dev/getBotCdn',
   },
   staging: {

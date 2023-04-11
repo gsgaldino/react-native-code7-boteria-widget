@@ -1,5 +1,6 @@
 import { SocketAction, Message } from '../types';
 import { logger } from '../utils';
+import { Global } from '../global';
 
 export type OnMessageCallback = (msg: Message) => void;
 export type OnOpenCallback = () => Promise<void>;
@@ -10,6 +11,8 @@ export class ChatbotWebSocket {
   private ws: WebSocket | null = null;
   private onMessageCallback: OnMessageCallback | null = null;
   private onOpenCallback: OnOpenCallback | null = null;
+  private connectionTries = 0;
+  private readonly maxTries = 5;
 
   constructor(private readonly url: string) {}
 
@@ -22,9 +25,20 @@ export class ChatbotWebSocket {
   }
 
   public connect() {
+    if (this.connectionTries >= this.maxTries) {
+      console.log(
+        `Maximum number of connection tries (${this.maxTries}) reached.`
+      );
+      return;
+    }
+
+    this.connectionTries++;
+
     this.ws = new WebSocket(this.url);
+    console.log('CREATING SOCKET WITH:', this.url);
 
     this.ws.onopen = () => {
+      this.connectionTries = 0;
       if (this.onOpenCallback) this.onOpenCallback();
     };
 
@@ -44,7 +58,12 @@ export class ChatbotWebSocket {
     };
 
     this.ws.onmessage = (event) => {
+      console.log('NEW MESSAGE!', event);
       const socketAction = JSON.parse(event.data) as SocketAction;
+      if (socketAction.action === 'link') {
+        const socketId = socketAction.data?.socketId || null;
+        Global.socketId = socketId || null;
+      }
       if (socketAction.action === 'message' && this.onMessageCallback) {
         this.onMessageCallback(socketAction.data as unknown as Message);
       }
