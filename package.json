@@ -32,20 +32,22 @@
     "prepare": "bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn install"
+    "bootstrap": "yarn example && yarn install",
+    "test": "npm run test:unit",
+    "test:unit": "jest --testPathPattern=src/"
   },
   "keywords": [
     "react-native",
     "ios",
     "android"
   ],
-  "repository": "https://github.com/gsgaldino/react-native-code7-boteria-widget",
+  "repository": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn",
   "author": "Code7 Xlab <code7xlab@hotmail.com> (https://github.com/code7-xlab)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gsgaldino/react-native-code7-boteria-widget/issues"
+    "url": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn/issues"
   },
-  "homepage": "https://github.com/gsgaldino/react-native-code7-boteria-widget#readme",
+  "homepage": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -54,15 +56,17 @@
     "@commitlint/config-conventional": "^17.0.2",
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
+    "@testing-library/react-native": "^12.0.1",
+    "@types/jest": "^29.5.0",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "@types/react-native-video": "^5.0.14",
     "commitlint": "^17.0.2",
-    "cypress": "^12.8.1",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^29.5.0",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "18.1.0",
@@ -71,7 +75,9 @@
     "react-native-fs": "^2.20.0",
     "react-native-notifications": "^4.3.3",
     "react-native-sound": "^0.11.2",
+    "react-test-renderer": "^18.2.0",
     "release-it": "^15.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.5.2"
   },
   "resolutions": {
@@ -85,13 +91,6 @@
     "react-native-notifications": "*",
     "react-native-sound": "*",
     "react-native-video": "*"
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
   },
   "commitlint": {
     "extends": [

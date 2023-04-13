@@ -5,6 +5,7 @@ import { useChatConfigurations } from '../../context/ChatConfigurations';
 import Header from './components/Header';
 import Messages from './components/Messages';
 import Input from './components/Input';
+import Footer from './components/Footer';
 
 function Chat() {
   const { isChatOpen } = useChatConfigurations();
@@ -14,6 +15,7 @@ function Chat() {
       <Header />
       <Messages />
       <Input />
+      <Footer />
     </Modal>
   );
 }

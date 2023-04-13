@@ -22,7 +22,7 @@ export type SocketData = {
   botChannel: string;
   id: string;
   sessionId: string | null;
-  socketId: string;
+  socketId: string | null;
 };
 
 export type SocketAction = {

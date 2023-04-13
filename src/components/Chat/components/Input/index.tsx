@@ -1,14 +1,11 @@
-import type { DocumentPickerResponse } from 'react-native-document-picker';
-
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { TextInput, View, TouchableOpacity, Image } from 'react-native';
 
-import { MessageTypes, From, Message, Document } from '../../../../types';
+import { MessageTypes, From, Message } from '../../../../types';
 import FilePicker from './components/FilePicker';
 
 import { useSocketActions } from '../../../../hooks';
 
-import { toBase64 } from './utils/toBase64';
 import sendIcon from '../../../../assets/send_icon.png';
 import { styles } from './styles';
 
@@ -18,59 +15,15 @@ function Input() {
   const { handleSubmitMessage } = useSocketActions();
   const [userText, setUserText] = useState('');
 
-  const getMessageType = (type: string) => {
-    switch (type) {
-      case 'application':
-      case 'msword':
-      case 'text':
-        return MessageTypes.DOCUMENT;
-      case 'video':
-        return MessageTypes.VIDEO;
-      case 'image':
-        return MessageTypes.IMAGE;
-      default:
-        return MessageTypes.IMAGE;
-    }
-  };
-
-  const onAttach = useCallback(async (files: DocumentPickerResponse[]) => {
-    files.forEach(async (file) => {
-      const [type, ext] = (file?.type as string)?.split('/');
-      const messageType = getMessageType(type as string);
-      const base64String = await toBase64(file?.uri);
-
-      const msg: Message = {
-        ext,
-        from: From.USER,
-        isMedia: true,
-        type: messageType,
-        message: `data:${file?.type};base64,${base64String}`,
-        localFileUri: file?.uri,
-      };
-
-      if ([MessageTypes.DOCUMENT, MessageTypes.VIDEO].includes(messageType)) {
-        msg.document = {
-          fileUrl: file?.uri,
-          size: file?.size,
-          title: file?.name,
-        } as Document;
-      }
-
-      handleSubmitMessage(msg);
-    });
-  }, []);
-
   const onSend = () => {
     if (!userText) return;
-    else {
-      const msg: Message = {
-        type: MessageTypes.TEXT,
-        message: userText,
-        from: From.USER,
-      };
-      handleSubmitMessage(msg);
-      setUserText('');
-    }
+    const msg: Message = {
+      type: MessageTypes.TEXT,
+      message: userText,
+      from: From.USER,
+    };
+    handleSubmitMessage(msg);
+    setUserText('');
   };
 
   return (
@@ -85,9 +38,9 @@ function Input() {
       />
 
       <View style={styles.icons}>
-        <FilePicker onSelect={onAttach} />
+        <FilePicker />
 
-        <TouchableOpacity onPress={onSend}>
+        <TouchableOpacity testID="sendIcon" onPress={onSend}>
           <Image source={sendIcon} style={styles.sendIcon} />
         </TouchableOpacity>
       </View>

@@ -1,6 +1,6 @@
 import { SocketAction, Message } from '../types';
-import { logger } from '../utils';
 import { Global } from '../global';
+import { logger } from '../utils';
 
 export type OnMessageCallback = (msg: Message) => void;
 export type OnOpenCallback = () => Promise<void>;
@@ -12,7 +12,7 @@ export class ChatbotWebSocket {
   private onMessageCallback: OnMessageCallback | null = null;
   private onOpenCallback: OnOpenCallback | null = null;
   private connectionTries = 0;
-  private readonly maxTries = 5;
+  private readonly maxConnectionTries = 3;
 
   constructor(private readonly url: string) {}
 
@@ -25,9 +25,9 @@ export class ChatbotWebSocket {
   }
 
   public connect() {
-    if (this.connectionTries >= this.maxTries) {
-      console.log(
-        `Maximum number of connection tries (${this.maxTries}) reached.`
+    if (this.connectionTries >= this.maxConnectionTries) {
+      logger.log(
+        `Maximum number of connection tries (${this.maxConnectionTries}) reached.`
       );
       return;
     }
@@ -35,7 +35,6 @@ export class ChatbotWebSocket {
     this.connectionTries++;
 
     this.ws = new WebSocket(this.url);
-    console.log('CREATING SOCKET WITH:', this.url);
 
     this.ws.onopen = () => {
       this.connectionTries = 0;
@@ -58,7 +57,6 @@ export class ChatbotWebSocket {
     };
 
     this.ws.onmessage = (event) => {
-      console.log('NEW MESSAGE!', event);
       const socketAction = JSON.parse(event.data) as SocketAction;
       if (socketAction.action === 'link') {
         const socketId = socketAction.data?.socketId || null;

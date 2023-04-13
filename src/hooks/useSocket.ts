@@ -8,24 +8,24 @@ import { From } from '../types';
 
 import { useStorage } from '../context/Storage/Component';
 import { useSocketActions } from './useSocketActions';
-
-import { sendNotification } from '../utils';
 import { useEncryptedStorage } from './useEncryptedStorage';
 
+import { sendNotification } from '../utils';
 import { Global } from '../global';
 
 export const useSocket = (wsUrl: string) => {
-  const { retrieve } = useEncryptedStorage();
   const isFirstRender = useRef(true);
   const wsRef = useRef<ChatbotWebSocket | null>(null);
 
   const [waitingToReconnect, setWaitingToReconnect] = useState(false);
 
   const { subscribe } = useSocketActions();
+  const { retrieve } = useEncryptedStorage();
 
   const { addMessage } = useStorage();
 
   const onOpenCallback: OnOpenCallback = async () => {
+    await subscribe();
     const sessionId = await retrieve('sessionId');
 
     if (!Global.socketId) {

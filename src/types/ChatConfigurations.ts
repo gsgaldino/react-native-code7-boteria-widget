@@ -34,6 +34,15 @@ export interface IBotConfigs {
      */
     secondaryText: string;
   };
+  /**
+   * Texto do footer
+   */
+  poweredBy: string;
+
+  /**
+   * Link para quando o usuário clica no footer
+   */
+  poweredByUrl: string;
 }
 
 export interface IChatConfigurations {

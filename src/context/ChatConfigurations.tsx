@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { IBotConfigs, IChatConfigurations } from '../types/chatConfigurations';
+import { IBotConfigs, IChatConfigurations } from '../types';
 import { createService } from '../services';
 import { logger } from '../utils';
 import { Global } from '../global';
@@ -24,6 +24,8 @@ const defaultBotConfig: IBotConfigs = {
     secondary: '#DADCE3',
     secondaryText: '#5A5D68',
   },
+  poweredBy: 'Powered By Code7 Boteria',
+  poweredByUrl: 'https://code7.com/produtos/boteria',
 };
 
 const ChatConfigurationsContext = createContext<IChatConfigurations>({
@@ -64,6 +66,8 @@ const IsChatOpenProvider: React.FC<IChatConfigurationsProps> = ({
 
       const botConfigs: IBotConfigs = {
         title: data?.title,
+        poweredBy: webchatChannel?.poweredBy,
+        poweredByUrl: webchatChannel?.poweredByUrl,
         botFab: String(webchatChannel?.settings?.botFab),
         colors: {
           main: String(webchatChannel?.settings?.mainColor),

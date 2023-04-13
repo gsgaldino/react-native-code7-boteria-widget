@@ -6,7 +6,7 @@ export {
   SocketPayload,
 } from './socket';
 export { IAppProps } from './appProps';
-export { IBotConfigs } from './chatConfigurations';
+export { IBotConfigs, IChatConfigurations } from './chatConfigurations';
 export {
   Message,
   MessageTypes,

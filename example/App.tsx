@@ -95,8 +95,9 @@ function App(): JSX.Element {
       </ScrollView>
 
       <Code7Boteria
-        botId="62e9145fc073550012d52f25"
-        // botId="62ec1ac218ba8f42452383a6"
+        // botId="624465913286a300137a0f3e" //prod
+        // botId="62e9145fc073550012d52f25" //staging
+        botId="62ec1ac218ba8f42452383a6" //local
         // appearance={{
         //   title: 'Anderson',
         //   botFab:
@@ -111,7 +112,7 @@ function App(): JSX.Element {
         params={{
           name: 'Joe Doe',
         }}
-        staging
+        // staging
       />
     </SafeAreaView>
   );

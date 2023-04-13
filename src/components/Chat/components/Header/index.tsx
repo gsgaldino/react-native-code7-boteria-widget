@@ -20,8 +20,7 @@ function Header() {
 
   const onRestartConversation = async () => {
     resetMessages();
-    await clear();
-    await subscribe();
+    await Promise.all([clear(), subscribe()]);
   };
 
   return (
@@ -40,13 +39,16 @@ function Header() {
       </View>
 
       <View style={styles.iconsWrapper}>
-        <TouchableOpacity onPress={onRestartConversation}>
+        <TouchableOpacity
+          testID="restartConversation"
+          onPress={onRestartConversation}
+        >
           <View style={styles.iconContainer}>
             <Image source={resetIcon} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={onClose}>
+        <TouchableOpacity testID="closeChat" onPress={onClose}>
           <View style={styles.iconContainer}>
             <Image source={closeIcon} />
           </View>

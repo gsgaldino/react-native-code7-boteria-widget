@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { SocketContextProvider, SocketContext } from './Context';
-// import { useChatConfigurations } from '../ChatConfigurations';
+import { useChatConfigurations } from '../ChatConfigurations';
 import { useSocket } from '../../hooks';
 
 import { ISocketContextState } from '../../types/socket';
@@ -11,13 +11,13 @@ const SocketContextComponent: React.FC<{ wsUrl: string }> = ({
   wsUrl,
 }) => {
   const { disconnect } = useSocket(wsUrl);
-  // const { fetchBotAndUpdateConfigs } = useChatConfigurations();
+  const { fetchBotAndUpdateConfigs } = useChatConfigurations();
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await fetchBotAndUpdateConfigs();
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      await fetchBotAndUpdateConfigs();
+    })();
+  }, []);
 
   return (
     <SocketContextProvider value={{ disconnect }}>
