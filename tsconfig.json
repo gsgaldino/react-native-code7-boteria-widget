@@ -7,7 +7,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-code7-boteria": [
+      "react-native-code7-boteria-widget": [
         "./src/index"
       ],
     },
