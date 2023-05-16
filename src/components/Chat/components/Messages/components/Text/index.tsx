@@ -1,20 +1,20 @@
 import React, { memo } from 'react';
 import { Text as P, StyleSheet } from 'react-native';
 import { Message, From } from '../../../../../../types/message';
-import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
+import { useChatConfigurations } from '../../../../../../context/ChatConfigurationsContext';
 
 const Text: React.FC<Message> = (msg) => {
-  const { botConfigs } = useChatConfigurations();
+  const { chatConfigurations } = useChatConfigurations();
 
   const styles = StyleSheet.create({
     container: {
       fontSize: 16,
     },
     bot: {
-      color: botConfigs.colors.secondaryText,
+      color: chatConfigurations.settings.secondaryTextColor,
     },
     user: {
-      color: botConfigs.colors.mainText,
+      color: chatConfigurations.settings.mainTextColor,
     },
   });
 

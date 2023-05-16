@@ -14,25 +14,18 @@ export default (type: MessageTypes) => {
   switch (type) {
     case MessageTypes.TYPING:
       return wrapMessage(Typing);
-
     case MessageTypes.TEXT:
       return wrapMessage(Text);
-
     case MessageTypes.IMAGE:
       return wrapMessage(Image);
-
     case MessageTypes.VIDEO:
       return wrapMessage(Video);
-
     case MessageTypes.AUDIO:
       return wrapMessage(Audio);
-
     case MessageTypes.DOCUMENT:
       return wrapMessage(Document);
-
     case MessageTypes.CAROUSEL:
       return wrapMessage(Carousel);
-
     default:
       return wrapMessage(Text);
   }

@@ -11,10 +11,10 @@ import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFr
 import RNFS from 'react-native-fs';
 
 import attachIcon from '../../../../../../assets/attach_icon.png';
-import { useChatConfigurations } from '../../../../../../context/ChatConfigurations';
+import { useChatConfigurations } from '../../../../../../context/ChatConfigurationsContext';
 
 const DocumentComponent: React.FC<Message> = (msg) => {
-  const { botConfigs } = useChatConfigurations();
+  const { chatConfigurations } = useChatConfigurations();
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -47,10 +47,10 @@ const DocumentComponent: React.FC<Message> = (msg) => {
 
   const styles = StyleSheet.create({
     bot: {
-      color: botConfigs.colors.secondaryText,
+      color: chatConfigurations.settings.secondaryTextColor,
     },
     user: {
-      color: botConfigs.colors.mainText,
+      color: chatConfigurations.settings.mainTextColor,
     },
     container: {
       flexDirection: 'row',

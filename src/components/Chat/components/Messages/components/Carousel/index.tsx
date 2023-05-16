@@ -21,14 +21,19 @@ import {
   MessageTypes,
 } from '../../../../../../types';
 
-import { useSocketActions } from '../../../../../../hooks';
+import { useSession } from '../../../../../../context/SessionContext';
+
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;
 
 export default (message: Message) => {
-  const { sendAction } = useSocketActions();
+  const { session } = useSession();
   const [slidePosition, setSlidePosition] = useState(0);
+
+  const sendAction = (action: SocketPayload) => {
+    session.sendAction(action);
+  };
 
   const previousDisabled = slidePosition === 0;
   const nextDisabled =
@@ -37,12 +42,12 @@ export default (message: Message) => {
 
   const handleNextSlide = () => {
     if (nextDisabled) return;
-    setSlidePosition((prevState) => prevState - 1);
+    setSlidePosition((prevState) => prevState + 1);
   };
 
   const handlePreviousSlide = () => {
     if (previousDisabled) return;
-    setSlidePosition((prevState) => prevState + 1);
+    setSlidePosition((prevState) => prevState - 1);
   };
 
   const handleOpenLink = async (url: string) => {
@@ -69,7 +74,7 @@ export default (message: Message) => {
       data: { clickedButton, clickedCard },
     };
 
-    await sendAction(socketActionPayload);
+    sendAction(socketActionPayload);
   };
 
   const checkButtonIsEmpty = (button: Button) => {

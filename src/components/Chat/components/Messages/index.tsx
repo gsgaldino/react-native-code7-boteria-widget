@@ -1,10 +1,9 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef } from 'react';
 import { FlatList, View } from 'react-native';
 import { Message } from '../../../../types/message';
-import { generateUniqueId } from '../../../../utils';
 
-import { useStorage } from '../../../../context/Storage/Component';
 import MessageComponent from './components/MessageComponent';
+import { useMessageList } from '../../../../context/MessageListContext';
 
 import { styles } from './styles';
 
@@ -12,30 +11,30 @@ interface IRenderItemProps {
   item: Message;
 }
 
-const MessageList: React.FC = () => {
-  const flatlistRef = useRef<null | FlatList>(null);
-  const { messages } = useStorage();
+const MessageList = () => {
+  const { messageList } = useMessageList();
 
+  const flatlistRef = useRef<null | FlatList>(null);
   const renderItem = ({ item }: IRenderItemProps) => {
     return <MessageComponent message={item} />;
   };
 
   const scrollBottom = (): void => {
-    if (messages.length) flatlistRef.current?.scrollToEnd?.();
+    if (messageList?.messages?.length) flatlistRef.current?.scrollToEnd?.();
   };
 
   return (
     <View style={styles.messagesContainer}>
       <FlatList
         ref={flatlistRef}
-        data={messages}
+        data={messageList?.messages}
         onContentSizeChange={scrollBottom}
         onLayout={scrollBottom}
         renderItem={renderItem}
-        keyExtractor={() => generateUniqueId()}
+        keyExtractor={(msg: Message) => msg.id}
       />
     </View>
   );
 };
 
-export default memo(MessageList);
+export default MessageList;

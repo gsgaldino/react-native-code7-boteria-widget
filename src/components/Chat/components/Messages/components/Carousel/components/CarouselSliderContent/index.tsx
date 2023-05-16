@@ -1,11 +1,12 @@
+import type { CSSProperties, ReactNode } from 'react';
 import React from 'react';
 import { View } from 'react-native';
 
 import { styles } from './styles';
 
 interface ICarouselSliderContentProps {
-  style: React.CSSProperties;
-  children: React.ReactNode;
+  style: CSSProperties;
+  children: ReactNode;
 }
 
 const CarouselSliderContent = (props: ICarouselSliderContentProps) => {

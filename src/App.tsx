@@ -3,14 +3,19 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 import Chat from './components/Chat';
 import WidgetComponent from './components/Widget';
-import { useChatConfigurations } from './context/ChatConfigurations';
+import { useChatConfigurations } from './context/ChatConfigurationsContext';
 
 type Props = {
   customWidget: React.ReactNode;
 };
 
 function App({ customWidget }: Props) {
-  const { toggleIsChatOpen } = useChatConfigurations();
+  const { chatConfigurations, updateState } = useChatConfigurations();
+
+  const toggleIsChatOpen = () => {
+    chatConfigurations.toggleIsOpen();
+    updateState();
+  };
 
   const newComponent =
     React.isValidElement(customWidget) &&
@@ -21,7 +26,7 @@ function App({ customWidget }: Props) {
   return (
     <SafeAreaView>
       <Chat />
-      {newComponent || <WidgetComponent onPress={() => toggleIsChatOpen()} />}
+      {newComponent || <WidgetComponent onPress={toggleIsChatOpen} />}
     </SafeAreaView>
   );
 }

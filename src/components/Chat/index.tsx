@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-native';
-import { useChatConfigurations } from '../../context/ChatConfigurations';
+import { useChatConfigurations } from '../../context/ChatConfigurationsContext';
 
 import Header from './components/Header';
 import Messages from './components/Messages';
@@ -8,10 +8,10 @@ import Input from './components/Input';
 import Footer from './components/Footer';
 
 function Chat() {
-  const { isChatOpen } = useChatConfigurations();
+  const { chatConfigurations } = useChatConfigurations();
 
   return (
-    <Modal visible={isChatOpen} animationType="slide">
+    <Modal visible={chatConfigurations.isOpen} animationType="slide">
       <Header />
       <Messages />
       <Input />

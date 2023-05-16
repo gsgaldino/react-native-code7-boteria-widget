@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Message } from '../../../../../../types/message';
 
 import messageComponentByType from '../../utils/messageComponentByType';
@@ -12,4 +12,4 @@ const MessageComponent = ({ message }: IMessageComponentProps) => {
   return <MessageComponentByType {...(message as Message)} />;
 };
 
-export default MessageComponent;
+export default memo(MessageComponent);

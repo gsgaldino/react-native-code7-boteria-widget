@@ -7,7 +7,7 @@ Maneira fácil e rápida para criar uma instância do chat (Boteria) em aplicati
 ## Instalação
 
 ```sh
-yarn add react-native-code7-boteria-widget
+yarn add code7-boteria-lib-mobile-rn
 ```
 
 Instalação das dependências pares:
@@ -21,7 +21,7 @@ yarn add @react-native/normalize-color
 ```
 
 ```js
-import { Code7Boteria } from 'react-native-code7-boteria-widget';
+import { Code7Boteria } from 'code7-boteria-lib-mobile-rn';
 import MyComponent from 'components';
 
 // ...

@@ -12,8 +12,6 @@ import {
   getPlayedPosition,
 } from './utils';
 
-import { logger } from '../../../../../../utils';
-
 import { styles } from './styles';
 
 const THREE_HUNDRED_MILLIS = 300;
@@ -25,10 +23,9 @@ const AudioComponent: React.FC<Message> = (props) => {
 
   const interval = useRef<null | NodeJS.Timer>();
   const sound = useRef<Sound | null>(
-    new Sound(props.audio?.fileUrl, Sound.MAIN_BUNDLE, (error) => {
+    new Sound(props.audio?.fileUrl, Sound.MAIN_BUNDLE, (error: any) => {
       if (error) {
-        logger.log(`failed to load the sound ${JSON.stringify(error)}`);
-        return;
+        throw error;
       } else {
         setDuration(Math.floor(sound.current?.getDuration() as number));
       }

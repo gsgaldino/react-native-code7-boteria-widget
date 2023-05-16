@@ -1,63 +1,70 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import Header from '.';
-import { useChatConfigurations } from '../../../../context/ChatConfigurations';
-import { useStorage } from '../../../../context/Storage/Component';
-import { useSocketActions, useEncryptedStorage } from '../../../../hooks';
+import { initialConfigs } from '../../../../constants';
+import { useChatConfigurations } from '../../../../context/ChatConfigurationsContext';
+import { useMessageList } from '../../../../context/MessageListContext';
+import { useSession } from '../../../../context/SessionContext';
+import { ChatConfigurations } from '../../../../entities/ChatConfigurations';
+import { Session } from '../../../../entities/Session';
+import { MessageList } from '../../../../entities/MessageList';
 
-jest.mock('../../../../context/ChatConfigurations');
-jest.mock('../../../../context/Storage/Component');
-jest.mock('../../../../hooks');
+jest.mock('../../../../context/ChatConfigurationsContext');
+jest.mock('../../../../context/SessionContext');
+jest.mock('../../../../context/MessageListContext');
 
 describe('Header component', () => {
   beforeAll(() => {
     (useChatConfigurations as jest.Mock).mockReturnValue({
-      isChatOpen: true,
-      toggleIsChatOpen: jest.fn(),
-      botConfigs: {
-        title: 'Bot title',
-        colors: {
-          main: '#000000',
-        },
-      },
+      chatConfigurations: new ChatConfigurations(
+        initialConfigs.title,
+        initialConfigs.poweredBy,
+        initialConfigs.poweredByUrl,
+        initialConfigs.settings,
+        false
+      ),
+      updateState: () => {},
     });
-
-    (useStorage as jest.Mock).mockReturnValue({
-      resetMessages: jest.fn(),
+    (useMessageList as jest.Mock).mockReturnValue({
+      messageList: new MessageList([]),
     });
-
-    (useEncryptedStorage as jest.Mock).mockReturnValue({
-      clear: jest.fn(),
+    (useSession as jest.Mock).mockReturnValue({
+      session: new Session(''),
     });
-
-    (useSocketActions as jest.Mock).mockReturnValue({
-      subscribe: jest.fn(),
-    });
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
   });
 
   it('renders the component with the correct title', () => {
     const { getByText } = render(<Header />);
-    expect(getByText('Bot title')).toBeDefined();
+    expect(getByText(initialConfigs.title)).toBeDefined();
   });
 
-  it('calls onRestartConversation when reset icon is pressed', async () => {
-    const { getByTestId } = render(<Header />);
-    const restartConversationButton = getByTestId('restartConversation');
-    fireEvent.press(restartConversationButton);
+  it('calls onClose when close button is clicked', () => {
+    const closeSpy = jest.spyOn(
+      useChatConfigurations().chatConfigurations,
+      'close'
+    );
 
-    expect(useStorage().resetMessages).toHaveBeenCalledTimes(1);
-    expect(useEncryptedStorage().clear).toHaveBeenCalledTimes(1);
-    expect(useSocketActions().subscribe).toHaveBeenCalledTimes(1);
+    const { getByTestId } = render(<Header />);
+    const closeButton = getByTestId('closeChat');
+
+    fireEvent.press(closeButton);
+
+    expect(closeSpy).toHaveBeenCalled();
   });
 
-  it('calls onClose when close icon is pressed', () => {
+  it('calls onRestartConversation when restart button is clicked', () => {
+    const clearMessagesSpy = jest.spyOn(
+      useMessageList().messageList,
+      'clearMessages'
+    );
+    const clearSessionSpy = jest.spyOn(useSession().session, 'clearSession');
+
     const { getByTestId } = render(<Header />);
-    const closeElement = getByTestId('closeChat');
-    fireEvent.press(closeElement);
-    expect(useChatConfigurations().toggleIsChatOpen).toHaveBeenCalledTimes(1);
+    const restartButton = getByTestId('restartConversation');
+
+    fireEvent.press(restartButton);
+
+    expect(clearMessagesSpy).toHaveBeenCalled();
+    expect(clearSessionSpy).toHaveBeenCalled();
   });
 });

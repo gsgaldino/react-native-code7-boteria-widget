@@ -1,5 +1,5 @@
 import { Notifications, Notification } from 'react-native-notifications';
-import { Message, MessageTypes } from '../types/message';
+import { Message, MessageTypes } from '../types';
 
 export const sendNotification = (msg: Message) => {
   const soundPath = '../notification_receiving.mp3';

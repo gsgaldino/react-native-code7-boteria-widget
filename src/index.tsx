@@ -1,39 +1,91 @@
 import React from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 
-import StorageContextProvider from './context/Storage/Component';
-import SocketContextProvider from './context/Socket/Component';
-import ChatConfigurationsContextProvider from './context/ChatConfigurations';
-
 import App from './App';
 import { Global } from './global';
 import { getEnvironment } from './utils';
 import { IAppProps } from './types';
 
-export const Code7Boteria = (props: IAppProps) => {
-  const { botId, params, appearance, children, staging } = props;
+import {
+  AxiosHttpConnectionAdapter,
+  WebSocketAdapter,
+  ConsoleLoggerAdapter,
+  EncryptedStorageAdapter,
+  MathUuidAdapter,
+} from './infra';
+
+import { MessageHttpSocketGateway } from './gateways/MessageHttpSocketGateway';
+import { ChatConfigurationsHttpGateway } from './gateways/ChatConfigurationsHttpGateway';
+import { SessionStorageGateway } from './gateways/SessionStorageGateway';
+
+import UuidContextProvider from './context/UuidContext';
+import {
+  SocketConnectionProvider,
+  ChatConfigurationsProvider,
+  MessageListProvider,
+  SessionProvider,
+} from './providers';
+
+export const Code7Boteria = ({
+  botId,
+  params,
+  appearance,
+  children,
+  staging,
+}: IAppProps) => {
   const env = getEnvironment(staging as boolean);
 
   Global.botId = botId;
   Global.params = params;
   Global.env = env;
 
-  const isIphone = Platform.OS === 'ios';
+  const logger = new ConsoleLoggerAdapter();
+  const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
+  const axiosAdapterApi = new AxiosHttpConnectionAdapter(env.API_URL, logger);
+  const axiosAdapterGetBot = new AxiosHttpConnectionAdapter(
+    env.GET_BOT_URL,
+    logger
+  );
+  const chatConfigurationsGateway = new ChatConfigurationsHttpGateway(
+    axiosAdapterGetBot
+  );
+  const storage = new EncryptedStorageAdapter();
+
+  const sessionGateway = new SessionStorageGateway(
+    storage,
+    axiosAdapterApi,
+    wsAdapter
+  );
+
+  const messageGateway = new MessageHttpSocketGateway(
+    wsAdapter,
+    axiosAdapterApi,
+    storage,
+    sessionGateway
+  );
+
+  const uuidAdapter = new MathUuidAdapter();
 
   return (
-    <KeyboardAvoidingView behavior={isIphone ? 'padding' : 'height'}>
-      <StorageContextProvider>
-        <ChatConfigurationsContextProvider
-          apiUrl={env.GET_BOT_URL}
-          appearance={appearance}
-        >
-          <SocketContextProvider wsUrl={env.SOCKET_URL}>
-            <App customWidget={children} />
-          </SocketContextProvider>
-        </ChatConfigurationsContextProvider>
-      </StorageContextProvider>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <UuidContextProvider uuid={uuidAdapter}>
+        <SocketConnectionProvider ws={wsAdapter}>
+          <ChatConfigurationsProvider
+            configurations={chatConfigurationsGateway}
+            appearance={appearance}
+          >
+            <SessionProvider sessionGateway={sessionGateway}>
+              <MessageListProvider messageGateway={messageGateway}>
+                <App customWidget={children} />
+              </MessageListProvider>
+            </SessionProvider>
+          </ChatConfigurationsProvider>
+        </SocketConnectionProvider>
+      </UuidContextProvider>
     </KeyboardAvoidingView>
   );
 };
 
-export type { IBotConfigs } from './types/chatConfigurations';
+export type { ChatConfigurationsType as IBotConfigs } from './types/chatConfigurations';

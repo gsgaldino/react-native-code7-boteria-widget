@@ -29,15 +29,20 @@ export type Document = {
   /**
    * Título do documento configurado pelo cliente no fluxo do BOT
    */
-  title: string;
+  title?: string;
 
   /**
    * Tamanho do documento em KB
    */
-  size: number;
+  size?: number;
 };
 
+export type MessageStatus = 'read' | 'delivered';
+
 export interface Message {
+  id: string;
+
+  status?: MessageStatus;
   /**
    * Identifica se a mensagem está sendo enviada pelo BOT
    * ou pelo usuário

@@ -1,22 +1,22 @@
 import React from 'react';
 import { Linking } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
-import { useChatConfigurations } from '../../../../context/ChatConfigurations';
+import { useChatConfigurations } from '../../../../context/ChatConfigurationsContext';
 import Footer from '.';
 
-jest.mock('../../../../context/ChatConfigurations');
+jest.mock('../../../../context/ChatConfigurationsContext');
 const mockBotConfig = {
-  botConfigs: {
+  chatConfigurations: {
     poweredBy: 'Mock powered by',
     poweredByUrl: 'https://mock.powered.com',
   },
 };
 
-describe('Footer component', () => {
+describe('<Footer />', () => {
   it('renders text when poweredBy is present in botConfigs', () => {
     (useChatConfigurations as jest.Mock).mockReturnValueOnce(mockBotConfig);
     const { getByText } = render(<Footer />);
-    const textElement = getByText(mockBotConfig.botConfigs.poweredBy);
+    const textElement = getByText(mockBotConfig.chatConfigurations.poweredBy);
     expect(textElement).toBeDefined();
   });
 
@@ -25,7 +25,7 @@ describe('Footer component', () => {
       botConfigs: {},
     });
     const { queryByText } = render(<Footer />);
-    const textElement = queryByText(mockBotConfig.botConfigs.poweredBy);
+    const textElement = queryByText(mockBotConfig.chatConfigurations.poweredBy);
     expect(textElement).toBeNull();
   });
 
@@ -41,7 +41,7 @@ describe('Footer component', () => {
     fireEvent.press(textElement);
 
     expect(mockOpenURL).toHaveBeenCalledWith(
-      mockBotConfig.botConfigs.poweredByUrl
+      mockBotConfig.chatConfigurations.poweredByUrl
     );
 
     mockOpenURL.mockRestore();

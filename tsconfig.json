@@ -1,8 +1,9 @@
 {
   "include": [
     "src",
-    "index.d.ts"
-, "src/styles.ts"  ],
+    "index.d.ts",
+    "src/styles.ts"
+  ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
@@ -13,7 +14,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "preserve",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": [

@@ -3,29 +3,34 @@ import { TouchableOpacity, Image } from 'react-native';
 
 import DocumentPicker from 'react-native-document-picker';
 
-import { useSocketActions } from '../../../../../../hooks';
-import { logger, toBase64 } from '../../../../../../utils';
+import { toBase64 } from '../../../../../../utils';
 import { MessageTypes, From, Message, Document } from '../../../../../../types';
 import { styles } from './styles';
 
 import attachIcon from '../../../../../../assets/attach_icon.png';
+import { useUuid } from '../../../../../../context/UuidContext';
+import { useMessageList } from '../../../../../../context/MessageListContext';
+
+export const getMessageType = (type: string) => {
+  switch (type) {
+    case 'application':
+    case 'msword':
+    case 'text':
+      return MessageTypes.DOCUMENT;
+    case 'video':
+      return MessageTypes.VIDEO;
+    case 'image':
+      return MessageTypes.IMAGE;
+    default:
+      return MessageTypes.IMAGE;
+  }
+};
 
 const FilePicker = () => {
-  const { handleSubmitMessage } = useSocketActions();
-
-  const getMessageType = (type: string) => {
-    switch (type) {
-      case 'application':
-      case 'msword':
-      case 'text':
-        return MessageTypes.DOCUMENT;
-      case 'video':
-        return MessageTypes.VIDEO;
-      case 'image':
-        return MessageTypes.IMAGE;
-      default:
-        return MessageTypes.IMAGE;
-    }
+  const { uuid } = useUuid();
+  const { messageList } = useMessageList();
+  const handleSubmitMessage = (msg: Message) => {
+    messageList.addMessage(msg);
   };
 
   const handleDocumentSelection = async () => {
@@ -43,6 +48,7 @@ const FilePicker = () => {
             const base64String = await toBase64(file?.uri);
 
             const msg: Message = {
+              id: uuid.generate(),
               ext,
               from: From.USER,
               isMedia: true,
@@ -67,12 +73,7 @@ const FilePicker = () => {
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) return;
-
-      logger.log(
-        `[FilePicker - handleDocumentSelection] Error selecting document ${JSON.stringify(
-          err
-        )}`
-      );
+      throw err;
     }
   };
 

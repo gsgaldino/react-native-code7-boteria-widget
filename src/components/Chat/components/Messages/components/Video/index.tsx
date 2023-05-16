@@ -9,6 +9,7 @@ const VideoComponent: React.FC<Message> = (props) => {
 
   return (
     <Video
+      testID="video-player"
       playWhenInactive={false}
       playInBackground={false}
       paused={true}

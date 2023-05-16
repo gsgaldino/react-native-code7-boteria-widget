@@ -26,7 +26,7 @@ export type SocketData = {
 };
 
 export type SocketAction = {
-  action: 'message' | 'link';
+  action: 'message' | 'link' | 'end_conversation';
   data: Partial<SocketData>;
 };
 

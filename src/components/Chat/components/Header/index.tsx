@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
-import { useChatConfigurations } from '../../../../context/ChatConfigurations';
-import { useStorage } from '../../../../context/Storage/Component';
-import { useSocketActions, useEncryptedStorage } from '../../../../hooks';
+import { useChatConfigurations } from '../../../../context/ChatConfigurationsContext';
+import { useMessageList } from '../../../../context/MessageListContext';
+import { useSession } from '../../../../context/SessionContext';
 
 import Icon from '../../../Icon';
 import closeIcon from '../../../../assets/icons/CloseIcon.png';
@@ -11,16 +11,18 @@ import resetIcon from '../../../../assets/icons/ResetIcon.png';
 import { styles } from './styles';
 
 function Header() {
-  const { resetMessages } = useStorage();
-  const { clear } = useEncryptedStorage();
-  const { subscribe } = useSocketActions();
-  const { isChatOpen, toggleIsChatOpen, botConfigs } = useChatConfigurations();
+  const { messageList } = useMessageList();
+  const { session } = useSession();
+  const { chatConfigurations, updateState } = useChatConfigurations();
 
-  const onClose = () => !!isChatOpen && toggleIsChatOpen();
+  const onClose = () => {
+    chatConfigurations.close();
+    updateState();
+  };
 
-  const onRestartConversation = async () => {
-    resetMessages();
-    await Promise.all([clear(), subscribe()]);
+  const onRestartConversation = () => {
+    messageList?.clearMessages();
+    session.clearSession();
   };
 
   return (
@@ -29,13 +31,13 @@ function Header() {
         styles.container,
         styles.wrapper,
         {
-          backgroundColor: botConfigs.colors.main,
+          backgroundColor: chatConfigurations.settings?.mainColor,
         },
       ]}
     >
       <View style={styles.titleContainer}>
         <Icon />
-        <Text style={styles.title}>{botConfigs.title}</Text>
+        <Text style={styles.title}>{chatConfigurations.title}</Text>
       </View>
 
       <View style={styles.iconsWrapper}>
