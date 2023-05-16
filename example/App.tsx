@@ -24,7 +24,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import {Code7Boteria} from 'code7-boteria-lib-mobile-rn';
+import {Code7Boteria} from 'react-native-code7-boteria';
 
 type SectionProps = PropsWithChildren<{
   title: string;

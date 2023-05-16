@@ -7,7 +7,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "code7-boteria-lib-mobile-rn": [
+      "react-native-code7-boteria": [
         "./src/index"
       ],
     },

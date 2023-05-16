@@ -1,5 +1,5 @@
 {
-  "name": "code7-boteria-lib-mobile-rn",
+  "name": "react-native-code7-boteria",
   "version": "0.1.17",
   "description": "test",
   "main": "lib/commonjs/index",
@@ -41,13 +41,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn",
+  "repository": "https://github.com/gsgaldino/react-native-code7-boteria",
   "author": "Code7 Xlab <code7xlab@hotmail.com> (https://github.com/code7-xlab)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn/issues"
+    "url": "https://github.com/gsgaldino/react-native-code7-boteria/issues"
   },
-  "homepage": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn#readme",
+  "homepage": "https://github.com/gsgaldino/react-native-code7-boteria#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
