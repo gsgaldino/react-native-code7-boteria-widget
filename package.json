@@ -1,6 +1,6 @@
 {
   "name": "react-native-code7-boteria-widget",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -101,15 +101,33 @@
     "axios": "*"
   },
   "peerDependenciesMeta": {
-    "react": { "autoinstall": true },
-    "react-native": { "autoinstall": true },
-    "react-native-document-picker": { "autoinstall": true },
-    "react-native-fs": { "autoinstall": true },
-    "react-native-notifications": { "autoinstall": true },
-    "react-native-sound": { "autoinstall": true },
-    "react-native-video": { "autoinstall": true },
-    "react-native-encrypted-storage": { "autoinstall": true },
-    "axios": { "autoinstall": true }
+    "react": {
+      "autoinstall": true
+    },
+    "react-native": {
+      "autoinstall": true
+    },
+    "react-native-document-picker": {
+      "autoinstall": true
+    },
+    "react-native-fs": {
+      "autoinstall": true
+    },
+    "react-native-notifications": {
+      "autoinstall": true
+    },
+    "react-native-sound": {
+      "autoinstall": true
+    },
+    "react-native-video": {
+      "autoinstall": true
+    },
+    "react-native-encrypted-storage": {
+      "autoinstall": true
+    },
+    "axios": {
+      "autoinstall": true
+    }
   },
   "commitlint": {
     "extends": [
