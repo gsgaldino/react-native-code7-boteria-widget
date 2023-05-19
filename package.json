@@ -34,7 +34,8 @@
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install",
     "test": "yarn test:unit",
-    "test:unit": "jest --testPathPattern=src/"
+    "test:unit": "jest --testPathPattern=src/",
+    "postinstall": "install-peers"
   },
   "keywords": [
     "react-native",
@@ -61,6 +62,7 @@
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "@types/react-native-video": "^5.0.14",
+    "axios": "^1.2.1",
     "commitlint": "^17.0.2",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
@@ -95,7 +97,9 @@
     "react-native-fs": "*",
     "react-native-notifications": "*",
     "react-native-sound": "*",
-    "react-native-video": "*"
+    "react-native-video": "*",
+    "react-native-encrypted-storage": "*",
+    "axios": "*"
   },
   "commitlint": {
     "extends": [
