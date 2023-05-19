@@ -100,6 +100,17 @@
     "react-native-encrypted-storage": "*",
     "axios": "*"
   },
+  "peerDependenciesMeta": {
+    "react": { "autoinstall": true },
+    "react-native": { "autoinstall": true },
+    "react-native-document-picker": { "autoinstall": true },
+    "react-native-fs": { "autoinstall": true },
+    "react-native-notifications": { "autoinstall": true },
+    "react-native-sound": { "autoinstall": true },
+    "react-native-video": { "autoinstall": true },
+    "react-native-encrypted-storage": { "autoinstall": true },
+    "axios": { "autoinstall": true }
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -169,7 +180,6 @@
     ]
   },
   "dependencies": {
-    "react-dom": "18.1.0",
-    "install-peers": "^1.0.4"
+    "react-dom": "18.1.0"
   }
 }
