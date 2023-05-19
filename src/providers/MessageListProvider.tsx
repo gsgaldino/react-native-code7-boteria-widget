@@ -5,15 +5,18 @@ import { From, MessageTypes } from '../types';
 import { useUuid } from '../context/UuidContext';
 import MessageListContextProvider from '../context/MessageListContext';
 import { MessageGateway } from '../gateways/MessageGateway';
+import { NotificationGateway } from '../gateways/NotificationGateway';
 import { MessageList } from '../entities/MessageList';
 import { Observer } from '../entities/Observer';
 
 type MessageListProviderProps = PropsWithChildren<{
   messageGateway: MessageGateway;
+  notificationGateway: NotificationGateway;
 }>;
 
 export const MessageListProvider = ({
   messageGateway,
+  notificationGateway,
   children,
 }: MessageListProviderProps) => {
   const { uuid } = useUuid();
@@ -30,6 +33,10 @@ export const MessageListProvider = ({
           id: data.id || uuid.generate(),
           from: From.BOT,
         });
+
+        if (data.type !== MessageTypes.TYPING) {
+          notificationGateway.postLocal(data.message);
+        }
       });
 
       messages.register(

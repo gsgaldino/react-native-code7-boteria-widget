@@ -1,6 +1,6 @@
 # Boteria Mobile 🤖
 
-Maneira fácil e rápida para criar uma instância do chat (Boteria) em aplicativos React Native
+Maneira ágil e eficiente para criar uma instância do chat (Boteria) em seus aplicativos React Native
 
 ---
 
@@ -116,3 +116,13 @@ return (
   </td>
   </tr>
 </table>
+
+## Acesso ao Ambiente de Homologação
+
+Para acessar o ambiente de homologação do aplicativo, você precisará passar o parâmetro `staging` como `true`. Por exemplo:
+
+```jsx
+<Code7Boteria staging botId="MEU_ID" />
+```
+
+Ao fazer isso, o ambiente do aplicativo será redirecionado para a [homologação](https://hml2.testesboteria.com.br) ao invés do ambiente padrão de [produção](https://new.boteria.com.br).

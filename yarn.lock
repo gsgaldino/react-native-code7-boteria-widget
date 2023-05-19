@@ -6531,6 +6531,13 @@ execa@^5.0.0, execa@^5.1.1:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
+executioner@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/executioner/-/executioner-2.0.1.tgz#add328e03bc45dd598f358fbb529fc0be0ec6fcd"
+  integrity sha512-idZAlKsxEZASjaIqP4PQ1txyS1bOcDwWCHy/8p5oMmLGV0XNCQPD6WWAOwJCUVsWItWzAN2BEash5N78PliaIw==
+  dependencies:
+    mixly "^1.0.0"
+
 exit@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
@@ -7253,6 +7260,11 @@ ftp@^0.3.10:
   dependencies:
     readable-stream "1.1.x"
     xregexp "2.0.0"
+
+fulcon@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/fulcon/-/fulcon-1.0.2.tgz#8a4dfda4c73fcd9cc62a79d5045c392b45547320"
+  integrity sha512-vYwUBqbdo9XK0NmN7cFmURmy2T1YHpEsTCbxGO3aErxx6a0Z/HkWXcqcPkk7yOuJ74mSAHGWGBSBBd6v3GKebA==
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -8169,6 +8181,13 @@ inquirer@9.1.5:
     strip-ansi "^7.0.1"
     through "^2.3.6"
     wrap-ansi "^8.1.0"
+
+install-peers@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/install-peers/-/install-peers-1.0.4.tgz#0fcfe18d223a72bb39ddeca09394ce50e3305c79"
+  integrity sha512-0POFG2zRn/rt0uO1tUekCDhq6t6l3HDjxR42+Hcbjmj75Gv4yuqEfMe63HC76piO1lsctAp/cQW+Ny+i/SxTlg==
+  dependencies:
+    executioner "^2.0.1"
 
 internal-ip@4.3.0, internal-ip@^4.3.0:
   version "4.3.0"
@@ -10435,6 +10454,13 @@ mixin-deep@^1.2.0:
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
+
+mixly@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mixly/-/mixly-1.0.0.tgz#9b5a2e1f63e6dfba0d30e6797ffae62ab1dc24ef"
+  integrity sha512-ks+xIMVeIDwuYK4LnOMXTfmiEI8oo3tFNFirpHd60C4r2H0wMwKN5/qHCrFBKFK+BYx2Gp7qs+evUJw7QO9D2w==
+  dependencies:
+    fulcon "^1.0.1"
 
 mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.6, mkdirp@~0.5.1:
   version "0.5.6"

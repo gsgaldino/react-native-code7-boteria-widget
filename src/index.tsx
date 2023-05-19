@@ -12,11 +12,13 @@ import {
   ConsoleLoggerAdapter,
   EncryptedStorageAdapter,
   MathUuidAdapter,
+  NotificationAdapter,
 } from './infra';
 
 import { MessageHttpSocketGateway } from './gateways/MessageHttpSocketGateway';
 import { ChatConfigurationsHttpGateway } from './gateways/ChatConfigurationsHttpGateway';
 import { SessionStorageGateway } from './gateways/SessionStorageGateway';
+import { NotificationRnGateway } from './gateways/NotificationRnGateway';
 
 import UuidContextProvider from './context/UuidContext';
 import {
@@ -63,6 +65,8 @@ export const Code7Boteria = ({
     storage,
     sessionGateway
   );
+  const notificationAdapter = new NotificationAdapter();
+  const notificationGateway = new NotificationRnGateway(notificationAdapter);
 
   const uuidAdapter = new MathUuidAdapter();
 
@@ -77,7 +81,10 @@ export const Code7Boteria = ({
             appearance={appearance}
           >
             <SessionProvider sessionGateway={sessionGateway}>
-              <MessageListProvider messageGateway={messageGateway}>
+              <MessageListProvider
+                notificationGateway={notificationGateway}
+                messageGateway={messageGateway}
+              >
                 <App customWidget={children} />
               </MessageListProvider>
             </SessionProvider>

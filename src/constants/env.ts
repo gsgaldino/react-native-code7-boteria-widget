@@ -9,10 +9,11 @@ interface IEnvironments {
 export const environments: IEnvironments = {
   development: {
     SOCKET_URL:
-      'http://19fa-2804-431-cff7-6024-9c74-87c9-ebb6-ba9.ngrok-free.app',
-    API_URL: 'http://8a74-2804-431-cff7-6024-9c74-87c9-ebb6-ba9.ngrok-free.app',
+      'http://4fc3-2804-431-cff7-6024-843a-9b3d-8e87-5f8f.ngrok-free.app',
+    API_URL:
+      'http://3d48-2804-431-cff7-6024-843a-9b3d-8e87-5f8f.ngrok-free.app',
     GET_BOT_URL:
-      'http://6500-2804-431-cff7-6024-9c74-87c9-ebb6-ba9.ngrok-free.app/dev/getBotCdn',
+      'http://41bd-2804-431-cff7-6024-843a-9b3d-8e87-5f8f.ngrok-free.app/dev/getBotCdn',
   },
   staging: {
     SOCKET_URL:
@@ -26,6 +27,6 @@ export const environments: IEnvironments = {
       'wss://m9bdiwm1x8.execute-api.sa-east-1.amazonaws.com/production/',
     API_URL: 'https://wapp.boteria.com.br',
     GET_BOT_URL:
-      'https://8g82aisqs3.execute-api.sa-east-1.amazonaws.com/test/getBotCdn/',
+      'https://v72a6qtdol.execute-api.sa-east-1.amazonaws.com/prod/getBotCdn/',
   },
 };
