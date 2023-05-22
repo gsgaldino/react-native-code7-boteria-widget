@@ -46,6 +46,11 @@ export class ChatConfigurationsHttpGateway
 
   public async getStyles(botId: string): Promise<ChatConfigurationsType> {
     const styles = await this.httpAdapter.get(`/${botId}`);
-    return this._treatStyles(styles);
+
+    if (styles) {
+      return this._treatStyles(styles);
+    }
+
+    return initialConfigs;
   }
 }

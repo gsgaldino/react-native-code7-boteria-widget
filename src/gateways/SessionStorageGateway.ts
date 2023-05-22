@@ -53,7 +53,7 @@ export class SessionStorageGateway implements SessionGateway {
   }
 
   public async linkSession(): Promise<void> {
-    const sessionId = await this.storage.retrieve('sessionId');
+    const sessionId = await this.getCurrent();
 
     this.ws.sendMessage({
       action: 'link',

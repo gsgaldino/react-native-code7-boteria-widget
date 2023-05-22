@@ -43,6 +43,7 @@ export const Code7Boteria = ({
 
   const logger = new ConsoleLoggerAdapter();
   const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
+
   const axiosAdapterApi = new AxiosHttpConnectionAdapter(env.API_URL, logger);
   const axiosAdapterGetBot = new AxiosHttpConnectionAdapter(
     env.GET_BOT_URL,
@@ -69,6 +70,10 @@ export const Code7Boteria = ({
   const notificationGateway = new NotificationRnGateway(notificationAdapter);
 
   const uuidAdapter = new MathUuidAdapter();
+
+  wsAdapter.onOpen(async () => {
+    await sessionGateway.linkSession();
+  });
 
   return (
     <KeyboardAvoidingView

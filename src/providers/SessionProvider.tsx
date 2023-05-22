@@ -24,7 +24,6 @@ export const SessionProvider = ({
     const getInitialSession = async () => {
       const sessionId = await sessionGateway.getCurrent();
       const session = await sessionGateway.subscribe(sessionId);
-      await sessionGateway.linkSession();
       sessionGateway.onEndConversation(async () => {
         setInitialSession(await sessionGateway.clearSession());
       });
