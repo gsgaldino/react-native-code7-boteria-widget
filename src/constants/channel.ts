@@ -1,1 +1,1 @@
-export const channel = 'webchat';
+export const channel = 'mobile';

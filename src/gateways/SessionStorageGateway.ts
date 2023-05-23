@@ -4,7 +4,8 @@ import { HttpConnection, SocketConnection, Storage } from '../infra';
 import { Session } from '../entities/Session';
 import { Global } from '../global';
 import { OnEndConversationCallback } from '../infra/ports/SocketConnection';
-import { SocketPayload } from 'src/types';
+import { SocketPayload } from '../types';
+import { channel } from '../constants';
 
 export class SessionStorageGateway implements SessionGateway {
   constructor(
@@ -28,6 +29,7 @@ export class SessionStorageGateway implements SessionGateway {
       botId: Global.botId,
       parameters: JSON.stringify(Global.params),
       socketId: Global.socketId,
+      channel,
     });
 
     this.changeSession(response.sessionId);
