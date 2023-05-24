@@ -12,7 +12,7 @@ yarn add react-native-code7-boteria-widget
 
 Instalação das dependências pares:
 ```bash
-yarn add react-native-encrypted-storage@4.0.3 react-native-fs@2.20.0 react-native-document-picker@8.1.3 react-native-notifications@4.3.3 react-native-sound@0.11.2 react-native-video@5.2.1
+yarn add react-native-encrypted-storage@4.0.3 react-native-fs@2.20.0 react-native-document-picker@8.1.3 react-native-notifications@4.3.3 react-native-sound@0.11.2 react-native-video@5.2.1 axios@1.2.1 @miblanchard/react-native-slider@2.1.0
 ```
 
 Para versões React Native 0.64.0 até 0.70
