@@ -32,9 +32,11 @@ export class SessionStorageGateway implements SessionGateway {
       channel,
     });
 
-    this.changeSession(response.sessionId);
+    const newSessionId = response?.sessionId || '';
 
-    return new Session(response.sessionId);
+    this.changeSession(newSessionId);
+
+    return new Session(newSessionId);
   }
 
   public async getCurrent(): Promise<string> {

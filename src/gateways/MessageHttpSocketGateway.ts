@@ -31,7 +31,7 @@ export class MessageHttpSocketGateway implements MessageGateway {
 
   async getMessages(): Promise<MessageList> {
     const messages = await this.storage.retrieve('messages');
-    return new MessageList(JSON.parse(messages as string));
+    return new MessageList(JSON.parse(messages as string) || []);
   }
 
   async sendMessage(msg: Message): Promise<any> {

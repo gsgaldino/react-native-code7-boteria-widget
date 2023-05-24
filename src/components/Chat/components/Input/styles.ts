@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     height: 64,
     paddingVertical: 0,
     paddingLeft: 20,
+    color: '#000000',
   },
   icons: {
     flexDirection: 'row',

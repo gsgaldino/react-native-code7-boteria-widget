@@ -18,6 +18,7 @@ export class AxiosHttpConnectionAdapter implements HttpConnection {
         `MESSAGE: ${error?.response?.data?.error}`,
         JSON.stringify(error)
       );
+      return null;
     }
   }
 
