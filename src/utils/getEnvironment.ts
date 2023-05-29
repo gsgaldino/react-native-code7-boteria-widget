@@ -1,5 +1,5 @@
 import { environments } from '../constants';
-import { IEnvironment } from '../types';
+import type { IEnvironment } from '../types';
 
 export const getEnvironment = (staging: boolean): IEnvironment => {
   if (staging) return environments.staging;

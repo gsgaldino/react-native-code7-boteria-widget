@@ -1,12 +1,12 @@
 import { Message, MessageStatus, MessageTypes } from '../types';
-import { MessageGateway } from './MessageGateway';
-import { SocketConnection, HttpConnection, Storage } from '../infra';
-import { OnMessageCallback } from '../infra/ports/SocketConnection';
+import type { MessageGateway } from './MessageGateway';
+import type { SocketConnection, HttpConnection, Storage } from '../infra';
+import type { OnMessageCallback } from '../infra/ports/SocketConnection';
 import { MessageList } from '../entities/MessageList';
 
 import { channel } from '../constants';
 import { Global } from '../global';
-import { SessionGateway } from './SessionGateway';
+import type { SessionGateway } from './SessionGateway';
 
 export class MessageHttpSocketGateway implements MessageGateway {
   constructor(
@@ -31,48 +31,54 @@ export class MessageHttpSocketGateway implements MessageGateway {
 
   async getMessages(): Promise<MessageList> {
     const messages = await this.storage.retrieve('messages');
-    return new MessageList(JSON.parse(messages as string) || []);
+
+    if (typeof messages === 'object') {
+      return new MessageList(messages);
+    }
+
+    return new MessageList([]);
   }
 
   async sendMessage(msg: Message): Promise<any> {
-    const messagesData = JSON.parse(
-      (await this.storage.retrieve('messages')) || '[]'
-    );
-    messagesData.push(msg);
-    await this.storage.store('messages', JSON.stringify(messagesData));
-    const sessionId = await this.sessionGateway.getCurrent();
-    if (!sessionId) {
-      await this.sessionGateway.subscribe('');
-    } else {
-      this.httpConnection.post('/webchat/message', {
-        botId: Global.botId,
-        message: msg.message,
-        isMedia: msg.type !== MessageTypes.TEXT,
-        ext: msg.ext,
-        sessionId: sessionId,
-        botChannel: channel,
-        isPreview: false,
-        socketId: Global.socketId,
-      });
-    }
+    const messagesData = await this.storage.retrieve('messages');
 
-    return new MessageList(messagesData);
+    if (typeof messagesData === 'object') {
+      messagesData.push(msg);
+      await this.storage.store('messages', JSON.stringify(messagesData));
+      const sessionId = await this.storage.retrieve('sessionId');
+      if (!sessionId) {
+        await this.sessionGateway.subscribe('');
+      } else {
+        this.httpConnection.post('/webchat/message', {
+          botId: Global.botId,
+          message: msg.message,
+          isMedia: msg.type !== MessageTypes.TEXT,
+          ext: msg.ext,
+          sessionId: sessionId,
+          botChannel: channel,
+          isPreview: false,
+          socketId: Global.socketId,
+        });
+      }
+
+      return new MessageList(messagesData);
+    }
   }
 
   async storeMessage(msg: any) {
-    const messages = JSON.parse(
-      (await this.storage.retrieve('messages')) || '[]'
-    );
-    messages.push(msg);
-    await this.storage.store('messages', JSON.stringify(messages));
-    return new MessageList(messages);
+    const stored = await this.storage.retrieve('messages');
+
+    if (typeof stored === 'object') {
+      stored.push(msg);
+      await this.storage.store('messages', JSON.stringify(stored));
+      return new MessageList(stored);
+    }
+
+    return new MessageList([]);
   }
 
-  async clearMessages(): Promise<MessageList> {
-    const messageList: Message[] = [];
-    await this.storage.store('messages', JSON.stringify(messageList));
-
-    return new MessageList(messageList);
+  clearMessages(): Promise<MessageList> {
+    return Promise.resolve(new MessageList([]));
   }
 
   onMessage(callback: OnMessageCallback): void {

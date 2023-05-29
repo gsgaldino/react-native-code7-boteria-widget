@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
-    fontFamily: 'Archivo',
+    // fontFamily: 'Archivo',
     fontSize: 12,
     letterSpacing: 1.5,
     fontWeight: '600',

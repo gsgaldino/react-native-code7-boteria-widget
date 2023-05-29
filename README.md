@@ -7,12 +7,18 @@ Maneira ágil e eficiente para criar uma instância do chat (Boteria) em seus ap
 ## Instalação
 
 ```sh
-yarn add react-native-code7-boteria-widget
+yarn add -D react-native-code7-boteria-widget react-native-encrypted-storage@4.0.3 react-native-fs@2.20.0 react-native-document-picker@8.1.3 react-native-notifications@4.3.3 react-native-sound@0.11.2 react-native-video@5.2.1 axios@1.2.1 @miblanchard/react-native-slider@2.1.0
 ```
 
-Instalação das dependências pares:
-```bash
-yarn add react-native-encrypted-storage@4.0.3 react-native-fs@2.20.0 react-native-document-picker@8.1.3 react-native-notifications@4.3.3 react-native-sound@0.11.2 react-native-video@5.2.1 axios@1.2.1 @miblanchard/react-native-slider@2.1.0
+### Configurações react-native-video
+
+#### **android/settings.gradle**
+
+Adicione o caminho para o player nas configurações de build
+
+```gradle
+include ':react-native-video'
+project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
 ```
 
 Para versões React Native 0.64.0 até 0.70
@@ -126,3 +132,11 @@ Para acessar o ambiente de homologação do aplicativo, você precisará passar 
 ```
 
 Ao fazer isso, o ambiente do aplicativo será redirecionado para a [homologação](https://hml2.testesboteria.com.br) ao invés do ambiente padrão de [produção](https://new.boteria.com.br).
+
+## Compatibilidade com Expo
+
+Para utilizar em aplicativos expo, a opção `isExpoApp` deve ser fornecida como `true`. Por exemplo:
+
+```jsx
+<Code7Boteria isExpoApp botId="MEU_ID" />
+```

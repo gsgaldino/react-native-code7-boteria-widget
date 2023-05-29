@@ -4,16 +4,14 @@ import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 import Icon from '../../components/Icon';
 import { styles } from './styles';
 
-type Props = {
+type WidgetProps = {
   onPress: (e: GestureResponderEvent) => void;
 };
 
-function Widget({ onPress }: Props) {
+export const Widget = ({ onPress }: WidgetProps) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Icon />
     </TouchableOpacity>
   );
-}
-
-export default Widget;
+};

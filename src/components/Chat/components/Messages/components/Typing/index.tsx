@@ -1,11 +1,12 @@
 import React, { useEffect, memo, useRef } from 'react';
 import { View, Animated } from 'react-native';
+import type { IMessageComponentProps } from '../MessageComponent';
 
 import { styles } from './styles';
 
 const ONE_HUNDRED_EIGHTY = 180;
 
-const Typing: React.FC = () => {
+const Typing: React.FC<IMessageComponentProps> = () => {
   const dots = {
     one: useRef(new Animated.Value(0)).current,
     two: useRef(new Animated.Value(0)).current,
@@ -37,6 +38,7 @@ const Typing: React.FC = () => {
 
   useEffect(() => {
     bounce();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { ChatConfigurationsType } from '../entities/ChatConfigurations';
+import type { ChatConfigurationsType } from '../entities/ChatConfigurations';
 
 export { ChatConfigurationsType };
 

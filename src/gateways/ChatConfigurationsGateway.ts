@@ -1,4 +1,4 @@
-import {
+import type {
   ChatConfigurationsType,
   ChatConfigurationsApiResponse,
 } from '../types';

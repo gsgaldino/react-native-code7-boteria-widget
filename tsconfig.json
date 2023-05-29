@@ -1,24 +1,16 @@
 {
-  "include": [
-    "src",
-    "index.d.ts",
-    "src/styles.ts"
-  ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-code7-boteria-widget": [
-        "./src/index"
-      ],
+      "react-native-code7-boteria-widget": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": [
-      "es5", "es6", "dom", "dom.iterable"
-    ],
+    "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,

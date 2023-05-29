@@ -40,7 +40,7 @@ export type Document = {
 export type MessageStatus = 'read' | 'delivered';
 
 export interface Message {
-  id: string;
+  id?: string;
 
   status?: MessageStatus;
   /**

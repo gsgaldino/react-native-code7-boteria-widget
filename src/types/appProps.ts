@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { ChatConfigurationsType } from './chatConfigurations';
+import type { ChatConfigurationsType } from './chatConfigurations';
 
 export type IAppProps = PropsWithChildren<{
   botId: string;

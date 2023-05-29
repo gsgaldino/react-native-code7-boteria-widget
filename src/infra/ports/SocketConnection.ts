@@ -1,4 +1,4 @@
-import { Message, SocketAction } from '../../types';
+import type { Message, SocketAction } from '../../types';
 
 export type OnMessageCallback = (msg: Message) => void;
 export type OnOpenCallback = () => Promise<void>;

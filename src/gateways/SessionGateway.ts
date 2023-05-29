@@ -1,9 +1,9 @@
-import { OnEndConversationCallback } from '../infra/ports/SocketConnection';
-import { Session } from '../entities/Session';
-import { SocketPayload } from '../types';
+import type { OnEndConversationCallback } from '../infra/ports/SocketConnection';
+import type { Session } from '../entities/Session';
+import type { SocketPayload } from '../types';
 
 export interface SessionGateway {
-  getCurrent(): Promise<string>;
+  getCurrent(): Promise<Session>;
   changeSession(newSessionId: string): Promise<string>;
   subscribe(sessionId: string): Promise<Session>;
   clearSession(): Promise<Session>;

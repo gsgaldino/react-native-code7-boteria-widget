@@ -1,27 +1,25 @@
 import React, { memo } from 'react';
 import { Text as P, StyleSheet } from 'react-native';
-import { Message, From } from '../../../../../../types/message';
-import { useChatConfigurations } from '../../../../../../context/ChatConfigurationsContext';
+import { From } from '../../../../../../types/message';
+import type { IMessageComponentProps } from '../MessageComponent';
 
-const Text: React.FC<Message> = (msg) => {
-  const { chatConfigurations } = useChatConfigurations();
-
+const Text: React.FC<IMessageComponentProps> = (props) => {
   const styles = StyleSheet.create({
     container: {
       fontSize: 16,
     },
     bot: {
-      color: chatConfigurations.settings.secondaryTextColor,
+      color: props.settings.secondaryTextColor,
     },
     user: {
-      color: chatConfigurations.settings.mainTextColor,
+      color: props.settings.mainTextColor,
     },
   });
 
-  const isBot = msg.from === From.BOT;
+  const isBot = props.message.from === From.BOT;
   const textColor = isBot ? styles.bot : styles.user;
 
-  return <P style={[styles.container, textColor]}>{msg.message}</P>;
+  return <P style={[styles.container, textColor]}>{props.message.message}</P>;
 };
 
 export default memo(Text);

@@ -1,4 +1,4 @@
-import { Message } from '.';
+import type { Message } from '.';
 
 export interface IAppState {
   messages: Message[];

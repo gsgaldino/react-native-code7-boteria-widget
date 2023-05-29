@@ -1,4 +1,4 @@
-import { Uuid } from '../ports';
+import type { Uuid } from '../ports';
 
 export class MathUuidAdapter implements Uuid {
   generate(): string {

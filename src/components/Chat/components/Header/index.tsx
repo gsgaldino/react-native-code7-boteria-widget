@@ -1,8 +1,5 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
-import { useChatConfigurations } from '../../../../context/ChatConfigurationsContext';
-import { useMessageList } from '../../../../context/MessageListContext';
-import { useSession } from '../../../../context/SessionContext';
 
 import Icon from '../../../Icon';
 import closeIcon from '../../../../assets/icons/CloseIcon.png';
@@ -10,20 +7,22 @@ import resetIcon from '../../../../assets/icons/ResetIcon.png';
 
 import { styles } from './styles';
 
-function Header() {
-  const { messageList } = useMessageList();
-  const { session } = useSession();
-  const { chatConfigurations, updateState } = useChatConfigurations();
+interface IHeaderProps {
+  close: () => void;
+  restartConversation: () => void;
+  title: string;
+  mainColor?: string;
+}
 
-  const onClose = () => {
-    chatConfigurations.close();
-    updateState();
-  };
+export const Header = ({
+  close,
+  restartConversation,
+  title,
+  mainColor,
+}: IHeaderProps) => {
+  const onClose = () => close();
 
-  const onRestartConversation = () => {
-    messageList?.clearMessages();
-    session.clearSession();
-  };
+  const onRestartConversation = () => restartConversation();
 
   return (
     <View
@@ -31,13 +30,13 @@ function Header() {
         styles.container,
         styles.wrapper,
         {
-          backgroundColor: chatConfigurations.settings?.mainColor,
+          backgroundColor: mainColor,
         },
       ]}
     >
       <View style={styles.titleContainer}>
         <Icon />
-        <Text style={styles.title}>{chatConfigurations.title}</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
 
       <View style={styles.iconsWrapper}>
@@ -58,6 +57,4 @@ function Header() {
       </View>
     </View>
   );
-}
-
-export default Header;
+};

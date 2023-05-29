@@ -21,18 +21,19 @@ import {
   MessageTypes,
 } from '../../../../../../types';
 
-import { useSession } from '../../../../../../context/SessionContext';
+// import { useSession } from '../../../../../../context/SessionContext';
 
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;
 
 export default (message: Message) => {
-  const { session } = useSession();
+  // const { session } = useSession();
   const [slidePosition, setSlidePosition] = useState(0);
 
   const sendAction = (action: SocketPayload) => {
-    session.sendAction(action);
+    console.log('ACTION', action);
+    // session.sendAction(action);
   };
 
   const previousDisabled = slidePosition === 0;

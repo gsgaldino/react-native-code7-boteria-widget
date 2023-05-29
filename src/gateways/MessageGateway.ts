@@ -1,5 +1,5 @@
-import { MessageStatus } from '../types';
-import { MessageList } from '../entities/MessageList';
+import type { MessageStatus } from '../types';
+import type { MessageList } from '../entities/MessageList';
 
 export interface MessageGateway {
   getMessages(): Promise<MessageList>;

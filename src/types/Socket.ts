@@ -1,4 +1,4 @@
-import { Button, Card, MessageTypes } from '.';
+import type { Button, Card, MessageTypes } from '.';
 
 export interface IHandleCarouselButtonClickProps {
   /**

@@ -1,4 +1,4 @@
-import { SocketPayload } from '../types';
+import type { SocketPayload } from '../types';
 import { Observable } from './Observable';
 
 export class Session extends Observable {

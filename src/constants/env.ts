@@ -1,4 +1,4 @@
-import { IEnvironment } from '../types';
+import type { IEnvironment } from '../types';
 
 interface IEnvironments {
   development: IEnvironment;

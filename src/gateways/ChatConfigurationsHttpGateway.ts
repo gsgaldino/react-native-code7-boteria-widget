@@ -1,9 +1,9 @@
-import { ChatConfigurationsType } from '../entities/ChatConfigurations';
-import { ChatConfigurationsGateway } from './ChatConfigurationsGateway';
-import { HttpConnection } from '../infra';
+import type { ChatConfigurationsType } from '../entities/ChatConfigurations';
+import type { ChatConfigurationsGateway } from './ChatConfigurationsGateway';
+import type { HttpConnection } from '../infra';
 import { channel } from '../constants/channel';
 import { initialConfigs } from '../constants/initialChatConfigurations';
-import { ChatConfigurationsApiResponse } from '../types';
+import type { ChatConfigurationsApiResponse } from '../types';
 
 export class ChatConfigurationsHttpGateway
   implements ChatConfigurationsGateway

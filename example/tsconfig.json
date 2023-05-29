@@ -1,6 +1,6 @@
 {
+  "extends": "../tsconfig",
   "compilerOptions": {
-    "jsx": "react"
-  },
-  "extends": "@tsconfig/react-native/tsconfig.json"
+    // Avoid expo-cli auto-generating a tsconfig
+  }
 }

@@ -1,7 +1,7 @@
 import { Global } from '../../global';
-import { Message, SocketAction } from '../../types';
-import { SocketConnection, Logger } from '../ports';
-import {
+import type { Message, SocketAction } from '../../types';
+import type { SocketConnection, Logger } from '../ports';
+import type {
   OnMessageCallback,
   OnOpenCallback,
   OnEndConversationCallback,
@@ -65,12 +65,14 @@ export class WebSocketAdapter implements SocketConnection {
       }
     };
   }
+
   public disconnect() {
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
   }
+
   public sendMessage(action: SocketAction) {
     if (this.ws) {
       this.ws.send(JSON.stringify(action));
@@ -80,9 +82,11 @@ export class WebSocketAdapter implements SocketConnection {
   public onMessage(callback: OnMessageCallback) {
     this.onMessageCallback = callback;
   }
+
   public onOpen(callback: OnOpenCallback) {
     this.onOpenCallback = callback;
   }
+
   public onEndConversation(callback: OnEndConversationCallback) {
     this.onEndConversationCallback = callback;
   }

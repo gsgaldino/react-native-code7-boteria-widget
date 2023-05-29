@@ -1,10 +1,10 @@
-import { SessionGateway } from './SessionGateway';
-import { HttpConnection, SocketConnection, Storage } from '../infra';
+import type { SessionGateway } from './SessionGateway';
+import type { HttpConnection, SocketConnection, Storage } from '../infra';
+import type { OnEndConversationCallback } from '../infra/ports/SocketConnection';
+import type { SocketPayload } from '../types';
 
 import { Session } from '../entities/Session';
 import { Global } from '../global';
-import { OnEndConversationCallback } from '../infra/ports/SocketConnection';
-import { SocketPayload } from '../types';
 import { channel } from '../constants';
 
 export class SessionStorageGateway implements SessionGateway {
@@ -15,7 +15,7 @@ export class SessionStorageGateway implements SessionGateway {
   ) {}
 
   async sendAction(action: SocketPayload): Promise<void> {
-    const sessionId = await this.getCurrent();
+    const sessionId = await this.storage.retrieve('sessionId');
     await this.httpClient.post('/webchat/action', {
       botId: Global.botId,
       action,
@@ -39,9 +39,13 @@ export class SessionStorageGateway implements SessionGateway {
     return new Session(newSessionId);
   }
 
-  public async getCurrent(): Promise<string> {
+  public async getCurrent(): Promise<Session> {
     const sessionId = await this.storage.retrieve('sessionId');
-    return sessionId || '';
+    if (typeof sessionId === 'string') {
+      return new Session(sessionId);
+    }
+
+    return new Session('');
   }
 
   public async changeSession(newSessionId: string): Promise<string> {
@@ -51,21 +55,23 @@ export class SessionStorageGateway implements SessionGateway {
 
   public async clearSession(): Promise<Session> {
     const session = '';
-    await this.storage.store('sessionId', session);
+    await this.storage.clean();
 
     return new Session(session);
   }
 
   public async linkSession(): Promise<void> {
-    const sessionId = await this.getCurrent();
+    const sessionId = await this.storage.retrieve('sessionId');
 
-    this.ws.sendMessage({
-      action: 'link',
-      data: {
-        sessionId,
-        botId: Global.botId,
-      },
-    });
+    if (typeof sessionId === 'string') {
+      this.ws.sendMessage({
+        action: 'link',
+        data: {
+          sessionId,
+          botId: Global.botId,
+        },
+      });
+    }
   }
 
   public async onEndConversation(

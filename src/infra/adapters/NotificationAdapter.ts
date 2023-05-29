@@ -1,4 +1,4 @@
-import { Notification } from '../ports';
+import type { Notification } from '../ports';
 import {
   Notification as NotificationType,
   Notifications,
