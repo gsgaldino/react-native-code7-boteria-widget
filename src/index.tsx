@@ -6,6 +6,7 @@ export interface ICode7BoteriaProps {
   staging?: boolean;
   appearance?: any;
   params?: object;
+  isExpoApp?: boolean;
 }
 
 export function Code7Boteria(props: ICode7BoteriaProps) {

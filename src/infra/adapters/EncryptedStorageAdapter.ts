@@ -3,7 +3,7 @@ import type { Storage } from '../ports';
 import { Global } from '../../global';
 let EncryptedStorage: any;
 
-if (!Global.isExpoApp) {
+if (typeof Global.isExpoApp !== 'undefined' && !Global.isExpoApp) {
   EncryptedStorage = require('react-native-encrypted-storage').default;
 }
 

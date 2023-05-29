@@ -7,7 +7,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>My chat app</Text>
-      <Code7Boteria botId="6452721a96898b72321ba3cb" />
+      <Code7Boteria isExpoApp botId="6452721a96898b72321ba3cb" />
     </View>
   );
 }

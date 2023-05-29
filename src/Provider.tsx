@@ -26,8 +26,10 @@ export const Provider = (props: ICode7BoteriaProps) => {
   Global.botId = props.botId;
   Global.params = props.params;
 
+  if (props.isExpoApp) Global.isExpoApp = props.isExpoApp;
+  else Global.isExpoApp = false;
+
   const env = getEnvironment(props.staging as boolean);
-  const isExpoApp = true;
 
   const configurations = new ChatConfigurations(
     initialConfigs.title,
@@ -38,7 +40,7 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const logger = new ConsoleLoggerAdapter();
   const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
   const httpClient = new AxiosHttpConnectionAdapter(env.API_URL, logger);
-  const storage = isExpoApp
+  const storage = Global.isExpoApp
     ? new ExpoSecureStoreStorageAdapter()
     : new EncryptedStorageAdapter();
   const session = new SessionStorageGateway(storage, httpClient, wsAdapter);
@@ -48,7 +50,7 @@ export const Provider = (props: ICode7BoteriaProps) => {
     storage,
     session
   );
-  const notificationAdapter = isExpoApp
+  const notificationAdapter = Global.isExpoApp
     ? new ExpoNotificationsAdapter()
     : new NotificationAdapter();
   const notificationGateway = new NotificationRnGateway(notificationAdapter);
