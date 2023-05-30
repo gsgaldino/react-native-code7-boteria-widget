@@ -1,11 +1,6 @@
 import type { Key, Message } from '../../types';
 import type { Storage } from '../ports';
-import { Global } from '../../global';
-let EncryptedStorage: any;
-
-if (typeof Global.isExpoApp !== 'undefined' && !Global.isExpoApp) {
-  EncryptedStorage = require('react-native-encrypted-storage').default;
-}
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 export class EncryptedStorageAdapter implements Storage {
   async store(key: Key, data: string): Promise<void> {
@@ -20,7 +15,8 @@ export class EncryptedStorageAdapter implements Storage {
 
   async retrieve(key: Key): Promise<Message[] | string> {
     try {
-      return await EncryptedStorage.getItem(key);
+      const result = await EncryptedStorage.getItem(key);
+      return result || '';
     } catch (error) {
       throw error;
     }

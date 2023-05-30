@@ -83,13 +83,13 @@
   "peerDependencies": {
     "axios": "*",
     "expo": "*",
+    "expo-notifications": "*",
     "expo-secure-store": "*",
     "react": "*",
     "react-native": "*",
     "react-native-encrypted-storage": "*",
     "react-native-fs": "*",
-    "react-native-notifications": "*",
-    "expo-notifications": "*"
+    "react-native-notifications": "*"
   },
   "engines": {
     "node": ">= 16.0.0"

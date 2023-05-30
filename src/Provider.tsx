@@ -13,10 +13,6 @@ import {
   WebSocketAdapter,
   ConsoleLoggerAdapter,
   AxiosHttpConnectionAdapter,
-  EncryptedStorageAdapter,
-  ExpoSecureStoreStorageAdapter,
-  NotificationAdapter,
-  ExpoNotificationsAdapter,
 } from './infra/adapters';
 
 import { getEnvironment } from './utils';
@@ -25,9 +21,6 @@ import { Global } from './global';
 export const Provider = (props: ICode7BoteriaProps) => {
   Global.botId = props.botId;
   Global.params = props.params;
-
-  if (props.isExpoApp) Global.isExpoApp = props.isExpoApp;
-  else Global.isExpoApp = false;
 
   const env = getEnvironment(props.staging as boolean);
 
@@ -40,20 +33,31 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const logger = new ConsoleLoggerAdapter();
   const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
   const httpClient = new AxiosHttpConnectionAdapter(env.API_URL, logger);
-  const storage = Global.isExpoApp
-    ? new ExpoSecureStoreStorageAdapter()
-    : new EncryptedStorageAdapter();
+
+  const Storage = props.isExpoApp
+    ? require('./infra/adapters/ExpoSecureStoreStorageAdapter')
+        .ExpoSecureStoreStorageAdapter
+    : require('./infra/adapters/ExpoSecureStoreStorageAdapter')
+        .ExpoSecureStoreStorageAdapter;
+
+  const storage = new Storage();
+
   const session = new SessionStorageGateway(storage, httpClient, wsAdapter);
+
+  const NotificationsAdapter = props.isExpoApp
+    ? require('./infra/adapters/ExpoNotificationsAdapter')
+        .ExpoNotificationsAdapter
+    : require('./infra/adapters/NotificationAdapter');
+  const notificationAdapter = new NotificationsAdapter();
+
+  const notificationGateway = new NotificationRnGateway(notificationAdapter);
+
   const messageGateway = new MessageHttpSocketGateway(
     wsAdapter,
     httpClient,
     storage,
     session
   );
-  const notificationAdapter = Global.isExpoApp
-    ? new ExpoNotificationsAdapter()
-    : new NotificationAdapter();
-  const notificationGateway = new NotificationRnGateway(notificationAdapter);
 
   return (
     <>
