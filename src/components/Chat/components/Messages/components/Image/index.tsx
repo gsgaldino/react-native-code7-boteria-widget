@@ -1,10 +1,13 @@
 import React, { memo } from 'react';
 import { View, Image as ExpoImage } from 'react-native';
-import type { Message } from '../../../../../../types/message';
+import type { IMessageComponentProps } from '../MessageComponent';
+
 import { styles } from './styles';
 
-const Image: React.FC<Message> = (msg) => {
-  const imageUri = (msg.image ? msg.image : msg.message) as string;
+const Image: React.FC<IMessageComponentProps> = (msg) => {
+  const imageUri = (
+    msg.message.image ? msg.message.image : msg.message.message
+  ) as string;
 
   return (
     <View>

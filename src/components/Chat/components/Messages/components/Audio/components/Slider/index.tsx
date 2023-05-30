@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-// import { Slider } from '@miblanchard/react-native-slider';
+import { Slider } from '@miblanchard/react-native-slider';
 
 import { styles } from './styles';
 
@@ -10,15 +10,14 @@ interface IProgressBarProps {
 }
 
 const SliderComponent = (props: IProgressBarProps) => {
-  console.log('PROPS', props);
   return (
     <View style={styles.container}>
-      {/* <Slider
+      <Slider
         value={props.value || 0}
         thumbTintColor="#254EDB"
         onSlidingComplete={(value: any) => props.onValueChange(Number(value))}
         minimumTrackTintColor="#254EDB"
-      /> */}
+      />
     </View>
   );
 };

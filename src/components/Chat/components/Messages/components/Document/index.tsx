@@ -6,21 +6,19 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Message, Document, From } from '../../../../../../types/message';
+import { Document, From } from '../../../../../../types/message';
 import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFromAttachment';
 import RNFS from 'react-native-fs';
+import type { IMessageComponentProps } from '../MessageComponent';
 
 import attachIcon from '../../../../../../assets/attach_icon.png';
-// import { useChatConfigurations } from '../../../../../../context/ChatConfigurationsContext';
 
-const DocumentComponent: React.FC<Message> = (msg) => {
-  // const { chatConfigurations } = useChatConfigurations();
-
+const DocumentComponent: React.FC<IMessageComponentProps> = (props) => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const fileName = useMemo(
-    () => getFileNameFromAttachment(msg.document as Document),
-    [msg.document]
+    () => getFileNameFromAttachment(props.message.document as Document),
+    [props.message.document]
   );
 
   const downloadDocumentToDevice = async () => {
@@ -29,7 +27,7 @@ const DocumentComponent: React.FC<Message> = (msg) => {
     try {
       const destination = `${RNFS.DownloadDirectoryPath}/${fileName}`;
       const job = RNFS.downloadFile({
-        fromUrl: msg.document?.fileUrl as string,
+        fromUrl: props.message.document?.fileUrl as string,
         toFile: destination,
       });
 
@@ -60,7 +58,7 @@ const DocumentComponent: React.FC<Message> = (msg) => {
     },
   });
 
-  const textColor = msg.from === From.BOT ? styles.bot : styles.user;
+  const textColor = props.message.from === From.BOT ? styles.bot : styles.user;
 
   return (
     <TouchableOpacity onPress={onDocumentPress} style={styles.container}>

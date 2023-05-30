@@ -1,24 +1,25 @@
 import React from 'react';
-import type { Message } from '../../../../../../types';
-// import Video from 'react-native-video';
+import type { IMessageComponentProps } from '../MessageComponent';
+
+import Video from 'react-native-video';
 
 // import { styles } from './styles';
 
-const VideoComponent: React.FC<Message> = (props) => {
-  console.log('VIDEO PROPS', props);
-  // const uri = props.video ? props.video.fileUrl : props.document?.fileUrl;
+const VideoComponent: React.FC<IMessageComponentProps> = (props) => {
+  const uri = props.message.video
+    ? props.message.video.fileUrl
+    : props.message.document?.fileUrl;
 
   return (
-    <></>
-    // <Video
-    //   testID="video-player"
-    //   playWhenInactive={false}
-    //   playInBackground={false}
-    //   paused={true}
-    //   source={{ uri }}
-    //   style={styles.video}
-    //   controls={true}
-    // />
+    <Video
+      testID="video-player"
+      playWhenInactive={false}
+      playInBackground={false}
+      paused={true}
+      source={{ uri }}
+      // style={styles.video}
+      controls={true}
+    />
   );
 };
 

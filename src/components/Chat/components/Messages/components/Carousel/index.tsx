@@ -12,7 +12,6 @@ import {
 } from './components';
 
 import {
-  Message,
   Button,
   Card,
   CarouselDestinationTypes,
@@ -20,26 +19,23 @@ import {
   SocketPayload,
   MessageTypes,
 } from '../../../../../../types';
-
-// import { useSession } from '../../../../../../context/SessionContext';
+import type { IMessageComponentProps } from '../MessageComponent';
 
 import { styles } from './styles';
 
 const SLIDE_WIDTH = 210;
 
-export default (message: Message) => {
-  // const { session } = useSession();
+export default (props: IMessageComponentProps) => {
   const [slidePosition, setSlidePosition] = useState(0);
 
   const sendAction = (action: SocketPayload) => {
-    console.log('ACTION', action);
-    // session.sendAction(action);
+    console.log('Sending carousel action ...', action);
   };
 
   const previousDisabled = slidePosition === 0;
   const nextDisabled =
     Math.abs(slidePosition) ===
-    (message?.carousel?.cards?.length as number) - 1;
+    (props.message?.carousel?.cards?.length as number) - 1;
 
   const handleNextSlide = () => {
     if (nextDisabled) return;
@@ -91,7 +87,7 @@ export default (message: Message) => {
       <CarouselWrapper>
         <CarouselSlider>
           <CarouselSliderContent style={{ left: slidePosition * SLIDE_WIDTH }}>
-            {message?.carousel?.cards?.map((card) => (
+            {props.message?.carousel?.cards?.map((card) => (
               <View key={card._id}>
                 {card.imageUrl ? <CustomImage src={card.imageUrl} /> : <Text />}
                 <CarouselCardInfo hasInfo={checkHasInfo(card)}>
@@ -127,7 +123,7 @@ export default (message: Message) => {
             ))}
           </CarouselSliderContent>
         </CarouselSlider>
-        {(message?.carousel?.cards?.length as number) > 1 && (
+        {(props.message?.carousel?.cards?.length as number) > 1 && (
           <CarouselActions
             onPrevious={handlePreviousSlide}
             onNext={handleNextSlide}
