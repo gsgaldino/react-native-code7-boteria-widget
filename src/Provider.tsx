@@ -37,8 +37,8 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const Storage = props.isExpoApp
     ? require('./infra/adapters/ExpoSecureStoreStorageAdapter')
         .ExpoSecureStoreStorageAdapter
-    : require('./infra/adapters/ExpoSecureStoreStorageAdapter')
-        .ExpoSecureStoreStorageAdapter;
+    : require('./infra/adapters/EncryptedStorageAdapter')
+        .EncryptedStorageAdapter;
 
   const storage = new Storage();
 
@@ -47,7 +47,7 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const NotificationsAdapter = props.isExpoApp
     ? require('./infra/adapters/ExpoNotificationsAdapter')
         .ExpoNotificationsAdapter
-    : require('./infra/adapters/NotificationAdapter');
+    : require('./infra/adapters/NotificationAdapter').NotificationAdapter;
   const notificationAdapter = new NotificationsAdapter();
 
   const notificationGateway = new NotificationRnGateway(notificationAdapter);

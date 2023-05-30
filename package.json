@@ -74,6 +74,7 @@
     "react-native-builder-bob": "^0.20.0",
     "react-native-fs": "^2.20.0",
     "react-native-notifications": "^4.3.5",
+    "react-native-encrypted-storage": "^4.0.3",
     "release-it": "^15.0.0",
     "typescript": "^4.5.2"
   },
@@ -168,8 +169,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "react-native-encrypted-storage": "^4.0.3"
   }
 }
