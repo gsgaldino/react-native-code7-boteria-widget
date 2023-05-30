@@ -15,6 +15,9 @@ import {
   AxiosHttpConnectionAdapter,
 } from './infra/adapters';
 
+import { EncryptedStorageAdapter } from './infra/adapters/EncryptedStorageAdapter';
+import { NotificationAdapter } from './infra/adapters/NotificationAdapter';
+
 import { getEnvironment } from './utils';
 import { Global } from './global';
 
@@ -34,21 +37,11 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
   const httpClient = new AxiosHttpConnectionAdapter(env.API_URL, logger);
 
-  const Storage = props.isExpoApp
-    ? require('./infra/adapters/ExpoSecureStoreStorageAdapter')
-        .ExpoSecureStoreStorageAdapter
-    : require('./infra/adapters/EncryptedStorageAdapter')
-        .EncryptedStorageAdapter;
-
-  const storage = new Storage();
+  const storage = new EncryptedStorageAdapter();
 
   const session = new SessionStorageGateway(storage, httpClient, wsAdapter);
 
-  const NotificationsAdapter = props.isExpoApp
-    ? require('./infra/adapters/ExpoNotificationsAdapter')
-        .ExpoNotificationsAdapter
-    : require('./infra/adapters/NotificationAdapter').NotificationAdapter;
-  const notificationAdapter = new NotificationsAdapter();
+  const notificationAdapter = new NotificationAdapter();
 
   const notificationGateway = new NotificationRnGateway(notificationAdapter);
 
