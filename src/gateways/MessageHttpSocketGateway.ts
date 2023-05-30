@@ -41,15 +41,18 @@ export class MessageHttpSocketGateway implements MessageGateway {
 
   async sendMessage(msg: Message): Promise<any> {
     const messagesData = await this.storage.retrieve('messages');
+    const messagesObject = JSON.parse(
+      messagesData ? (messagesData as string) : '[]'
+    );
 
-    if (typeof messagesData === 'object') {
-      messagesData.push(msg);
-      await this.storage.store('messages', JSON.stringify(messagesData));
+    if (messagesObject) {
+      messagesObject.push(msg);
+      await this.storage.store('messages', JSON.stringify(messagesObject));
       const sessionId = await this.storage.retrieve('sessionId');
       if (!sessionId) {
         await this.sessionGateway.subscribe('');
       } else {
-        this.httpConnection.post('/webchat/message', {
+        await this.httpConnection.post('/webchat/message', {
           botId: Global.botId,
           message: msg.message,
           isMedia: msg.type !== MessageTypes.TEXT,
@@ -61,7 +64,7 @@ export class MessageHttpSocketGateway implements MessageGateway {
         });
       }
 
-      return new MessageList(messagesData);
+      return new MessageList(messagesObject);
     }
   }
 
