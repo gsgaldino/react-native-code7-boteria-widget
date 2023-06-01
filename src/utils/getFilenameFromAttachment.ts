@@ -16,5 +16,5 @@ export const getFileNameFromUrl = (url: string): string => {
 };
 
 export const getFileNameFromAttachment = (document: Document) => {
-  return document.title || getFileNameFromUrl(document?.fileUrl);
+  return getFileNameFromUrl(document?.fileUrl) || document.title;
 };

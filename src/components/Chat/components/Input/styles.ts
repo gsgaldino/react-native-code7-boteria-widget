@@ -3,26 +3,24 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     padding: 8,
-    position: 'relative',
-    backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+    borderRadius: 16,
+    marginHorizontal: 8,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
   },
   input: {
-    backgroundColor: '#F3F5F9',
-    borderRadius: 16,
-    height: 64,
-    paddingVertical: 0,
-    paddingLeft: 20,
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
     color: '#000000',
-  },
-  icons: {
-    flexDirection: 'row',
-    position: 'absolute',
-    right: 24,
-    top: 0,
-    transform: [{ translateY: 28 }],
-  },
-  sendIcon: {
-    width: 21,
-    height: 18,
   },
 });

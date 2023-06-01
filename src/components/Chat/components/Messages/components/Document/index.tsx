@@ -45,10 +45,10 @@ const DocumentComponent: React.FC<IMessageComponentProps> = (props) => {
 
   const styles = StyleSheet.create({
     bot: {
-      // color: chatConfigurations.settings.secondaryTextColor,
+      color: props.settings.secondaryTextColor,
     },
     user: {
-      // color: chatConfigurations.settings.mainTextColor,
+      color: props.settings.mainTextColor,
     },
     container: {
       flexDirection: 'row',

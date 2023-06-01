@@ -1,28 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-
-// import { useChatConfigurations } from '../../../../context/ChatConfigurationsContext';
+import { View, Text, TouchableOpacity, Linking } from 'react-native';
 
 import { styles } from './styles';
 
-export const Footer = () => {
-  // const { chatConfigurations } = useChatConfigurations();
-  // const hasText = !!chatConfigurations?.poweredBy;
+export interface IFooterProps {
+  poweredBy: string;
+  poweredByUrl: string;
+}
 
-  // const onTextPress = () => Linking.openURL(chatConfigurations.poweredByUrl);
+export const Footer = ({ poweredBy, poweredByUrl }: IFooterProps) => {
+  const onTextPress = () => Linking.openURL(poweredByUrl);
 
-  const hasText = true;
-
-  return hasText ? (
+  return (
     <View style={styles.footerContainer}>
-      <TouchableOpacity
-        testID="poweredBy"
-        onPress={() => console.log('FOOTER PRESSED')}
-      >
-        <Text style={styles.footerText}>Footer Text</Text>
+      <TouchableOpacity testID="poweredBy" onPress={onTextPress}>
+        <Text style={styles.footerText}>{poweredBy}</Text>
       </TouchableOpacity>
     </View>
-  ) : (
-    <View />
   );
 };

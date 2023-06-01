@@ -2,14 +2,15 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   footerContainer: {
-    padding: 10,
+    padding: 8,
     paddingTop: 0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: -8,
   },
   footerText: {
-    // fontFamily: 'Archivo',
+    fontFamily: 'Archivo',
     fontSize: 12,
     letterSpacing: 1.5,
     fontWeight: '600',

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { TextInput, View, TouchableOpacity, Image } from 'react-native';
-
+import { View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { MessageTypes, From, Message } from '../../../../types';
-// import FilePicker from './components/FilePicker';
 
+import FilePicker from './components/FilePicker';
 import sendIcon from '../../../../assets/send_icon.png';
-import { styles } from './styles';
 
+import { styles } from './styles';
 const ONE_THOUSAND = 1000;
 
 export const Input = ({
@@ -14,37 +13,35 @@ export const Input = ({
 }: {
   sendMessage: (msg: Message) => void;
 }) => {
-  const [userText, setUserText] = useState('');
+  const [message, setMessage] = useState('');
 
   const onSend = () => {
-    if (!userText) return;
+    if (!message) return;
     const msg: Message = {
       type: MessageTypes.TEXT,
-      message: userText,
+      message: message,
       from: From.USER,
     };
     sendMessage(msg);
-    setUserText('');
+    setMessage('');
   };
 
   return (
     <View style={styles.container}>
       <TextInput
+        style={styles.input}
+        value={message}
+        onChangeText={setMessage}
         placeholder="Digite algo ..."
         placeholderTextColor="#979AA5"
-        onChangeText={setUserText}
-        style={styles.input}
-        value={userText}
         maxLength={ONE_THOUSAND}
+        testID="messageInput"
       />
 
-      <View style={styles.icons}>
-        {/* <FilePicker /> */}
-
-        <TouchableOpacity testID="sendIcon" onPress={onSend}>
-          <Image source={sendIcon} style={styles.sendIcon} />
-        </TouchableOpacity>
-      </View>
+      <FilePicker sendMessage={sendMessage} />
+      <TouchableOpacity onPress={onSend} testID="sendIcon">
+        <Image source={sendIcon} resizeMode="contain" style={styles.icon} />
+      </TouchableOpacity>
     </View>
   );
 };

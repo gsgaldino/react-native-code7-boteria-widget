@@ -23,6 +23,7 @@ export type SocketData = {
   id: string;
   sessionId: string | null;
   socketId: string | null;
+  isTransfer?: boolean;
 };
 
 export type SocketAction = {

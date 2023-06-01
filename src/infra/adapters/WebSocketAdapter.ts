@@ -55,7 +55,10 @@ export class WebSocketAdapter implements SocketConnection {
       if (socketAction.action === 'link') {
         const socketId = socketAction.data?.socketId || null;
         Global.socketId = socketId || null;
-      } else if (socketAction.action === 'end_conversation') {
+      } else if (
+        socketAction.action === 'end_conversation' &&
+        !socketAction.data?.isTransfer
+      ) {
         if (this.onEndConversationCallback)
           await this.onEndConversationCallback();
       }

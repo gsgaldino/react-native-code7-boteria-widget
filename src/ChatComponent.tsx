@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+// import { AppState } from 'react-native';
 
 import { Widget } from './components/Widget';
 import { Chat } from './components/Chat';
@@ -7,7 +8,7 @@ import { ChatConfigurations, Session, MessageList, Observer } from './entities';
 import type { WebSocketAdapter } from './infra';
 import type { SessionGateway } from './gateways/SessionGateway';
 import type { MessageGateway } from './gateways/MessageGateway';
-import type { NotificationGateway } from './gateways/NotificationGateway';
+// import type { NotificationGateway } from './gateways/NotificationGateway';
 import type { Message, SocketPayload } from './types';
 import { From, MessageTypes } from './types';
 
@@ -16,7 +17,7 @@ interface IChatComponentProps {
   ws: WebSocketAdapter;
   sessionGateway: SessionGateway;
   messagesGateway: MessageGateway;
-  notificationGateway: NotificationGateway;
+  // notificationGateway: NotificationGateway;
 }
 
 export const ChatComponent = ({
@@ -24,32 +25,39 @@ export const ChatComponent = ({
   ws,
   sessionGateway,
   messagesGateway,
-  notificationGateway,
 }: IChatComponentProps) => {
+  // const [isAppOpened, setIsAppOpened] = useState(false);
+
+  // AppState.addEventListener('change', (state) => {
+  //   setIsAppOpened(state === 'active');
+  // });
+
   const [sessionState, setSessionState] = useState<Session | null>(null);
 
-  const [messageState, setMessageState] = useState<MessageList | null>(null);
+  const [messageState, setMessageState] = useState<MessageList>(
+    new MessageList([])
+  );
 
-  const isFirstRenderRef = useRef(true);
   const wsRef = useRef<WebSocketAdapter | null>(null);
 
-  const onIncomingMessage = useCallback(
-    (data: any, from: From) => {
-      const newMessageList = new MessageList(messageState?.messages);
-      newMessageList.observers = messageState?.observers || [];
-      newMessageList.addMessage({
-        ...data,
-        id: data.id || `${Date.now() * Math.random()}`,
-        from,
-      });
+  const onIncomingMessage = (data: any, from: From) => {
+    const newMessageList = new MessageList(messageState?.messages);
+    newMessageList.observers = messageState?.observers || [];
+    newMessageList.addMessage({
+      ...data,
+      id: data.id || `${Date.now() * Math.random()}`,
+      from,
+    });
 
-      setMessageState(newMessageList);
-      if (data.type !== MessageTypes.TYPING) {
-        notificationGateway.postLocal(data.message);
-      }
-    },
-    [messageState, notificationGateway]
-  );
+    setMessageState(newMessageList);
+
+    // const hasToNotify =
+    //   data.type !== MessageTypes.TYPING && from === From.BOT && !isAppOpened;
+
+    // if (hasToNotify) {
+    //   notificationGateway.postLocal(data.message);
+    // }
+  };
 
   sessionGateway.onEndConversation(async () => {
     await sessionGateway.clearSession();
@@ -88,6 +96,7 @@ export const ChatComponent = ({
         })
       );
 
+      await sessionGateway.subscribe(storedSession.current);
       setSessionState(storedSession);
 
       storedMessages.register(
@@ -108,21 +117,6 @@ export const ChatComponent = ({
 
     loadData();
   }, [sessionGateway, messagesGateway]);
-
-  useEffect(() => {
-    if (isFirstRenderRef.current) {
-      isFirstRenderRef.current = false;
-      return;
-    }
-
-    const subscribe = async () => {
-      const sessionId = sessionState?.current || '';
-      await sessionGateway.subscribe(sessionId);
-    };
-
-    subscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstRenderRef.current]);
 
   const restartConversation = () => {
     const messageList = new MessageList([]);

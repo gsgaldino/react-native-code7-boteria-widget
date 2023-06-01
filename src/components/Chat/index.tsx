@@ -35,7 +35,12 @@ export const Chat = ({
       />
       <MessageList data={messages} settings={configurations.settings} />
       <Input sendMessage={sendMessage} />
-      <Footer />
+      {configurations.poweredBy && (
+        <Footer
+          poweredBy={configurations.poweredBy}
+          poweredByUrl={configurations.poweredByUrl}
+        />
+      )}
     </Modal>
   );
 };

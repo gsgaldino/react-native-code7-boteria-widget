@@ -16,6 +16,12 @@ export class EncryptedStorageAdapter implements Storage {
   async retrieve(key: Key): Promise<Message[] | string> {
     try {
       const result = await EncryptedStorage.getItem(key);
+
+      if (key === 'messages') {
+        const messages = result || '[]';
+        return JSON.parse(messages);
+      }
+
       return result || '';
     } catch (error) {
       throw error;

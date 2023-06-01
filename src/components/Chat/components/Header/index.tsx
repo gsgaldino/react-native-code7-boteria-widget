@@ -7,7 +7,7 @@ import resetIcon from '../../../../assets/icons/ResetIcon.png';
 
 import { styles } from './styles';
 
-interface IHeaderProps {
+export interface IHeaderProps {
   close: () => void;
   restartConversation: () => void;
   title: string;

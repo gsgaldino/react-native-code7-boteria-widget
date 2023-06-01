@@ -132,11 +132,3 @@ Para acessar o ambiente de homologação do aplicativo, você precisará passar 
 ```
 
 Ao fazer isso, o ambiente do aplicativo será redirecionado para a [homologação](https://hml2.testesboteria.com.br) ao invés do ambiente padrão de [produção](https://new.boteria.com.br).
-
-## Compatibilidade com Expo
-
-Para utilizar em aplicativos expo, a opção `isExpoApp` deve ser fornecida como `true`. Por exemplo:
-
-```jsx
-<Code7Boteria isExpoApp botId="MEU_ID" />
-```

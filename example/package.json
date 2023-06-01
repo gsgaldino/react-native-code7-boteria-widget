@@ -1,32 +1,29 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "Code7BoteriaLibMobileRnExample",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "pods": "pod-install --quiet"
   },
   "dependencies": {
-    "expo": "~48.0.15",
-    "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.71.8",
-    "react-native-web": "~0.18.10"
+    "react-native": "0.71.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@expo/webpack-config": "^0.17.2",
-    "axios": "^1.4.0",
-    "babel-loader": "^8.1.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@miblanchard/react-native-slider": "2.1.0",
+    "axios": "1.2.1",
     "babel-plugin-module-resolver": "^4.1.0",
-    "expo-notifications": "^0.18.1",
-    "expo-secure-store": "~12.1.1",
-    "react-native-encrypted-storage": "^4.0.3",
-    "react-native-fs": "^2.20.0",
-    "react-native-notifications": "^4.3.5"
-  },
-  "private": true
+    "metro-react-native-babel-preset": "0.73.9",
+    "react-native-document-picker": "8.1.3",
+    "react-native-encrypted-storage": "4.0.3",
+    "react-native-fs": "2.20.0",
+    "react-native-sound": "0.11.2",
+    "react-native-video": "5.2.1"
+  }
 }

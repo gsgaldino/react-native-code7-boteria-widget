@@ -1,13 +1,17 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { Code7Boteria } from 'react-native-code7-boteria-widget';
+import { StyleSheet, View } from 'react-native';
+import { Code7Boteria } from 'code7-boteria-lib-mobile-rn';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>My chat app</Text>
-      <Code7Boteria isExpoApp botId="6452721a96898b72321ba3cb" />
+      <Code7Boteria
+        botId="6452721a96898b72321ba3cb"
+        params={{
+          name: 'Joe Doe',
+        }}
+      />
     </View>
   );
 }

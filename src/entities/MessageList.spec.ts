@@ -1,6 +1,10 @@
 import { MessageList } from './MessageList';
 import { Message, From, MessageTypes } from '../types';
 
+jest.mock('react-native-fs', () => ({
+  readFile: jest.fn(),
+}));
+
 describe('MessageList test suite', () => {
   it('should create a list with initial data', () => {
     const initialData: Message[] = [

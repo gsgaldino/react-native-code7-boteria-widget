@@ -40,14 +40,11 @@ export class MessageHttpSocketGateway implements MessageGateway {
   }
 
   async sendMessage(msg: Message): Promise<any> {
-    const messagesData = await this.storage.retrieve('messages');
-    const messagesObject = JSON.parse(
-      messagesData ? (messagesData as string) : '[]'
-    );
+    const messages = await this.storage.retrieve('messages');
 
-    if (messagesObject) {
-      messagesObject.push(msg);
-      await this.storage.store('messages', JSON.stringify(messagesObject));
+    if (messages && typeof messages === 'object') {
+      messages.push(msg);
+      await this.storage.store('messages', JSON.stringify(messages));
       const sessionId = await this.storage.retrieve('sessionId');
       if (!sessionId) {
         await this.sessionGateway.subscribe('');
@@ -64,20 +61,21 @@ export class MessageHttpSocketGateway implements MessageGateway {
         });
       }
 
-      return new MessageList(messagesObject);
+      return new MessageList(messages);
     }
   }
 
   async storeMessage(msg: any) {
     const stored = await this.storage.retrieve('messages');
-
     if (typeof stored === 'object') {
       stored.push(msg);
       await this.storage.store('messages', JSON.stringify(stored));
       return new MessageList(stored);
+    } else {
+      const messageList = [msg];
+      await this.storage.store('messages', JSON.stringify(messageList));
+      return new MessageList(messageList);
     }
-
-    return new MessageList([]);
   }
 
   clearMessages(): Promise<MessageList> {

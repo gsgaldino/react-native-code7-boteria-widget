@@ -3,7 +3,7 @@ import type { IMessageComponentProps } from '../MessageComponent';
 
 import Video from 'react-native-video';
 
-// import { styles } from './styles';
+import { styles } from './styles';
 
 const VideoComponent: React.FC<IMessageComponentProps> = (props) => {
   const uri = props.message.video
@@ -17,7 +17,7 @@ const VideoComponent: React.FC<IMessageComponentProps> = (props) => {
       playInBackground={false}
       paused={true}
       source={{ uri }}
-      // style={styles.video}
+      style={styles.video}
       controls={true}
     />
   );
