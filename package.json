@@ -1,6 +1,6 @@
 {
-  "name": "code7-boteria-lib-mobile-rn",
-  "version": "0.1.0",
+  "name": "react-native-code7-boteria-widget",
+  "version": "0.1.53",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -42,13 +42,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn",
-  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/code7-xlab)",
+  "repository": "https://github.com/gsgaldino/react-native-code7-boteria-widget",
+  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/gsgaldino)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn/issues"
+    "url": "https://github.com/gsgaldino/react-native-code7-boteria-widget/issues"
   },
-  "homepage": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn#readme",
+  "homepage": "https://github.com/gsgaldino/react-native-code7-boteria-widget#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "code7-boteria-lib-mobile-rn": ["./src/index"]
+      "react-native-code7-boteria-widget": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
