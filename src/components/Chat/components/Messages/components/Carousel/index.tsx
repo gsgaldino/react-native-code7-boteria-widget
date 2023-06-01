@@ -28,7 +28,6 @@ const SLIDE_WIDTH = 210;
 export default (props: IMessageComponentProps) => {
   const [slidePosition, setSlidePosition] = useState(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendAction = (action: SocketPayload) => {
     return action;
     // console.log('Sending carousel action ...', action);
