@@ -9,10 +9,10 @@ type Settings = {
 
 export class ChatConfigurations {
   constructor(
-    public readonly title: string = '',
-    public readonly poweredBy: string = '',
-    public readonly poweredByUrl: string = '',
-    public readonly settings: Settings = {},
+    public readonly title?: string,
+    public readonly poweredBy?: string,
+    public readonly poweredByUrl?: string,
+    public readonly settings?: Settings,
     public isOpen?: boolean
   ) {
     if (!isOpen) this.isOpen = false;

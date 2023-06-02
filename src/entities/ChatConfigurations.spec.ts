@@ -14,17 +14,17 @@ describe('ChatConfigurations test suite', () => {
     expect(configurations.title).toBe(initialConfigs.title);
     expect(configurations.poweredBy).toBe(initialConfigs.poweredBy);
     expect(configurations.poweredByUrl).toBe(initialConfigs.poweredByUrl);
-    expect(configurations.settings.mainColor).toBe(
-      initialConfigs.settings.mainColor
+    expect(configurations?.settings?.mainColor).toBe(
+      initialConfigs?.settings?.mainColor
     );
-    expect(configurations.settings.secondaryColor).toBe(
-      initialConfigs.settings.secondaryColor
+    expect(configurations?.settings?.secondaryColor).toBe(
+      initialConfigs?.settings?.secondaryColor
     );
-    expect(configurations.settings.mainTextColor).toBe(
-      initialConfigs.settings.mainTextColor
+    expect(configurations?.settings?.mainTextColor).toBe(
+      initialConfigs?.settings?.mainTextColor
     );
-    expect(configurations.settings.secondaryTextColor).toBe(
-      initialConfigs.settings.secondaryTextColor
+    expect(configurations?.settings?.secondaryTextColor).toBe(
+      initialConfigs?.settings?.secondaryTextColor
     );
   });
   it('should toggle the chat open', () => {

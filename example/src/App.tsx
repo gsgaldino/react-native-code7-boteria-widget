@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { Code7Boteria } from 'react-native-code7-boteria-widget';
+import { Code7Boteria } from 'code7-boteria-lib-mobile-rn';
 
 export default function App() {
   return (
@@ -10,6 +10,12 @@ export default function App() {
         botId="6452721a96898b72321ba3cb"
         params={{
           name: 'Joe Doe',
+        }}
+        appearance={{
+          settings: {
+            mainColor: '#FF0000',
+            secondaryColor: '#00FF00',
+          },
         }}
       />
     </View>

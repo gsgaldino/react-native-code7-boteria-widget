@@ -1,18 +1,19 @@
 import React from 'react';
-import { Image } from 'react-native';
-// import { useChatConfigurations } from '../../context/ChatConfigurationsContext';
+import { Image, ActivityIndicator, View } from 'react-native';
 
 import widgetImage from '../../assets/widget.png';
 import { styles } from './styles';
 
-function Icon() {
-  // const { chatConfigurations } = useChatConfigurations();
+function Icon({ imageUrl }: { imageUrl?: string }) {
+  const uri = imageUrl ? { uri: imageUrl } : widgetImage;
 
-  // const uri = chatConfigurations.settings?.botFab
-  //   ? { uri: chatConfigurations.settings?.botFab }
-  //   : widgetImage;
-
-  return <Image source={widgetImage} style={styles.image} />;
+  return imageUrl ? (
+    <Image source={uri} style={styles.image} />
+  ) : (
+    <View style={styles.container}>
+      <ActivityIndicator />
+    </View>
+  );
 }
 
 export default Icon;

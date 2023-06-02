@@ -11,7 +11,8 @@ export class ChatConfigurationsHttpGateway
   constructor(readonly httpAdapter: HttpConnection) {}
 
   _treatStyles(
-    apiResponse: ChatConfigurationsApiResponse
+    apiResponse: ChatConfigurationsApiResponse,
+    appearance?: ChatConfigurationsType
   ): ChatConfigurationsType {
     const [activeChannel] = apiResponse.channels.filter(
       (ch: any) => ch?.channelId?.toLowerCase?.() === channel
@@ -19,24 +20,33 @@ export class ChatConfigurationsHttpGateway
 
     if (activeChannel) {
       return {
-        title: activeChannel.settings.headerName || initialConfigs.title,
+        title:
+          appearance?.title ||
+          activeChannel?.settings?.headerName ||
+          initialConfigs.title,
         poweredBy: activeChannel.poweredBy || initialConfigs.poweredBy,
         poweredByUrl: activeChannel.poweredByUrl || initialConfigs.poweredByUrl,
         settings: {
           botFab:
-            activeChannel.settings.botFab || initialConfigs.settings.botFab,
+            appearance?.settings?.botFab ||
+            activeChannel?.settings?.botFab ||
+            initialConfigs?.settings?.botFab,
           mainColor:
-            activeChannel.settings.mainColor ||
-            initialConfigs.settings.mainColor,
+            appearance?.settings?.mainColor ||
+            activeChannel?.settings?.mainColor ||
+            initialConfigs?.settings?.mainColor,
           secondaryColor:
-            activeChannel.settings.secondaryColor ||
-            initialConfigs.settings.secondaryColor,
+            appearance?.settings?.secondaryColor ||
+            activeChannel?.settings?.secondaryColor ||
+            initialConfigs?.settings?.secondaryColor,
           mainTextColor:
-            activeChannel.settings.mainTextColor ||
-            initialConfigs.settings.mainTextColor,
+            appearance?.settings?.mainTextColor ||
+            activeChannel?.settings?.mainTextColor ||
+            initialConfigs?.settings?.mainTextColor,
           secondaryTextColor:
-            activeChannel.settings.secondaryTextColor ||
-            initialConfigs.settings.secondaryTextColor,
+            appearance?.settings?.secondaryTextColor ||
+            activeChannel?.settings?.secondaryTextColor ||
+            initialConfigs?.settings?.secondaryTextColor,
         },
       };
     } else {
@@ -44,11 +54,14 @@ export class ChatConfigurationsHttpGateway
     }
   }
 
-  public async getStyles(botId: string): Promise<ChatConfigurationsType> {
+  public async getStyles(
+    botId: string,
+    appearance?: ChatConfigurationsType
+  ): Promise<ChatConfigurationsType> {
     const styles = await this.httpAdapter.get(`/${botId}`);
 
     if (styles) {
-      return this._treatStyles(styles);
+      return this._treatStyles(styles, appearance);
     }
 
     return initialConfigs;

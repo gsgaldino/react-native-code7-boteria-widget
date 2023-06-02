@@ -11,7 +11,7 @@ export const environments: IEnvironments = {
     SOCKET_URL:
       'wss://krunswwtgg.execute-api.sa-east-1.amazonaws.com/development',
     API_URL: 'https://boteria.ngrok.io',
-    GET_BOT_URL: 'http://05a509a58b7c.ngrok.app/dev/getBotCdn',
+    GET_BOT_URL: 'http://cc5aaf1e2420.ngrok.app/dev/getBotCdn',
   },
   staging: {
     SOCKET_URL:

@@ -12,6 +12,7 @@ export interface IHeaderProps {
   restartConversation: () => void;
   title: string;
   mainColor?: string;
+  botFab?: string;
 }
 
 export const Header = ({
@@ -19,6 +20,7 @@ export const Header = ({
   restartConversation,
   title,
   mainColor,
+  botFab,
 }: IHeaderProps) => {
   const onClose = () => close();
 
@@ -35,7 +37,7 @@ export const Header = ({
       ]}
     >
       <View style={styles.titleContainer}>
-        <Icon />
+        <Icon imageUrl={botFab} />
         <Text style={styles.title}>{title}</Text>
       </View>
 

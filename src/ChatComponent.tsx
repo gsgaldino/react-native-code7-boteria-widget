@@ -1,23 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { AppState } from 'react-native';
 
 import { Widget } from './components/Widget';
 import { Chat } from './components/Chat';
 
 import { ChatConfigurations, Session, MessageList, Observer } from './entities';
+import type { ChatConfigurationsType } from './entities/ChatConfigurations';
 import type { WebSocketAdapter } from './infra';
 import type { SessionGateway } from './gateways/SessionGateway';
 import type { MessageGateway } from './gateways/MessageGateway';
-// import type { NotificationGateway } from './gateways/NotificationGateway';
+import type { ChatConfigurationsGateway } from './gateways/ChatConfigurationsGateway';
 import type { Message, SocketPayload } from './types';
 import { From, MessageTypes } from './types';
+import { Global } from './global';
 
 interface IChatComponentProps {
   configurations: ChatConfigurations;
   ws: WebSocketAdapter;
   sessionGateway: SessionGateway;
   messagesGateway: MessageGateway;
-  // notificationGateway: NotificationGateway;
+  configurationsGateway: ChatConfigurationsGateway;
+  appearance?: ChatConfigurationsType;
 }
 
 export const ChatComponent = ({
@@ -25,13 +27,9 @@ export const ChatComponent = ({
   ws,
   sessionGateway,
   messagesGateway,
+  configurationsGateway,
+  appearance,
 }: IChatComponentProps) => {
-  // const [isAppOpened, setIsAppOpened] = useState(false);
-
-  // AppState.addEventListener('change', (state) => {
-  //   setIsAppOpened(state === 'active');
-  // });
-
   const [sessionState, setSessionState] = useState<Session | null>(null);
 
   const [messageState, setMessageState] = useState<MessageList>(
@@ -50,13 +48,6 @@ export const ChatComponent = ({
     });
 
     setMessageState(newMessageList);
-
-    // const hasToNotify =
-    //   data.type !== MessageTypes.TYPING && from === From.BOT && !isAppOpened;
-
-    // if (hasToNotify) {
-    //   notificationGateway.postLocal(data.message);
-    // }
   };
 
   sessionGateway.onEndConversation(async () => {
@@ -127,15 +118,28 @@ export const ChatComponent = ({
   };
 
   const [configurationsState, setConfigurationsState] =
-    useState<ChatConfigurations>(
-      new ChatConfigurations(
-        configurations.title,
-        configurations.poweredBy,
-        configurations.poweredBy,
-        configurations.settings,
-        configurations.isOpen
-      )
-    );
+    useState<ChatConfigurations>(configurations);
+
+  useEffect(() => {
+    const loadConfigurations = async () => {
+      const configurationsResponse = await configurationsGateway.getStyles(
+        Global.botId,
+        appearance
+      );
+      setConfigurationsState(
+        new ChatConfigurations(
+          configurationsResponse.title,
+          configurationsResponse.poweredBy,
+          configurationsResponse.poweredByUrl,
+          configurationsResponse.settings,
+          configurationsState.isOpen
+        )
+      );
+    };
+
+    loadConfigurations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configurationsGateway, Global.botId]);
 
   const toggleIsChatOpen = () => {
     const updatedConfigurations = new ChatConfigurations(
@@ -170,7 +174,10 @@ export const ChatComponent = ({
         restartConversation={restartConversation}
         sendMessage={(msg: Message) => onIncomingMessage(msg, From.USER)}
       />
-      <Widget onPress={toggleIsChatOpen} />
+      <Widget
+        onPress={toggleIsChatOpen}
+        imageUrl={configurationsState?.settings?.botFab}
+      />
     </>
   );
 };

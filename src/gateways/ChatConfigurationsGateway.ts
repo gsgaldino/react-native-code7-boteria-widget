@@ -4,6 +4,12 @@ import type {
 } from '../types';
 
 export interface ChatConfigurationsGateway {
-  getStyles(botId: string): Promise<ChatConfigurationsType>;
-  _treatStyles(channels: ChatConfigurationsApiResponse): ChatConfigurationsType;
+  getStyles(
+    botId: string,
+    appearance?: ChatConfigurationsType
+  ): Promise<ChatConfigurationsType>;
+  _treatStyles(
+    channels: ChatConfigurationsApiResponse,
+    appearance: ChatConfigurationsType
+  ): ChatConfigurationsType;
 }

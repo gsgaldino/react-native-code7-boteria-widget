@@ -18,13 +18,13 @@ export default (MessageComponent: React.FC<IMessageComponentProps>) => {
         paddingBottom: 0,
       },
       bot: {
-        backgroundColor: props.settings.secondaryColor,
+        backgroundColor: props?.settings?.secondaryColor,
         alignSelf: 'flex-start',
         borderBottomEndRadius: 16,
         borderBottomStartRadius: 4,
       },
       user: {
-        backgroundColor: props.settings.mainColor,
+        backgroundColor: props?.settings?.mainColor,
         alignSelf: 'flex-end',
         borderBottomEndRadius: 4,
         borderBottomStartRadius: 16,

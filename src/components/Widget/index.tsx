@@ -6,12 +6,13 @@ import { styles } from './styles';
 
 type WidgetProps = {
   onPress: (e: GestureResponderEvent) => void;
+  imageUrl?: string;
 };
 
-export const Widget = ({ onPress }: WidgetProps) => {
+export const Widget = ({ onPress, imageUrl }: WidgetProps) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Icon />
+      <Icon imageUrl={imageUrl} />
     </TouchableOpacity>
   );
 };

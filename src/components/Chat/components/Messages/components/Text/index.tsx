@@ -9,10 +9,10 @@ const Text: React.FC<IMessageComponentProps> = (props) => {
       fontSize: 16,
     },
     bot: {
-      color: props.settings.secondaryTextColor,
+      color: props?.settings?.secondaryTextColor,
     },
     user: {
-      color: props.settings.mainTextColor,
+      color: props?.settings?.mainTextColor,
     },
   });
 

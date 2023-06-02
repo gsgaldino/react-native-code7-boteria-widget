@@ -28,17 +28,18 @@ export const Chat = ({
   return (
     <Modal visible={configurations.isOpen} animationType="slide">
       <Header
-        title={configurations.title}
-        mainColor={configurations.settings.mainColor}
+        title={configurations?.title || ''}
+        mainColor={configurations?.settings?.mainColor}
         restartConversation={restartConversation}
         close={close}
+        botFab={configurations?.settings?.botFab}
       />
       <MessageList data={messages} settings={configurations.settings} />
       <Input sendMessage={sendMessage} />
       {configurations.poweredBy && (
         <Footer
           poweredBy={configurations.poweredBy}
-          poweredByUrl={configurations.poweredByUrl}
+          poweredByUrl={configurations.poweredByUrl || ''}
         />
       )}
     </Modal>

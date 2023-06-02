@@ -2,6 +2,6 @@ import type { Logger } from '../ports/Logger';
 
 export class ConsoleLoggerAdapter implements Logger {
   log(...str: string[]): void {
-    console.log(...str);
+    if (__DEV__) console.log(...str);
   }
 }
