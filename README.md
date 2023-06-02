@@ -10,17 +10,6 @@ Maneira ágil e eficiente para criar uma instância do chat (Boteria) em seus ap
 yarn add -D react-native-code7-boteria-widget react-native-encrypted-storage@4.0.3 react-native-fs@2.20.0 react-native-document-picker@8.1.3 react-native-notifications@4.3.3 react-native-sound@0.11.2 react-native-video@5.2.1 axios@1.2.1 @miblanchard/react-native-slider@2.1.0
 ```
 
-### Configurações react-native-video
-
-#### **android/settings.gradle**
-
-Adicione o caminho para o player nas configurações de build
-
-```gradle
-include ':react-native-video'
-project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
-```
-
 Para versões React Native 0.64.0 até 0.70
 ```bash
 yarn add @react-native/normalize-color
