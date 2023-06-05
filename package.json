@@ -1,6 +1,6 @@
 {
   "name": "react-native-code7-boteria-widget",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -31,7 +31,7 @@
     "test:unit": "jest --testPathPattern=src/",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build --env NODE_ENV=production",
+    "prepack": "bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install && yarn example pods",
@@ -178,6 +178,9 @@
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
+    "variables": {
+      "NODE_ENV": "production"
+    },
     "targets": [
       "commonjs",
       "module",
