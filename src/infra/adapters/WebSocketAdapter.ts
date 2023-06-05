@@ -5,6 +5,7 @@ import type {
   OnMessageCallback,
   OnOpenCallback,
   OnEndConversationCallback,
+  OnLinkCallback,
 } from '../ports/SocketConnection';
 
 export class WebSocketAdapter implements SocketConnection {
@@ -12,6 +13,8 @@ export class WebSocketAdapter implements SocketConnection {
   private onMessageCallback: OnMessageCallback | null = null;
   private onOpenCallback: OnOpenCallback | null = null;
   private onEndConversationCallback: OnEndConversationCallback | null = null;
+  private onLinkCallback: OnLinkCallback | null = null;
+
   private connectionTries = 0;
   private readonly maxConnectionTries = 3;
 
@@ -53,8 +56,9 @@ export class WebSocketAdapter implements SocketConnection {
     this.ws.onmessage = async (event) => {
       const socketAction = JSON.parse(event.data) as SocketAction;
       if (socketAction.action === 'link') {
-        const socketId = socketAction.data?.socketId || null;
-        Global.socketId = socketId || null;
+        const socketId = socketAction.data?.socketId || '';
+        Global.socketId = socketId;
+        if (this.onLinkCallback) this.onLinkCallback(socketId);
       } else if (
         socketAction.action === 'end_conversation' &&
         !socketAction.data?.isTransfer
@@ -75,22 +79,21 @@ export class WebSocketAdapter implements SocketConnection {
       this.ws = null;
     }
   }
-
   public sendMessage(action: SocketAction) {
     if (this.ws) {
       this.ws.send(JSON.stringify(action));
     }
   }
-
   public onMessage(callback: OnMessageCallback) {
     this.onMessageCallback = callback;
   }
-
   public onOpen(callback: OnOpenCallback) {
     this.onOpenCallback = callback;
   }
-
   public onEndConversation(callback: OnEndConversationCallback) {
     this.onEndConversationCallback = callback;
+  }
+  public onLink(callback: OnLinkCallback) {
+    this.onLinkCallback = callback;
   }
 }

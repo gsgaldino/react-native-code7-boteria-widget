@@ -46,7 +46,6 @@ const AudioComponent: React.FC<IMessageComponentProps> = (props) => {
     sound.current?.getCurrentTime((seconds: any) => {
       setCurrentTime(Math.floor(seconds));
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sound.current]);
 
   const togglePlayback = useCallback(() => {
@@ -63,7 +62,6 @@ const AudioComponent: React.FC<IMessageComponentProps> = (props) => {
       interval.current = setInterval(updateCurrentTime, THREE_HUNDRED_MILLIS);
       setPlaying(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sound.current, playing]);
 
   const onSliderChange = (value: number) => {

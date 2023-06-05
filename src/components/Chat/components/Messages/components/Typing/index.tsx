@@ -38,7 +38,6 @@ const Typing: React.FC<IMessageComponentProps> = () => {
 
   useEffect(() => {
     bounce();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

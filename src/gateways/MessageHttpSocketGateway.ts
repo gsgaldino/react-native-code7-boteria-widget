@@ -17,31 +17,26 @@ export class MessageHttpSocketGateway implements MessageGateway {
   ) {}
 
   async sendStatus(messageId: string, status: MessageStatus): Promise<void> {
-    const sessionId = await this.sessionGateway.getCurrent();
-
+    const session = await this.sessionGateway.getCurrent();
     const payload = {
-      sessionId,
+      sessionId: session.current,
       botId: Global.botId,
       status,
       messageId,
     };
-
     await this.httpConnection.post('/webchat/status', payload);
   }
 
   async getMessages(): Promise<MessageList> {
     const messages = await this.storage.retrieve('messages');
-
     if (typeof messages === 'object') {
       return new MessageList(messages);
     }
-
     return new MessageList([]);
   }
 
   async sendMessage(msg: Message): Promise<any> {
     const messages = await this.storage.retrieve('messages');
-
     if (messages && typeof messages === 'object') {
       messages.push(msg);
       await this.storage.store('messages', JSON.stringify(messages));
@@ -60,7 +55,6 @@ export class MessageHttpSocketGateway implements MessageGateway {
           socketId: Global.socketId,
         });
       }
-
       return new MessageList(messages);
     }
   }

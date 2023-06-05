@@ -1,6 +1,6 @@
 {
   "name": "react-native-code7-boteria-widget",
-  "version": "0.1.55",
+  "version": "0.2.0",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -43,10 +43,10 @@
     "android"
   ],
   "repository": "https://github.com/gsgaldino/react-native-code7-boteria-widget",
-  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/code7-xlab)",
+  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/gsgaldino)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gsgaldino/coreact-native-code7-boteria-widget/issues"
+    "url": "https://github.com/gsgaldino/react-native-code7-boteria-widget/issues"
   },
   "homepage": "https://github.com/gsgaldino/react-native-code7-boteria-widget#readme",
   "publishConfig": {
@@ -109,14 +109,7 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "transform": {
       "^.+\\.tsx?$": "babel-jest"
     }
@@ -150,6 +143,7 @@
       "prettier"
     ],
     "rules": {
+      "react-hooks/exhaustive-deps": "off",
       "prettier/prettier": [
         "error",
         {

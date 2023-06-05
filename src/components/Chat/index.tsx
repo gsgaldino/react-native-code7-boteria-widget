@@ -28,7 +28,7 @@ export const Chat = ({
   return (
     <Modal visible={configurations.isOpen} animationType="slide">
       <Header
-        title={configurations?.title || ''}
+        title={configurations.title || ''}
         mainColor={configurations?.settings?.mainColor}
         restartConversation={restartConversation}
         close={close}

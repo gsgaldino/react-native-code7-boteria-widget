@@ -87,7 +87,10 @@ export const ChatComponent = ({
         })
       );
 
-      await sessionGateway.subscribe(storedSession.current);
+      wsRef?.current?.onLink(async () => {
+        await sessionGateway.subscribe(storedSession.current);
+      });
+
       setSessionState(storedSession);
 
       storedMessages.register(
@@ -138,7 +141,6 @@ export const ChatComponent = ({
     };
 
     loadConfigurations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [configurationsGateway, Global.botId]);
 
   const toggleIsChatOpen = () => {

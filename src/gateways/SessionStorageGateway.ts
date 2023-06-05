@@ -31,11 +31,8 @@ export class SessionStorageGateway implements SessionGateway {
       socketId: Global.socketId,
       channel,
     });
-
     const newSessionId = response?.sessionId || '';
-
     this.changeSession(newSessionId);
-
     return new Session(newSessionId);
   }
 
@@ -44,7 +41,6 @@ export class SessionStorageGateway implements SessionGateway {
     if (typeof sessionId === 'string') {
       return new Session(sessionId);
     }
-
     return new Session('');
   }
 
@@ -56,13 +52,11 @@ export class SessionStorageGateway implements SessionGateway {
   public async clearSession(): Promise<Session> {
     const session = '';
     await this.storage.clean();
-
     return new Session(session);
   }
 
   public async linkSession(): Promise<void> {
     const sessionId = await this.storage.retrieve('sessionId');
-
     if (typeof sessionId === 'string') {
       this.ws.sendMessage({
         action: 'link',
