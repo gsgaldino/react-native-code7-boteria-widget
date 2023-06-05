@@ -31,7 +31,7 @@
     "test:unit": "jest --testPathPattern=src/",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build",
+    "prepack": "bob build --env NODE_ENV=production",
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install && yarn example pods",
@@ -187,9 +187,6 @@
           "project": "tsconfig.build.json"
         }
       ]
-    ],
-    "env": {
-      "NODE_ENV": "production"
-    }
+    ]
   }
 }
