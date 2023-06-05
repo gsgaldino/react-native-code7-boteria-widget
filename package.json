@@ -1,6 +1,6 @@
 {
   "name": "react-native-code7-boteria-widget",
-  "version": "0.1.56",
+  "version": "0.2.0",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -109,14 +109,7 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "transform": {
       "^.+\\.tsx?$": "babel-jest"
     }
