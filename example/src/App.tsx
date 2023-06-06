@@ -7,15 +7,10 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Code7Boteria
-        botId="6452721a96898b72321ba3cb"
+        staging
+        botId="62e9145fc073550012d52f25"
         params={{
           name: 'Joe Doe',
-        }}
-        appearance={{
-          settings: {
-            mainColor: '#FF0000',
-            secondaryColor: '#00FF00',
-          },
         }}
       />
     </View>

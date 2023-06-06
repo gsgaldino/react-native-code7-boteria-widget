@@ -17,6 +17,7 @@ public class Code7BoteriaLibMobileRnPackage implements ReactPackage {
   public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
     modules.add(new Code7BoteriaLibMobileRnModule(reactContext));
+    modules.add(new NotificationModule(reactContext));
     return modules;
   }
 

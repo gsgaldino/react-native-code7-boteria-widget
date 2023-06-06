@@ -6,9 +6,14 @@ import { Chat } from './components/Chat';
 import { ChatConfigurations, Session, MessageList, Observer } from './entities';
 import type { ChatConfigurationsType } from './entities/ChatConfigurations';
 import type { WebSocketAdapter } from './infra';
-import type { SessionGateway } from './gateways/SessionGateway';
-import type { MessageGateway } from './gateways/MessageGateway';
-import type { ChatConfigurationsGateway } from './gateways/ChatConfigurationsGateway';
+
+import type {
+  SessionGateway,
+  MessageGateway,
+  ChatConfigurationsGateway,
+  NotificationGateway,
+} from './gateways';
+
 import type { Message, SocketPayload } from './types';
 import { From, MessageTypes } from './types';
 import { Global } from './global';
@@ -19,6 +24,7 @@ interface IChatComponentProps {
   sessionGateway: SessionGateway;
   messagesGateway: MessageGateway;
   configurationsGateway: ChatConfigurationsGateway;
+  notifications: NotificationGateway;
   appearance?: ChatConfigurationsType;
 }
 
@@ -29,16 +35,16 @@ export const ChatComponent = ({
   messagesGateway,
   configurationsGateway,
   appearance,
+  notifications,
 }: IChatComponentProps) => {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-
   const [messageState, setMessageState] = useState<MessageList>(
     new MessageList([])
   );
 
   const wsRef = useRef<WebSocketAdapter | null>(null);
 
-  const onIncomingMessage = (data: any, from: From) => {
+  const onIncomingMessage = (data: Message, from: From) => {
     const newMessageList = new MessageList(messageState?.messages);
     newMessageList.observers = messageState?.observers || [];
     newMessageList.addMessage({
@@ -48,12 +54,15 @@ export const ChatComponent = ({
     });
 
     setMessageState(newMessageList);
+
+    const hasToNotify = from === From.BOT;
+    if (hasToNotify) notifications.postLocal(data.message as string);
   };
 
   sessionGateway.onEndConversation(async () => {
     await sessionGateway.clearSession();
   });
-  messagesGateway.onMessage((msg: any) => onIncomingMessage(msg, From.BOT));
+  messagesGateway.onMessage((msg: Message) => onIncomingMessage(msg, From.BOT));
 
   useEffect(() => {
     if (!wsRef.current) {

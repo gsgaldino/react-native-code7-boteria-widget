@@ -5,7 +5,8 @@ import type { ChatConfigurationsType } from './entities/ChatConfigurations';
 export interface ICode7BoteriaProps {
   botId: string;
   staging?: boolean;
-  appearance?: ChatConfigurationsType;
+  dev?: boolean;
+  appearance?: Omit<ChatConfigurationsType, 'isOpen'>;
   params?: object;
 }
 

@@ -25,6 +25,6 @@ export const environments: IEnvironments = {
       'wss://m9bdiwm1x8.execute-api.sa-east-1.amazonaws.com/production',
     API_URL: 'https://wapp.boteria.com.br',
     GET_BOT_URL:
-      'https://v72a6qtdol.execute-api.sa-east-1.amazonaws.com/prod/getBotCdn/',
+      'https://v72a6qtdol.execute-api.sa-east-1.amazonaws.com/prod/getBotCdn',
   },
 };

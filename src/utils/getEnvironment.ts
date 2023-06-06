@@ -1,10 +1,16 @@
 import { environments } from '../constants';
 import type { IEnvironment } from '../types';
 
-export const getEnvironment = (staging: boolean): IEnvironment => {
-  if (staging) return environments.staging;
-  console.log('ENVIRONMENT', process.env.NODE_ENV);
-  if (process.env.NODE_ENV === 'development') return environments.development;
+export interface IGetEnvironmentProps {
+  staging?: boolean;
+  dev?: boolean;
+}
 
+export const getEnvironment = ({
+  staging,
+  dev,
+}: IGetEnvironmentProps): IEnvironment => {
+  if (staging) return environments.staging;
+  else if (dev) return environments.development;
   return environments.production;
 };
