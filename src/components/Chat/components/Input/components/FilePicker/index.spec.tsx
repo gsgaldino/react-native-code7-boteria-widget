@@ -1,85 +1,82 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import FilePicker, { getMessageType } from '.';
-import { MessageTypes, From } from '../../../../../../types';
-import DocumentPicker from 'react-native-document-picker';
-
-jest.mock('react-native-document-picker');
-jest.mock('../../../../../../utils/toBase64');
-
-jest.mock('react-native-fs', () => ({
-  readFile: jest.fn(),
-}));
+import FilePicker from '.';
+import { MessageTypes, From, Message } from '../../../../../../types';
+import type { DocumentPicker } from '../../../../../../infra/interfaces/DocumentPicker';
+import { Alert } from 'react-native';
 
 describe('FilePicker', () => {
   const sendMessage = jest.fn();
+
   afterEach(() => jest.clearAllMocks());
 
-  it('calls DocumentPicker.pick when filePicker is pressed', async () => {
-    const pickSpy = jest.spyOn(DocumentPicker, 'pick');
-    const { getByTestId } = render(<FilePicker sendMessage={sendMessage} />);
+  it('calls documentPicker.pick when filePicker is pressed', async () => {
+    const documentPicker: DocumentPicker = {
+      pick: jest.fn().mockResolvedValue(null),
+    };
+    const { getByTestId } = render(
+      <FilePicker documentPicker={documentPicker} sendMessage={sendMessage} />
+    );
     const filePicker = getByTestId('filePicker');
     fireEvent.press(filePicker);
-    expect(pickSpy).toHaveBeenCalled();
+    expect(documentPicker.pick).toHaveBeenCalled();
   });
 
   it('handles document selection correctly and adds message', async () => {
-    const mockResponse = [
-      {
-        uri: 'file1_uri',
-        type: 'application/pdf',
-        name: 'file1.pdf',
+    const mockMessage: Message = {
+      id: 'messageId',
+      ext: 'pdf',
+      from: From.USER,
+      isMedia: true,
+      type: MessageTypes.DOCUMENT,
+      message: 'data:application/pdf;base64,undefined',
+      localFileUri: 'file1_uri',
+      document: {
+        fileUrl: 'file1_uri',
         size: 1234,
-        message: 'data:application/pdf;base64,undefined',
+        title: 'file1.pdf',
       },
-      {
-        uri: 'file2_uri',
-        name: 'file2.jpg',
-        size: 5678,
-        type: 'image/jpeg',
-        localFileUri: 'file2.jpg',
-        message: 'data:image/jpeg;base64,undefined',
-      },
-    ];
-    (DocumentPicker.pick as jest.Mock).mockResolvedValue(mockResponse);
-    const { getByTestId } = render(<FilePicker sendMessage={sendMessage} />);
+    };
+    const documentPicker: DocumentPicker = {
+      pick: jest.fn().mockResolvedValue(mockMessage),
+    };
+    const { getByTestId } = render(
+      <FilePicker documentPicker={documentPicker} sendMessage={sendMessage} />
+    );
     const filePicker = getByTestId('filePicker');
     await fireEvent.press(filePicker);
-    const expectedMessages = mockResponse.map((file) => {
-      const [type, ext] = file.type.split('/');
-      const messageType = getMessageType(type as string);
-      const expectedMsg: any = {
-        id: undefined,
-        ext,
-        from: From.USER,
-        isMedia: true,
-        type: messageType,
-        message: file.message,
-        localFileUri: file.uri,
-      };
-      if (
-        messageType === MessageTypes.DOCUMENT ||
-        messageType === MessageTypes.VIDEO
-      ) {
-        expectedMsg.document = {
-          fileUrl: file.uri,
-          size: file.size,
-          title: file.name,
-        };
-      }
-      return expectedMsg;
-    });
-    expect(sendMessage).toHaveBeenCalledWith(expectedMessages[0]);
-    expect(sendMessage).toHaveBeenCalledWith(expectedMessages[1]);
-    expect(DocumentPicker.pick).toHaveBeenCalled();
-    expect(sendMessage).toHaveBeenCalledTimes(mockResponse.length);
+    expect(sendMessage).toHaveBeenCalledWith(mockMessage);
   });
 
-  it('does not add a message when document picker is canceled', async () => {
-    (DocumentPicker.isCancel as jest.Mock).mockReturnValue(true);
-    const { getByTestId } = render(<FilePicker sendMessage={sendMessage} />);
+  it('does not add a message when document picker returns null', async () => {
+    const documentPicker: DocumentPicker = {
+      pick: jest.fn().mockResolvedValue(null),
+    };
+    const { getByTestId } = render(
+      <FilePicker documentPicker={documentPicker} sendMessage={sendMessage} />
+    );
     const filePicker = getByTestId('filePicker');
-    fireEvent.press(filePicker);
+    await fireEvent.press(filePicker);
     expect(sendMessage).not.toHaveBeenCalled();
+  });
+
+  it('does not add a message when document size is greater than 14mb', async () => {
+    const mockAlert = jest.spyOn(Alert, 'alert');
+
+    const expectMessage = 'Tamanho de mídia';
+
+    const documentPicker: DocumentPicker = {
+      pick: jest.fn().mockRejectedValueOnce(new Error(expectMessage)),
+    };
+    const { getByTestId } = render(
+      <FilePicker documentPicker={documentPicker} sendMessage={sendMessage} />
+    );
+
+    const filePicker = getByTestId('filePicker');
+    await fireEvent.press(filePicker);
+    expect(mockAlert).toHaveBeenCalledWith(
+      expectMessage,
+      'Sua mídia ultrapassa o tamanho permitido de 14mb para envio'
+    );
   });
 });

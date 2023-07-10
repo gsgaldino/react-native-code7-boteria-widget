@@ -4,5 +4,6 @@ export const styles = StyleSheet.create({
   container: {
     position: 'relative',
     flexDirection: 'row',
+    borderTopEndRadius: 8,
   },
 });

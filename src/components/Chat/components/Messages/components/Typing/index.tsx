@@ -6,7 +6,7 @@ import { styles } from './styles';
 
 const ONE_HUNDRED_EIGHTY = 180;
 
-const Typing: React.FC<IMessageComponentProps> = () => {
+const Typing: React.FC<IMessageComponentProps> = (props) => {
   const dots = {
     one: useRef(new Animated.Value(0)).current,
     two: useRef(new Animated.Value(0)).current,
@@ -43,13 +43,25 @@ const Typing: React.FC<IMessageComponentProps> = () => {
   return (
     <View style={styles.wrapper}>
       <Animated.View
-        style={[styles.dot, { transform: [{ translateY: dots.one }] }]}
+        style={[
+          styles.dot,
+          { transform: [{ translateY: dots.one }] },
+          { backgroundColor: props?.settings?.secondaryTextColor },
+        ]}
       />
       <Animated.View
-        style={[styles.dot, { transform: [{ translateY: dots.two }] }]}
+        style={[
+          styles.dot,
+          { transform: [{ translateY: dots.two }] },
+          { backgroundColor: props?.settings?.secondaryTextColor },
+        ]}
       />
       <Animated.View
-        style={[styles.dot, { transform: [{ translateY: dots.three }] }]}
+        style={[
+          styles.dot,
+          { transform: [{ translateY: dots.three }] },
+          { backgroundColor: props?.settings?.secondaryTextColor },
+        ]}
       />
     </View>
   );

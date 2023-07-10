@@ -3,16 +3,26 @@ import type { Message } from '../../../../../../types/message';
 import type { ChatConfigurations } from '../../../../../../entities';
 
 import messageComponentByType from '../../utils/messageComponentByType';
+import { treatMessageType } from './utils/treatMessageType';
 
 export interface IMessageComponentProps
   extends Pick<ChatConfigurations, 'settings'> {
   message: Message;
+  sendNotification: (title: string, message: string, filePath?: string) => void;
+  handlOpenModalImage: (param: string) => void;
 }
 
 const MessageComponent = (props: IMessageComponentProps) => {
-  const MessageComponentByType = messageComponentByType(props.message.type);
+  const message = treatMessageType(props.message);
+  const MessageComponentByType = messageComponentByType(message.type);
+
   return (
-    <MessageComponentByType settings={props.settings} message={props.message} />
+    <MessageComponentByType
+      sendNotification={props.sendNotification}
+      settings={props.settings}
+      message={message}
+      handlOpenModalImage={props.handlOpenModalImage}
+    />
   );
 };
 

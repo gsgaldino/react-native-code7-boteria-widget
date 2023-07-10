@@ -1,12 +1,12 @@
 import { Global } from '../../global';
 import type { Message, SocketAction } from '../../types';
-import type { SocketConnection, Logger } from '../ports';
+import type { SocketConnection, Logger } from '../interfaces';
 import type {
   OnMessageCallback,
   OnOpenCallback,
   OnEndConversationCallback,
   OnLinkCallback,
-} from '../ports/SocketConnection';
+} from '../interfaces/SocketConnection';
 
 export class WebSocketAdapter implements SocketConnection {
   private ws: WebSocket | null = null;
@@ -17,6 +17,8 @@ export class WebSocketAdapter implements SocketConnection {
 
   private connectionTries = 0;
   private readonly maxConnectionTries = 3;
+  private keepAliveInterval: NodeJS.Timeout | null = null;
+  private messageQueue: SocketAction[] = [];
 
   constructor(private readonly url: string, private readonly logger: Logger) {}
 
@@ -36,13 +38,16 @@ export class WebSocketAdapter implements SocketConnection {
       this.connectionTries = 0;
       this.logger.log(`Socket connected to address: ${this.url}`);
       if (this.onOpenCallback) this.onOpenCallback();
+      this.startKeepAliveInterval();
+      this.sendQueuedMessages();
     };
 
     this.ws.onclose = (event) => {
       this.logger.log(
-        `Socket is closed. Reconnect will be attempted in 1 second. ${event.reason}`
+        `Socket is closed. Reconnect will be attempted immediately. ${event.reason}`
       );
 
+      this.stopKeepAliveInterval();
       setTimeout(() => {
         this.connect();
       }, 1000);
@@ -74,26 +79,70 @@ export class WebSocketAdapter implements SocketConnection {
   }
 
   public disconnect() {
+    this.stopKeepAliveInterval();
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
   }
+
+  public isConnected(): boolean {
+    return !!this.ws && this.ws.readyState === WebSocket.OPEN;
+  }
+
   public sendMessage(action: SocketAction) {
-    if (this.ws) {
-      this.ws.send(JSON.stringify(action));
+    if (this.isConnected()) {
+      this.ws?.send(JSON.stringify(action));
+    } else {
+      this.enqueueMessage(action);
     }
   }
+
   public onMessage(callback: OnMessageCallback) {
     this.onMessageCallback = callback;
   }
+
   public onOpen(callback: OnOpenCallback) {
     this.onOpenCallback = callback;
   }
+
   public onEndConversation(callback: OnEndConversationCallback) {
     this.onEndConversationCallback = callback;
   }
+
   public onLink(callback: OnLinkCallback) {
     this.onLinkCallback = callback;
+  }
+
+  private startKeepAliveInterval() {
+    this.keepAliveInterval = setInterval(() => {
+      if (this.isConnected()) {
+        this.sendMessage({
+          action: 'keep_alive',
+        });
+      }
+    }, 9 * 60 * 1000); // 9 minutes
+  }
+
+  private stopKeepAliveInterval() {
+    if (this.keepAliveInterval) {
+      clearInterval(this.keepAliveInterval);
+      this.keepAliveInterval = null;
+    }
+  }
+
+  private enqueueMessage(action: SocketAction) {
+    this.messageQueue.push(action);
+  }
+
+  private sendQueuedMessages() {
+    for (const message of this.messageQueue) {
+      this.sendMessage(message);
+    }
+    this.clearMessageQueue();
+  }
+
+  private clearMessageQueue() {
+    this.messageQueue = [];
   }
 }

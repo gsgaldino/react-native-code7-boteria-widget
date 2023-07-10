@@ -9,6 +9,7 @@ export interface SocketConnection {
   connect(): void;
   disconnect(): void;
   sendMessage(action: SocketAction): void;
+  isConnected(): boolean;
 
   onMessage(callback: OnMessageCallback): void;
   onOpen(callback: OnOpenCallback): void;

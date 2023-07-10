@@ -1,25 +1,27 @@
 import React, { memo } from 'react';
-import { View, Image as ExpoImage } from 'react-native';
+import { View, Image as ExpoImage, TouchableOpacity } from 'react-native';
 import type { IMessageComponentProps } from '../MessageComponent';
 
 import { styles } from './styles';
 
-const Image: React.FC<IMessageComponentProps> = (msg) => {
+const Image: React.FC<IMessageComponentProps> = (props) => {
   const imageUri = (
-    msg.message.image ? msg.message.image : msg.message.message
+    props.message.image ? props.message.image : props.message.message
   ) as string;
 
   return (
-    <View>
-      {imageUri && (
-        <ExpoImage
-          style={styles.image}
-          source={{
-            uri: imageUri,
-          }}
-        />
-      )}
-    </View>
+    <TouchableOpacity onPress={() => props.handlOpenModalImage(imageUri)}>
+      <View>
+        {imageUri && (
+          <ExpoImage
+            style={styles.image}
+            source={{
+              uri: imageUri,
+            }}
+          />
+        )}
+      </View>
+    </TouchableOpacity>
   );
 };
 

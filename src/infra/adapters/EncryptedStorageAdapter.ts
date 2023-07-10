@@ -1,5 +1,5 @@
 import type { Key, Message } from '../../types';
-import type { Storage } from '../ports';
+import type { Storage } from '../interfaces';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 export class EncryptedStorageAdapter implements Storage {

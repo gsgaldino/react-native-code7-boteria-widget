@@ -12,7 +12,7 @@
 1. Criar um [fork](https://docs.github.com/pt/get-started/quickstart/fork-a-repo) desse repositório
 2. Clonar o seu fork:
 ```bash
-git clone https://github.com/<SEU_FORK>/react-native-code7-boteria-widget
+git clone https://github.com/<SEU_FORK>/code7-boteria-lib-mobile-rn
 ```
 3. Para começar o projeto, execute `yarn` no diretório raiz para instalar as dependências necessárias para cada pacote:
 

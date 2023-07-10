@@ -1,3 +1,4 @@
+import type { ImageResizeMode } from 'react-native';
 import React, { memo } from 'react';
 import { TouchableOpacity, Image, View } from 'react-native';
 
@@ -12,15 +13,21 @@ interface IPlayPauseButtonProps {
 }
 
 const PlayPauseButton = (props: IPlayPauseButtonProps) => {
+  const resizeMode: ImageResizeMode = 'contain';
+
   return (
     <View style={styles.container}>
       {props.isPlaying ? (
         <TouchableOpacity onPress={props.onPress}>
-          <Image source={FaPause} style={styles.image} />
+          <Image
+            resizeMode={resizeMode}
+            source={FaPause}
+            style={styles.image}
+          />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={props.onPress}>
-          <Image source={FaPlay} style={styles.image} />
+          <Image resizeMode={resizeMode} source={FaPlay} style={styles.image} />
         </TouchableOpacity>
       )}
     </View>

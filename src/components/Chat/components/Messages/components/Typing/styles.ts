@@ -11,6 +11,5 @@ export const styles = StyleSheet.create({
     height: 5,
     borderRadius: 5 / 2,
     marginRight: 8,
-    backgroundColor: '#5A5D68',
   },
 });

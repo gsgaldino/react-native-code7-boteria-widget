@@ -15,6 +15,7 @@ const VideoComponent: React.FC<IMessageComponentProps> = (props) => {
       testID="video-player"
       playWhenInactive={false}
       playInBackground={false}
+      resizeMode="stretch"
       paused={true}
       source={{ uri }}
       style={styles.video}

@@ -23,8 +23,6 @@ import type { IMessageComponentProps } from '../MessageComponent';
 
 import { styles } from './styles';
 
-const SLIDE_WIDTH = 210;
-
 export default (props: IMessageComponentProps) => {
   const [slidePosition, setSlidePosition] = useState(0);
 
@@ -87,7 +85,10 @@ export default (props: IMessageComponentProps) => {
     <>
       <CarouselWrapper>
         <CarouselSlider>
-          <CarouselSliderContent style={{ left: slidePosition * SLIDE_WIDTH }}>
+          <CarouselSliderContent
+            slidePosition={slidePosition}
+            onSlidePosition={setSlidePosition}
+          >
             {props.message?.carousel?.cards?.map((card) => (
               <View key={card._id}>
                 {card.imageUrl ? <CustomImage src={card.imageUrl} /> : <Text />}

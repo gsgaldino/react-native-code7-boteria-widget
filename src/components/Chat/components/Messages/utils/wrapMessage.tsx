@@ -12,7 +12,7 @@ export default (MessageComponent: React.FC<IMessageComponentProps>) => {
       container: {
         borderTopRightRadius: 16,
         borderTopStartRadius: 16,
-        maxWidth: 290,
+        maxWidth: 320,
         minWidth: 80,
         padding: 16,
         paddingBottom: 0,
@@ -43,7 +43,11 @@ export default (MessageComponent: React.FC<IMessageComponentProps>) => {
         <View style={[styles.container, ballonStyle]}>
           <MessageComponent {...(props as IMessageComponentProps)} />
           {props.message.type !== MessageTypes.TYPING && (
-            <MessageHour msg={props.message} />
+            <MessageHour
+              msg={props.message}
+              botMessageColor={props.settings?.secondaryTextColor as string}
+              userMessageColor={props.settings?.mainTextColor as string}
+            />
           )}
         </View>
       </MessageStatusWrapper>

@@ -1,46 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Image,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   StyleSheet,
+  Linking,
 } from 'react-native';
+
 import { Document, From } from '../../../../../../types/message';
 import { getFileNameFromAttachment } from '../../../../../../utils/getFilenameFromAttachment';
-import RNFS from 'react-native-fs';
 import type { IMessageComponentProps } from '../MessageComponent';
 
 import attachIcon from '../../../../../../assets/attach_icon.png';
 
 const DocumentComponent: React.FC<IMessageComponentProps> = (props) => {
-  const [isDownloading, setIsDownloading] = useState(false);
-
   const fileName = useMemo(
     () => getFileNameFromAttachment(props.message.document as Document),
     [props.message.document]
   );
 
-  const downloadDocumentToDevice = async () => {
-    setIsDownloading(true);
-
-    try {
-      const destination = `${RNFS.DownloadDirectoryPath}/${fileName}`;
-      const job = RNFS.downloadFile({
-        fromUrl: props.message.document?.fileUrl as string,
-        toFile: destination,
-      });
-
-      await job.promise;
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
   const onDocumentPress = () => {
-    downloadDocumentToDevice();
+    if (props.message.from === From.USER) return;
+    return Linking.openURL(props.message.document?.fileUrl as string);
   };
 
   const styles = StyleSheet.create({
@@ -62,8 +43,7 @@ const DocumentComponent: React.FC<IMessageComponentProps> = (props) => {
 
   return (
     <TouchableOpacity onPress={onDocumentPress} style={styles.container}>
-      {isDownloading ? <ActivityIndicator /> : <Image source={attachIcon} />}
-
+      <Image source={attachIcon} />
       <Text style={[styles.text, textColor]}>{fileName}</Text>
     </TouchableOpacity>
   );

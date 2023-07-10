@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { HttpConnection, Logger } from '../ports';
+import type { HttpConnection, Logger } from '../interfaces';
 
 export class AxiosHttpConnectionAdapter implements HttpConnection {
   constructor(

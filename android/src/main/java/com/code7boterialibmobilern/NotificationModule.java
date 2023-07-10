@@ -1,5 +1,6 @@
 package com.code7boterialibmobilern;
 
+import java.io.File;
 import androidx.annotation.NonNull;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,6 +9,8 @@ import android.content.Context;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.app.PendingIntent;
+import android.net.Uri;
+import androidx.core.content.FileProvider;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -34,7 +37,7 @@ public class NotificationModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void sendNotification(String title, String message) {
+  public void sendNotification(String title, String message, String filePath) {
     Context context = getReactApplicationContext();
     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -48,9 +51,18 @@ public class NotificationModule extends ReactContextBaseJavaModule {
       notificationManager.createNotificationChannel(channel);
     }
 
-    Intent intent = context
-      .getPackageManager()
-      .getLaunchIntentForPackage(context.getPackageName());
+    Intent intent;
+    if (filePath != null && !filePath.isEmpty()) {
+      intent = new Intent(Intent.ACTION_VIEW);
+      intent.setDataAndType(Uri.parse(filePath), "*/*");
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    } else {
+      intent = context
+          .getPackageManager()
+          .getLaunchIntentForPackage(context.getPackageName());
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
 
     PendingIntent pendingIntent = PendingIntent.getActivity(
       context,
@@ -65,6 +77,12 @@ public class NotificationModule extends ReactContextBaseJavaModule {
       .setContentText(message)
       .setContentIntent(pendingIntent)
       .setAutoCancel(true);
+
+    if (filePath != null && !filePath.isEmpty()) {
+      File file = new File(filePath);
+      Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+      builder.setSound(uri);
+    }
 
     notificationManager.notify(0, builder.build());
   }

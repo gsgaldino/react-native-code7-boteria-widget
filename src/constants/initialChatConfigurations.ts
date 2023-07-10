@@ -3,7 +3,7 @@ import type { ChatConfigurationsType } from '../entities/ChatConfigurations';
 export const initialConfigs: ChatConfigurationsType = {
   settings: {
     mainColor: '#254EDB',
-    mainTextColor: '#FFFFFF',
+    mainTextColor: '#a8b1bf',
     secondaryColor: '#DADCE3',
     secondaryTextColor: '#5A5D68',
     botFab:

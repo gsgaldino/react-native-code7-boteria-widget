@@ -1,4 +1,4 @@
-import type { OnEndConversationCallback } from '../infra/ports/SocketConnection';
+import type { OnEndConversationCallback } from '../infra/interfaces/SocketConnection';
 import type { Session } from '../entities/Session';
 import type { SocketPayload } from '../types';
 

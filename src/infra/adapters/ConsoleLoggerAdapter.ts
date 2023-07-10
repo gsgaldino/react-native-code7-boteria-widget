@@ -1,7 +1,9 @@
-import type { Logger } from '../ports/Logger';
+import type { Logger } from '../interfaces/Logger';
 
 export class ConsoleLoggerAdapter implements Logger {
+  constructor(private readonly isDev: boolean) {}
+
   log(...str: string[]): void {
-    if (__DEV__) console.log(...str);
+    if (this.isDev) console.log(...str);
   }
 }

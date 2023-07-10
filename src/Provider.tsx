@@ -1,4 +1,5 @@
 import React from 'react';
+
 import type { ICode7BoteriaProps } from './index';
 import { ChatComponent } from './ChatComponent';
 import { initialConfigs } from './constants';
@@ -17,6 +18,7 @@ import {
   AxiosHttpConnectionAdapter,
   EncryptedStorageAdapter,
   NotificationAdapter,
+  MathUuidAdapter,
 } from './infra/adapters';
 
 import { getEnvironment } from './utils';
@@ -37,7 +39,7 @@ export const Provider = (props: ICode7BoteriaProps) => {
     initialConfigs.poweredByUrl,
     {}
   );
-  const logger = new ConsoleLoggerAdapter();
+  const logger = new ConsoleLoggerAdapter(props.dev || false);
   const wsAdapter = new WebSocketAdapter(env.SOCKET_URL, logger);
   const httpClient = new AxiosHttpConnectionAdapter(env.API_URL, logger);
 
@@ -62,17 +64,19 @@ export const Provider = (props: ICode7BoteriaProps) => {
   const notificationAdapter = new NotificationAdapter();
   const notificationsGateway = new NotificationRnGateway(notificationAdapter);
 
+  const uuidAdapter = new MathUuidAdapter();
+
   return (
-    <>
-      <ChatComponent
-        sessionGateway={session}
-        messagesGateway={messageGateway}
-        configurations={configurations}
-        configurationsGateway={chatConfigurationsGateway}
-        notifications={notificationsGateway}
-        ws={wsAdapter}
-        appearance={props.appearance}
-      />
-    </>
+    <ChatComponent
+      sessionGateway={session}
+      messagesGateway={messageGateway}
+      configurations={configurations}
+      configurationsGateway={chatConfigurationsGateway}
+      notifications={notificationsGateway}
+      ws={wsAdapter}
+      uuidAdapter={uuidAdapter}
+      appearance={props.appearance}
+      children={props.children}
+    />
   );
 };

@@ -24,8 +24,8 @@ export class ChatConfigurationsHttpGateway
           appearance?.title ||
           activeChannel?.settings?.headerName ||
           initialConfigs.title,
-        poweredBy: activeChannel.poweredBy || initialConfigs.poweredBy,
-        poweredByUrl: activeChannel.poweredByUrl || initialConfigs.poweredByUrl,
+        poweredBy: activeChannel.poweredBy,
+        poweredByUrl: activeChannel.poweredByUrl,
         settings: {
           botFab:
             appearance?.settings?.botFab ||

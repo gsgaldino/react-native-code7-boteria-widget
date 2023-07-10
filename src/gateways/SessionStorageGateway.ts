@@ -1,6 +1,6 @@
 import type { SessionGateway } from './SessionGateway';
 import type { HttpConnection, SocketConnection, Storage } from '../infra';
-import type { OnEndConversationCallback } from '../infra/ports/SocketConnection';
+import type { OnEndConversationCallback } from '../infra/interfaces/SocketConnection';
 import type { SocketPayload } from '../types';
 
 import { Session } from '../entities/Session';

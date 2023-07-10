@@ -1,7 +1,7 @@
 {
-  "name": "react-native-code7-boteria-widget",
-  "version": "0.2.6",
-  "description": "test",
+  "name": "code7-boteria-lib-mobile-rn",
+  "version": "0.4.0",
+  "description": "A agile and efficient way to integrate chat functionality (Boteria) into your React Native applications.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -42,13 +42,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/gsgaldino/react-native-code7-boteria-widget",
-  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/gsgaldino)",
+  "repository": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn",
+  "author": "Code7 <gabrielsoaresii@outlook.com> (https://github.com/code7-xlab)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gsgaldino/react-native-code7-boteria-widget/issues"
+    "url": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn/issues"
   },
-  "homepage": "https://github.com/gsgaldino/react-native-code7-boteria-widget#readme",
+  "homepage": "https://github.com/code7-xlab/code7-boteria-lib-mobile-rn#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

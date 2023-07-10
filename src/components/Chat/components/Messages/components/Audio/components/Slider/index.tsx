@@ -7,6 +7,7 @@ import { styles } from './styles';
 interface IProgressBarProps {
   onValueChange: (value: number) => void;
   value: number;
+  tintColor: string;
 }
 
 const SliderComponent = (props: IProgressBarProps) => {
@@ -14,9 +15,9 @@ const SliderComponent = (props: IProgressBarProps) => {
     <View style={styles.container}>
       <Slider
         value={props.value || 0}
-        thumbTintColor="#254EDB"
+        thumbTintColor={props.tintColor}
         onSlidingComplete={(value: any) => props.onValueChange(Number(value))}
-        minimumTrackTintColor="#254EDB"
+        minimumTrackTintColor={props.tintColor}
       />
     </View>
   );

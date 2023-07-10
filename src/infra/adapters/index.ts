@@ -3,4 +3,5 @@ export { WebSocketAdapter } from './WebSocketAdapter';
 export { AxiosHttpConnectionAdapter } from './AxiosHttpConnectionAdapter';
 export { EncryptedStorageAdapter } from './EncryptedStorageAdapter';
 export { NotificationAdapter } from './NotificationAdapter';
-// export { MathUuidAdapter } from './MathUuidAdapter';
+export { RNDocumentPickerAdapter } from './RNDocumentPickerAdapter';
+export { MathUuidAdapter } from './MathUuidAdapter';

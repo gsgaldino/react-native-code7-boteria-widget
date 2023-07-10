@@ -4,15 +4,18 @@ import { MessageTypes, From, Message } from '../../../../types';
 
 import FilePicker from './components/FilePicker';
 import sendIcon from '../../../../assets/send_icon.png';
+import { RNDocumentPickerAdapter } from '../../../../infra/adapters/RNDocumentPickerAdapter';
 
 import { styles } from './styles';
 const ONE_THOUSAND = 1000;
 
-export const Input = ({
-  sendMessage,
-}: {
+interface IInputProps {
   sendMessage: (msg: Message) => void;
-}) => {
+}
+
+const documentPicker = new RNDocumentPickerAdapter();
+
+export const Input = ({ sendMessage }: IInputProps) => {
   const [message, setMessage] = useState('');
 
   const onSend = () => {
@@ -38,7 +41,7 @@ export const Input = ({
         testID="messageInput"
       />
 
-      <FilePicker sendMessage={sendMessage} />
+      <FilePicker sendMessage={sendMessage} documentPicker={documentPicker} />
       <TouchableOpacity onPress={onSend} testID="sendIcon">
         <Image source={sendIcon} resizeMode="contain" style={styles.icon} />
       </TouchableOpacity>

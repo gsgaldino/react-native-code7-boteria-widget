@@ -1,3 +1,3 @@
 export interface NotificationGateway {
-  postLocal(msg: string): void;
+  postLocal(title: string, msg: string, filePath?: string): void;
 }

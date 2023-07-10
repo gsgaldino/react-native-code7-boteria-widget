@@ -27,8 +27,8 @@ export type SocketData = {
 };
 
 export type SocketAction = {
-  action: 'message' | 'link' | 'end_conversation';
-  data: Partial<SocketData>;
+  action: 'message' | 'link' | 'end_conversation' | 'keep_alive';
+  data?: Partial<SocketData>;
 };
 
 export type SocketPayload = {

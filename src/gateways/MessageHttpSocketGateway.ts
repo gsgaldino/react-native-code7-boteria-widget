@@ -1,7 +1,7 @@
 import { Message, MessageStatus, MessageTypes } from '../types';
 import type { MessageGateway } from './MessageGateway';
 import type { SocketConnection, HttpConnection, Storage } from '../infra';
-import type { OnMessageCallback } from '../infra/ports/SocketConnection';
+import type { OnMessageCallback } from '../infra/interfaces/SocketConnection';
 import { MessageList } from '../entities/MessageList';
 
 import { channel } from '../constants';
@@ -38,7 +38,12 @@ export class MessageHttpSocketGateway implements MessageGateway {
   async sendMessage(msg: Message): Promise<any> {
     const messages = await this.storage.retrieve('messages');
     if (messages && typeof messages === 'object') {
-      messages.push(msg);
+      if ([MessageTypes.DOCUMENT, MessageTypes.VIDEO].includes(msg?.type)) {
+        const messageToSave = { ...msg, message: '' };
+        messages.push(messageToSave);
+      } else {
+        messages.push(msg);
+      }
       await this.storage.store('messages', JSON.stringify(messages));
       const sessionId = await this.storage.retrieve('sessionId');
       if (!sessionId) {

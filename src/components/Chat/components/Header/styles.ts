@@ -11,17 +11,23 @@ export const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
+    paddingRight: 100,
   },
   titleIcon: {
     width: 50,
     height: 50,
-    marginRight: 10,
   },
   iconContainer: {
     padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 45,
   },
   iconsWrapper: {
     flexDirection: 'row',
+    position: 'absolute',
+    right: 16,
   },
   wrapper: {
     flexDirection: 'row',

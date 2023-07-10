@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-native';
 
 import { Header } from './components/Header';
-import { MessageList } from './components/Messages';
+import MessageList from './components/Messages';
 import { Input } from './components/Input';
 import { Footer } from './components/Footer';
 
@@ -16,6 +16,7 @@ interface IChatProps {
   close: () => void;
   restartConversation: () => void;
   sendMessage: (msg: Message) => void;
+  sendNotification: (title: string, msg: string, filePath?: string) => void;
 }
 
 export const Chat = ({
@@ -24,6 +25,7 @@ export const Chat = ({
   close,
   restartConversation,
   sendMessage,
+  sendNotification,
 }: IChatProps) => {
   return (
     <Modal visible={configurations.isOpen} animationType="slide">
@@ -34,7 +36,11 @@ export const Chat = ({
         close={close}
         botFab={configurations?.settings?.botFab}
       />
-      <MessageList data={messages} settings={configurations.settings} />
+      <MessageList
+        sendNotification={sendNotification}
+        data={messages}
+        settings={configurations.settings}
+      />
       <Input sendMessage={sendMessage} />
       {configurations.poweredBy && (
         <Footer

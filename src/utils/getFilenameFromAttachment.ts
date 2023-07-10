@@ -16,5 +16,7 @@ export const getFileNameFromUrl = (url: string): string => {
 };
 
 export const getFileNameFromAttachment = (document: Document) => {
-  return getFileNameFromUrl(document?.fileUrl) || document.title;
+  if (document.fileUrl.startsWith('http'))
+    return getFileNameFromUrl(document?.fileUrl);
+  return document.title;
 };

@@ -38,7 +38,9 @@ export const Header = ({
     >
       <View style={styles.titleContainer}>
         <Icon imageUrl={botFab} />
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+          {title}
+        </Text>
       </View>
 
       <View style={styles.iconsWrapper}>

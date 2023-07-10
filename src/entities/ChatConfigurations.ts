@@ -18,12 +18,16 @@ export class ChatConfigurations {
     if (!isOpen) this.isOpen = false;
   }
 
+  private canOpen = (): boolean => {
+    return Object.keys(this.settings || {}).length > 0;
+  };
+
   public toggleIsOpen = (): void => {
-    this.isOpen = !this.isOpen;
+    this.isOpen ? this.close() : this.open();
   };
 
   public open = (): void => {
-    this.isOpen = true;
+    this.isOpen = this.canOpen() && true;
   };
 
   public close = (): void => {
