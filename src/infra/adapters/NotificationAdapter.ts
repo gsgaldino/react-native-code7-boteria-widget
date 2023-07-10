@@ -2,7 +2,7 @@ import type { Notification } from '../interfaces';
 import { NativeModules, Platform, AppState } from 'react-native';
 
 const LINKING_ERROR =
-  `The package 'code7-boteria-lib-mobile-rn' doesn't seem to be linked. Make sure: \n\n` +
+  `The package 'react-native-code7-boteria-widget' doesn't seem to be linked. Make sure: \n\n` +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n' +
   Platform.select({

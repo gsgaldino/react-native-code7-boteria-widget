@@ -8,7 +8,7 @@ import {
   Switch,
 } from 'react-native';
 
-import { Code7Boteria } from 'code7-boteria-lib-mobile-rn';
+import { Code7Boteria } from 'react-native-code7-boteria-widget';
 
 interface IConfigurations {
   botId: string;

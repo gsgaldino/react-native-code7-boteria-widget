@@ -15,7 +15,7 @@ if (exists) {
 
     const modified = data
       .replace(/[a-fA-F0-9]{24}/, newConfigs.botId)
-      .replace('code7-boteria-lib-mobile-rn', newConfigs.libraryPath);
+      .replace('react-native-code7-boteria-widget', newConfigs.libraryPath);
 
     fs.writeFile(filePath, modified, () =>
       console.log('App.tsx - File modified successfully!')
